@@ -1,0 +1,11 @@
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
+
+.class-section{
+    transition: all 0.3s ease-in-out;
+    &:hover{
+        background: white;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 0 2px 3px rgb(201 193 193 / 28%);
+    }
+}
