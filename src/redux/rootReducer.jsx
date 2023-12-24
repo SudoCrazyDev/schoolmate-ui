@@ -1,14 +1,14 @@
 import {all} from "redux-saga/effects";
 import {combineReducers} from "redux";
-import persistReducer from "redux-persist/es/persistReducer";
-import storage from "redux-persist/lib/storage";
 
 import * as user from "./slices/UserSlice";
+import * as org from './slices/OrgSlice';
 
 export const rootReducer = combineReducers({
-    user: user.reducer
+    user: user.reducer,
+    org: org.reducer
 });
 
 export function* rootSaga(){
-    yield all([user.saga()]);
+    yield all([user.saga(), org.saga()]);
 }

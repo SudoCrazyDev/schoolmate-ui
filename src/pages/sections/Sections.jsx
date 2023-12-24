@@ -6,6 +6,8 @@ import NewSection from './partials/NewSection';
 import AddSubject from './partials/AddSubject';
 import { useEffect, useMemo, useState } from 'react';
 import Axios from "axios";
+import EditSubject from './partials/EditSubject';
+import DeleteSubject from './partials/DeleteSubject';
 
 export default function Sections(){
     const [gradeLevels, setGradeLevels] = useState([]);
@@ -67,9 +69,9 @@ export default function Sections(){
                 <div className="card p-3">
                     <div className="d-flex flex-row align-items-center align-items-center class-section mb-3">
                        <h6 className="m-0" style={{padding: '8px'}}>FILTER: </h6>
-                       <Select displayEmpty label="Grade Level" fullWidth size="small" defaultValue='' onChange={(e) => handleGradeLevelSelect(e)}>
+                       <Select displayEmpty fullWidth size="small" defaultValue='' onChange={(e) => handleGradeLevelSelect(e)}>
                             {gradeLevels && gradeLevels.map((gradeLevel, index) => (
-                            <MenuItem key={index} value={gradeLevel.id}>Grade {gradeLevel.grade_level}</MenuItem>    
+                            <MenuItem key={index} value={gradeLevel.id}>Grade {gradeLevel.grade_level}</MenuItem>
                             ))}
                         </Select>
                     </div>
@@ -111,11 +113,14 @@ export default function Sections(){
                             </thead>
                             <tbody>
                                 {subjects && subjects.map((subject, index) => (
-                                     <tr>
+                                     <tr key={index}>
                                         <td>{subject.subject_title}</td>
                                         <td>{subject.teacher?.details.first_name} {subject.teacher?.details.last_name}</td>
                                         <td>{subject.start_time} - {subject.end_time}</td>
-                                        <td></td>
+                                        <td>
+                                            <EditSubject subject={subject} setSubjects={setSubjects}/>
+                                            <DeleteSubject subject={subject} setSubjects={setSubjects}/>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

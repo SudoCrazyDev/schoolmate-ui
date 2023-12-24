@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useAlert } from "../../hooks/CustomHooks";
 import { useDispatch } from "react-redux";
-import * as auth from "../../redux/slices/UserSlice";
+import { actions } from "../../redux/slices/UserSlice";
 
 const validationSchema = yup.object().shape({
     email: yup.string().email('Must be a valid email'),
@@ -15,21 +15,17 @@ export default function Login(){
     const alert = useAlert();
     const dispatch = useDispatch();
     
-    const handleSubmit = (values) => {
-        formik.setSubmitting(true);
-        Axios.post('login', values)
-        .then(({data}) => {
+    const handleSubmit = async (values) => {
+        try {
+            formik.setSubmitting(true);
+            const { data } = await Axios.post('login', values);
             alert.setAlert('success', data.message);
-            setTimeout(() => {
-                dispatch(auth.actions.SET_TOKEN(data.token));
-            }, 1500);
-        })
-        .catch(({response}) => {
+            dispatch(actions.SET_TOKEN(data.token));
+        } catch (error) {
             alert.setAlert('error', response.data.message);
-        })
-        .finally(() => {
+        } finally{
             formik.setSubmitting(false);
-        });
+        }
     };
     
     const formik = useFormik({

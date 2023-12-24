@@ -1,37 +1,40 @@
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"
-import { put, takeLatest } from "redux-saga/effects";
+import { put, select, takeLatest } from "redux-saga/effects";
 import Axios from 'axios';
+import * as user from "../slices/UserSlice";
+import {all, call} from "redux-saga/effects";
+import { useSelector } from "react-redux"
 
 export const actionTypes = {
-    SET_TOKEN: "SET TOKEN",
+    SET_TEACHERS: "SET TEACHERS",
+    GET_TEACHERS: "GET TEACHERS"
 };
 
 const initialState = {
-    user: null,
-    token: null,
+    teachers: [],
 };
 
 const persistConfig = {
     storage,
-    key: 'v1-user-gscnssat',
-    whitelist: ['token']
+    key: 'v1-org-gscnssat'
 };
 
 export const reducer = persistReducer(persistConfig, (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.SET_TOKEN:
-            return {...state, token: action.payload};
+        case actionTypes.SET_TEACHERS:
+            return {...state, teachers: action.payload};
         default:
             return state;
     }
 });
 
 export const actions = {
-    SET_TOKEN: (token) => ({type: actionTypes.SET_TOKEN, payload: token})
+    SET_TEACHERS: (teachers) => ({type: actionTypes.SET_TEACHERS, payload: teachers}),
 };
 
-function* handleFetchUser(){
+
+function* handleTokenChange(){
     const {token} = yield select(state => state.user);
     if(token){
         try {
@@ -44,6 +47,11 @@ function* handleFetchUser(){
         }
     }
 };
+
+function* watchTokenChange(){
+    yield takeLatest(user.actionTypes.SET_TOKEN, handleTokenChange)
+};
+
 export function* saga(){
-    
+    yield all([watchTokenChange()]);
 }

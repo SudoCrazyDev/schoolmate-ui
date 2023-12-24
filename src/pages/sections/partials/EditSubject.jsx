@@ -1,67 +1,76 @@
+import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import Autocomplete from '@mui/material/Autocomplete';
 import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider'
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Axios from 'axios';
-import { useFormik } from "formik";
-import { useAlert } from '../../../hooks/CustomHooks';
+import IconButton from '@mui/material/IconButton';
+import { useFormik } from 'formik';
+import Axios from "axios";
 import { useSelector } from 'react-redux';
+import { useAlert } from '../../../hooks/CustomHooks';
 
-export default function AddSubject({selectedSection, setSubjects}){
-    const [open, setOpen] = useState(false);
+export default function EditSubject({subject, setSubjects}){
+    const [open, setOpenModal] = useState(false);
     const { teachers } = useSelector(state => state.org);
-    const alert = useAlert()
+    const alert = useAlert();
     
-    const handleCloseModal = () => {
-      formik.resetForm();
-      setOpen(false);
+    const {
+        subject_title,
+        schedule,
+        start_time,
+        end_time,
+        user_id,
+        id
+    } = subject;
+    
+    const handleModalState = () => {
+        setOpenModal(!open);
     };
     
     const handleSubmit = (values) => {
-      formik.setSubmitting(true);
-      Axios.post('section/subject/add', values)
-      .then(({data}) => {
-        setSubjects(data);
-        alert.setAlert('success', 'Subject Added successfully');
-        handleCloseModal();
-      })
-      .catch((err) => {
-        alert.setAlert('error', 'Error on adding subject');
-      })
-      .finally(() => {
-        formik.setSubmitting(false);
-      });
+        formik.setSubmitting(true)
+        Axios.put(`section/subject/update/${id}`, values)
+        .then(({data}) => {
+            setSubjects(data);
+            alert.setAlert('success', 'Subject updated successfully');
+            handleModalState();
+        })
+        .catch(() => {
+            alert.setAlert('error', 'Subject updated failed');
+        })
+        .finally(() => {
+            formik.setSubmitting(false)
+        });
     };
     
     const formik = useFormik({
-      initialValues:{
-        subject_title: '',
-        section_id: selectedSection.id,
-        user_id: '',
-        start_time: "07:30",
-        end_time: '08:30',
-        schedule: 'daily'
-      },
-      enableReinitialize: true,
-      onSubmit: handleSubmit
+        initialValues: {
+            subject_title: subject_title,
+            user_id: user_id,
+            start_time: start_time,
+            end_time: end_time,
+            schedule: schedule
+        },
+        onSubmit: handleSubmit
     });
     
     return(
         <>
-        <Button variant="contained" className='fw-bolder' onClick={() => setOpen(true)}>Add Subject</Button>
-        <Dialog open={open} maxWidth="sm" fullWidth onClose={() => handleCloseModal()}>
-            <DialogTitle className='fw-bolder'>Add New Subject for {selectedSection.section_name}</DialogTitle>
-            <Divider />
-            <DialogContent>
-                <form onSubmit={formik.handleSubmit}>
+        <IconButton size='small' color='primary' onClick={() => handleModalState()}>
+            <EditIcon />
+        </IconButton>
+        <Dialog open={open} maxWidth="sm" fullWidth>
+            <DialogTitle className='fw-bolder'>Update Subject Details</DialogTitle>
+            <form onSubmit={formik.handleSubmit}>
+                <DialogContent dividers>
                     <div className="d-flex flex-column gap-3">
                         <TextField label="Subject Title" variant="outlined" {...formik.getFieldProps('subject_title')} disabled={formik.isSubmitting}/>
                         <Autocomplete
@@ -73,6 +82,7 @@ export default function AddSubject({selectedSection, setSubjects}){
                             onChange={(event, newValue) =>{
                               formik.setFieldValue('user_id', newValue.id);
                             }}
+                            defaultValue={teachers[teachers.map(teacher => teacher.id).indexOf(user_id)]}
                             getOptionLabel={(option) => `${option.details?.first_name} ${option.details?.last_name}`}
                             renderInput={(params) => <TextField {...params} label="Subject Teacher" />}
                         />
@@ -86,14 +96,13 @@ export default function AddSubject({selectedSection, setSubjects}){
                                 <MenuItem value={"tth"}>Tuesday, Thursday</MenuItem>
                             </Select>
                         </FormControl>
-                        <Divider />
-                        <div className="d-flex flex-row mt-2 gap-2">
-                            <Button type="submit" variant="contained" color="primary" disabled={formik.isSubmitting}>Submit {formik.isSubmitting && <span className="ms-2 spinner-border spinner-border-sm"></span>}</Button>
-                            <Button variant="contained" color="error" onClick={() => handleCloseModal()} disabled={formik.isSubmitting}>Cancel</Button>
-                        </div>
                     </div>
-                </form>
-            </DialogContent>
+                </DialogContent>
+                <DialogActions className='d-flex flex-row justify-content-start mt-2'>
+                    <Button type="submit" variant="contained" color="primary" disabled={formik.isSubmitting}>Submit {formik.isSubmitting && <span className="ms-2 spinner-border spinner-border-sm"></span>}</Button>
+                    <Button variant="contained" color="error" onClick={() => handleModalState()} disabled={formik.isSubmitting}>Cancel</Button>
+                </DialogActions>
+            </form>
         </Dialog>
         </>
     );

@@ -7,7 +7,7 @@ const AlertComponent = () => {
     const {alertSettings, closeAlert} = useContext(AlertContext);
     return (
         <Snackbar open={alertSettings.open} autoHideDuration={3000} onClose={closeAlert} anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
-           <Alert severity={alertSettings.severity} variant="outlined">{alertSettings.message}</Alert>
+           <Alert severity={alertSettings.severity} variant="filled">{alertSettings.message}</Alert>
         </Snackbar>
     );
 };
