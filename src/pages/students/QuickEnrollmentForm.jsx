@@ -12,7 +12,7 @@ import DialogContent from '@mui/material/DialogContent';
 
 export default function QuickEnrollmentForm(){
     const alert = useAlert();
-    let {grade, section} = useParams();
+    let {grade, section, institution} = useParams();
     const [loading, setLoading] = useState(false);
     const [invalid, setInvalid] = useState(false);
     const [open, setOpen] = useState(false);
@@ -20,7 +20,7 @@ export default function QuickEnrollmentForm(){
     
     const handleValidateUrl = () => {
       setLoading(true);
-      Axios.post('validate/enrollment-form', {grade_level: grade, section: section.toUpperCase()})
+      Axios.post('validate/enrollment-form', {grade_level: grade, section: section.toUpperCase(), institution: institution})
       .then(({data}) => {
         formik.setFieldValue('section', data.section);
         setSectionId(data.section);
@@ -56,6 +56,7 @@ export default function QuickEnrollmentForm(){
         email: '',
         section: sectionId,
         grade: grade,
+        institution: institution
       },
       onSubmit: handleSubmit,
     });

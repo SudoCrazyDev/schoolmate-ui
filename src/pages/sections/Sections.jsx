@@ -1,33 +1,30 @@
-import IconButton from '@mui/material/IconButton';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import EditIcon from '@mui/icons-material/Edit';
 import NewSection from './partials/NewSection';
 import AddSubject from './partials/AddSubject';
 import { useEffect, useMemo, useState } from 'react';
 import Axios from "axios";
 import EditSubject from './partials/EditSubject';
 import DeleteSubject from './partials/DeleteSubject';
+import EditSection from './partials/EditSection';
+import { useSelector } from 'react-redux';
 
 export default function Sections(){
-    const [gradeLevels, setGradeLevels] = useState([]);
+    const {gradeLevels} = useSelector(state => state.org);
     const [selected, setSelected] = useState("");
     const [selectedSection, setSelectedSection] = useState(null);
     const [subjects, setSubjects] = useState([]);
     
     const filteredSections = useMemo(() => {
-        return gradeLevels.filter((gradelevel) => gradelevel.id === selected)[0];
-    }, [selected]);
+        const filteredGL = gradeLevels.filter((gradelevel) => gradelevel.id === selected)[0];
+        return filteredGL && filteredGL.sections.sort((a, b) => {
+            if(a.section_name < b.section_name) return -1;
+            if(a.section_name > b.section_name) return 1;
+        });
+    }, [selected, gradeLevels]);
     
     const handleGradeLevelSelect = (e) => {
         setSelected(e.target.value);
-    };
-    
-    const handleFetchSections = () => {
-        Axios.get('sections')
-        .then(({data}) => {
-            setGradeLevels(data);
-        });
     };
     
     const handleSelectSection = (values) => {
@@ -48,10 +45,6 @@ export default function Sections(){
         handleFetchSubjects();
     }, [selectedSection]);
     
-    useEffect(() => {
-        handleFetchSections()
-    },[]);
-    
     return(
         <div className="d-flex flex-row flex-wrap">
             <div className="col-12 p-2">
@@ -71,16 +64,14 @@ export default function Sections(){
                        <h6 className="m-0" style={{padding: '8px'}}>FILTER: </h6>
                        <Select displayEmpty fullWidth size="small" defaultValue='' onChange={(e) => handleGradeLevelSelect(e)}>
                             {gradeLevels && gradeLevels.map((gradeLevel, index) => (
-                            <MenuItem key={index} value={gradeLevel.id}>Grade {gradeLevel.grade_level}</MenuItem>
+                                <MenuItem key={index} value={gradeLevel.id}>Grade {gradeLevel.grade_level}</MenuItem>
                             ))}
                         </Select>
                     </div>
-                    {filteredSections && filteredSections.sections.map((section, index) => (
+                    {filteredSections && filteredSections.map((section, index) => (
                         <div key={index} className="d-flex flex-row align-items-center align-items-center class-section" onClick={() => handleSelectSection(section)}>
                             <h6 className="m-0" style={{padding: '8px'}}>{section.section_name}</h6>
-                            <IconButton className='ms-auto'>
-                                <EditIcon fontSize="small" />
-                            </IconButton>
+                            <EditSection section={section} />
                         </div>
                     ))}
                 </div>

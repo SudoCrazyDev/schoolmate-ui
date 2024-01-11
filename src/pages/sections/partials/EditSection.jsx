@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -14,9 +14,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import Axios from 'axios';
 import { useAlert } from '../../../hooks/CustomHooks';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
 import { actions } from '../../../redux/slices/OrgSlice';
 
-export default function NewSection(){
+export default function EditSection({section}){
     const [open, setOpen] = useState(false);
     const { teachers, gradeLevels } = useSelector(state => state.org);
     const dispatch = useDispatch();
@@ -28,14 +30,14 @@ export default function NewSection(){
     };
     
     const handleSubmit = (values) => {
-      Axios.post('section/add', values)
+      Axios.put(`section/update/${section.id}`, values)
       .then(({data}) => {
-          alert.setAlert('success', 'New Section added successfully')
+          alert.setAlert('success', 'Section updated successfully')
           dispatch(actions.SET_GRADELEVELS(data));
           handleModalState();
       })
       .catch(() => {
-        alert.setAlert('error', 'Failed creating new section')
+        alert.setAlert('error', 'Failed updating section')
       })
       .finally(() => {
         formik.setSubmitting(false);
@@ -44,18 +46,21 @@ export default function NewSection(){
     
     const formik = useFormik({
         initialValues: {
-          section_name: '',
-          grade_level_id: '',
-          class_adviser: ''
+          section_name: section.section_name,
+          grade_level_id: section.grade_level_id,
+          class_adviser: section.user_id
         },
+        enableReinitialize: true,
         onSubmit: handleSubmit
     });
     
     return(
         <>
-        <Button variant="contained" className='fw-bolder' onClick={handleModalState}>New Section</Button>
+        <IconButton className='ms-auto' onClick={handleModalState}>
+            <EditIcon fontSize="small" />
+        </IconButton>
         <Dialog open={open} maxWidth="sm" fullWidth onClose={() => setOpen(false)}>
-            <DialogTitle className='fw-bolder'>Add New Section</DialogTitle>
+            <DialogTitle className='fw-bolder'>Update Section</DialogTitle>
             <Divider />
             <DialogContent>
                 <form onSubmit={formik.handleSubmit}>
@@ -63,7 +68,7 @@ export default function NewSection(){
                         <TextField label="Section Name" variant="outlined" disabled={formik.isSubmitting} {...formik.getFieldProps('section_name')}/>
                         <FormControl>
                             <InputLabel id="grade_level_label">Grade Level</InputLabel>
-                            <Select labelId="grade_level_label" label="Grade Level" fullWidth onChange={(e) => formik.setFieldValue('grade_level_id', e.target.value)} disabled={formik.isSubmitting}>
+                            <Select defaultValue={section.grade_level_id} labelId="grade_level_label" label="Grade Level" fullWidth onChange={(e) => formik.setFieldValue('grade_level_id', e.target.value)} disabled={formik.isSubmitting}>
                               {gradeLevels.map((gl, index) => (
                                 <MenuItem key={index} value={gl.id}>Grade {gl.grade_level}</MenuItem>
                               ))}
@@ -78,6 +83,7 @@ export default function NewSection(){
                             onChange={(event, newValue) =>{
                               formik.setFieldValue('class_adviser', newValue.id);
                             }}
+                            defaultValue={teachers[teachers.map(teacher => teacher.id).indexOf(section.user_id)]}
                             getOptionLabel={(option) => `${option.details?.first_name} ${option.details?.last_name}`}
                             renderInput={(params) => <TextField {...params} label="Class Adviser" />}
                         />

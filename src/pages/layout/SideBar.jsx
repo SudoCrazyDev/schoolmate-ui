@@ -1,7 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import Axios from "axios";
+import { userHasRole } from "../../global/Helpers";
 
 const dashboardAccess = [
     'administrator',
@@ -11,29 +9,21 @@ const sectionsAccess = [
     'administrator',
     'curriculum-head'
 ];
+const teachersAccess = [
+    'administrator',
+    'curriculum-head'
+];
 
 export default function SideBar(){
-    const token = useSelector(state => state.user.token);
-    const [role, setRole] = useState([]);
-    
-    const handleFetchAdvisoryStudents = () => {
-        Axios.get(`user/role/${token}`)
-        .then(({data}) => {
-            setRole(data.roles);
-        });
-    };
-    
-    useEffect(() => {
-        handleFetchAdvisoryStudents();
-    },[]);
     
     return(
-        <div className="d-flex flex-column bg-dark text-white" style={{minHeight: '100%', maxHeight: '100vh', position: 'sticky'}}>
+        <div className="d-flex flex-column bg-dark text-white col-2" style={{position: 'fixed'}}>
             <div className="d-flex flex-column" style={{minHeight: '100vh'}}>
                 <div className="d-flex flex-row justify-content-center p-2">
                     <h1 className="m-0">GSCNSSAT</h1>
                 </div>
-                {role && role[0] && dashboardAccess.includes(role[0].name) && (
+                
+                {userHasRole(dashboardAccess) && (
                     <div className="d-flex flex-row m-1 p-1">
                         <NavLink to="/dashboard" className="h6">
                             Dashboard
@@ -41,20 +31,35 @@ export default function SideBar(){
                     </div>
                 )}
                 
-                {/* <div className="d-flex flex-row m-1 p-1">
-                    <h6 className="m-0">Class Advisory</h6>
-                </div>
+                {userHasRole(dashboardAccess) && (
+                    <div className="d-flex flex-row m-1 p-1">
+                        <NavLink to="/advisory" className="h6">
+                            Class Advisory
+                        </NavLink>
+                    </div>
+                )}
                 
-                <div className="d-flex flex-row m-1 p-1">
-                    <NavLink to="/sections/grading" className="h6">
-                        Subject Assignation
-                    </NavLink>
-                </div> */}
+                {userHasRole(dashboardAccess) && (
+                    <div className="d-flex flex-row m-1 p-1">
+                        <NavLink to="/sections/grading" className="h6">
+                            Subject Assignation
+                        </NavLink>
+                    </div>
+                )}
                 
-                {role && role[0] && sectionsAccess.includes(role[0].name) && (
+                
+                {userHasRole(sectionsAccess) && (
                     <div className="d-flex flex-row m-1 p-1">
                         <NavLink to="/sections" className="h6">
                             Sections
+                        </NavLink>
+                    </div>
+                )}
+                
+                {userHasRole(teachersAccess) && (
+                    <div className="d-flex flex-row m-1 p-1">
+                        <NavLink to="/teachers" className="h6">
+                            Teachers
                         </NavLink>
                     </div>
                 )}

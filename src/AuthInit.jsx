@@ -13,7 +13,7 @@ const tokenCheck = () => {
 
 useEffect(() =>{
     tokenCheck()
-},[]);
+},[token]);
 
 return(
     <>

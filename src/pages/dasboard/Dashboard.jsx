@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 
 export default function Dashboard(){
-    const token = useSelector(state => state.user.token);
+    const {token, user, institutions} = useSelector(state => state.user);
     const [advisory, setAdvisory] = useState([]);
     
     const handleAccept = (student_id) => {
@@ -38,6 +38,9 @@ export default function Dashboard(){
     return(
         <div className="d-flex flex-column">
             <h1 className="m-0">Student Request</h1>
+            <h6 className='m-0'>
+                {import.meta.env.VITE_APP_URL}form/{institutions.id}/{user.advisory[0]?.grade_level.grade_level}/{user.advisory[0]?.section_name.toLowerCase()}
+            </h6>
             <div className="my-2">
                 <Divider />
             </div>
@@ -53,23 +56,23 @@ export default function Dashboard(){
                 <tbody>
                     {advisory && advisory[0] && advisory[0].student_request && advisory[0].student_request.map((student, index) => (
                         <tr key={index}>
-                            <td className={`${student.user.is_accepted && 'bg-success text-white'}`}>
-                                {student.user.details.first_name} {student.user.details.last_name}
+                            <td className={`m-0 ${student.student.is_accepted && 'bg-success text-white'}`}>
+                                {student.student.details.first_name} {student.student.details.last_name}
                             </td>
-                            <td className={`${student.user.is_accepted && 'bg-success text-white'}`}>
-                                {student.user.email}
+                            <td className={`m-0 ${student.student.is_accepted && 'bg-success text-white'}`}>
+                                {student.student.email}
                             </td>
-                            <td className={`${student.user.is_accepted && 'bg-success text-white'}`}>
-                                {student.user.details.phone}
+                            <td className={`m-0 ${student.student.is_accepted && 'bg-success text-white'}`}>
+                                {student.student.details.phone}
                             </td>
                             <td>
-                                {!student.user.is_accepted && (
+                                {!student.student.is_accepted && (
                                     <>
-                                        <IconButton onClick={() => handleAccept(student.user.id)}>
-                                            <CheckIcon color="primary"/>
+                                        <IconButton size='small' onClick={() => handleAccept(student.student.id)}>
+                                            <CheckIcon color="primary" size='small'/>
                                         </IconButton>
-                                        <IconButton onClick={() => handleDelete(student.user.id)}>
-                                            <DeleteIcon color="error"/>
+                                        <IconButton size='small' onClick={() => handleDelete(student.student.id)}>
+                                            <DeleteIcon color="error" size='small'/>
                                         </IconButton>
                                     </>
                                 )}

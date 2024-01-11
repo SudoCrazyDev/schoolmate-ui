@@ -15,17 +15,19 @@ export default function Login(){
     const alert = useAlert();
     const dispatch = useDispatch();
     
-    const handleSubmit = async (values) => {
-        try {
-            formik.setSubmitting(true);
-            const { data } = await Axios.post('login', values);
+    const handleSubmit = (values) => {
+        formik.setSubmitting(true);
+        Axios.post('login', values)
+        .then(({data}) => {
             alert.setAlert('success', data.message);
             dispatch(actions.SET_TOKEN(data.token));
-        } catch (error) {
+        })
+        .catch(({response}) => {
             alert.setAlert('error', response.data.message);
-        } finally{
+        })
+        .finally(() => {
             formik.setSubmitting(false);
-        }
+        });
     };
     
     const formik = useFormik({

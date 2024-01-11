@@ -19,10 +19,8 @@ function App() {
     <ContextStore>
       <Provider store={store}>
         <PersistGate persistor={persistor}>
-          <AuthInit>
-            <RouterProvider router={router} />
-            <GlobalComponents />
-          </AuthInit>
+          <RouterProvider router={router} />
+          <GlobalComponents />
         </PersistGate>
       </Provider>
     </ContextStore>
