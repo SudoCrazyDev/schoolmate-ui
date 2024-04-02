@@ -1,5 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { userHasRole } from "../../global/Helpers";
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+
+const adminAccess = [
+    'administrator'
+];
 
 const dashboardAccess = [
     'administrator',
@@ -7,11 +12,21 @@ const dashboardAccess = [
 ];
 const sectionsAccess = [
     'administrator',
-    'curriculum-head'
+    'curriculum-head-7',
+    'curriculum-head-8',
+    'curriculum-head-9',
+    'curriculum-head-10',
+    'curriculum-head-11',
+    'curriculum-head-12',
 ];
 const teachersAccess = [
     'administrator',
-    'curriculum-head'
+    'curriculum-head-7',
+    'curriculum-head-8',
+    'curriculum-head-9',
+    'curriculum-head-10',
+    'curriculum-head-11',
+    'curriculum-head-12',
 ];
 
 export default function SideBar(){
@@ -24,16 +39,16 @@ export default function SideBar(){
                 </div>
                 
                 {userHasRole(dashboardAccess) && (
-                    <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/dashboard" className="h6">
-                            Dashboard
+                    <div className="d-flex flex-row m-1 p-1 align-items-center">
+                        <NavLink to="/dashboard" className="h6" style={{textDecoration: 'none'}}>
+                            <SpaceDashboardIcon /> Dashboard
                         </NavLink>
                     </div>
                 )}
                 
                 {userHasRole(dashboardAccess) && (
                     <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/advisory" className="h6">
+                        <NavLink to="/advisory" className="h6" style={{textDecoration: 'none'}}>
                             Class Advisory
                         </NavLink>
                     </div>
@@ -41,7 +56,7 @@ export default function SideBar(){
                 
                 {userHasRole(dashboardAccess) && (
                     <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/sections/grading" className="h6">
+                        <NavLink to="/sections/grading" className="h6" style={{textDecoration: 'none'}}>
                             Subject Assignation
                         </NavLink>
                     </div>
@@ -50,16 +65,24 @@ export default function SideBar(){
                 
                 {userHasRole(sectionsAccess) && (
                     <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/sections" className="h6">
+                        <NavLink to="/sections" className="h6" style={{textDecoration: 'none'}}>
                             Sections
                         </NavLink>
                     </div>
                 )}
                 
-                {userHasRole(teachersAccess) && (
+                {userHasRole(adminAccess) && (
                     <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/teachers" className="h6">
+                        <NavLink to="/teachers" className="h6" style={{textDecoration: 'none'}}>
                             Teachers
+                        </NavLink>
+                    </div>
+                )}
+                
+                {userHasRole(adminAccess) && (
+                    <div className="d-flex flex-row m-1 p-1">
+                        <NavLink to="/curriculum-heads" className="h6" style={{textDecoration: 'none'}}>
+                            Curriculum Heads
                         </NavLink>
                     </div>
                 )}

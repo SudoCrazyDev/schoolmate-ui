@@ -42,10 +42,10 @@ export default function Login(){
     return(
         <div className="d-flex flex-row justify-content-center align-items-center vh-100">
             <form onSubmit={formik.handleSubmit}>
-                <div className="d-flex flex-column align-items-center gap-3">
-                    <h1 className="m-0 fw-bolder">GSCNSSAT APP</h1>
-                    <TextField type="email" variant="outlined" label="Email" fullWidth {...formik.getFieldProps('email')} error={formik.errors.email}/>
-                    <TextField type="password" variant="outlined" label="Password" fullWidth {...formik.getFieldProps('password')} error={formik.errors.password}/>
+                <div className="d-flex flex-column align-items-center gap-3 align-items-center">
+                    <h1 className="m-0 fw-bolder text-center">SCHOLASTIC CLOUD</h1>
+                    <TextField id="email" type="email" variant="outlined" label="Email" fullWidth {...formik.getFieldProps('email')} error={formik.errors.email}/>
+                    <TextField id="password" type="password" variant="outlined" label="Password" fullWidth {...formik.getFieldProps('password')} error={formik.errors.password}/>
                     <Button type="submit" variant="contained" className="fw-bolder" fullWidth disabled={formik.isSubmitting}>Login {formik.isSubmitting && <span className="ms-2 spinner-border spinner-border-sm"></span>}</Button>
                 </div>
             </form>

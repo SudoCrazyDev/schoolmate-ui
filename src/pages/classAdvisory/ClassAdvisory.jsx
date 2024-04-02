@@ -4,6 +4,8 @@ import Axios from 'axios';
 import { useAlert } from '../../hooks/CustomHooks';
 import { useEffect, useState } from 'react';
 import Skeleton from '@mui/material/Skeleton';
+import Button from '@mui/material/Button';
+import { NavLink } from 'react-router-dom';
 
 export default function ClassAdvisory(){
     const { user } = useSelector(state => state.user);
@@ -35,7 +37,12 @@ export default function ClassAdvisory(){
                         <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>view your students progress.</p>
                     </div>
                     <div className="ms-auto">
-                        
+                        <NavLink to={'/advisory/new-student'}>
+                            <Button variant="contained" className='fw-bolder me-2'>NEW STUDENT</Button>
+                        </NavLink>
+                        <NavLink to={'/advisory/bulk-new-student'}>
+                            <Button variant="contained" className='fw-bolder'>BULK STUDENT</Button>
+                        </NavLink>
                     </div>
                 </div>
             </div>

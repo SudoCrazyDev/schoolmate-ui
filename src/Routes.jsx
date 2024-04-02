@@ -19,6 +19,10 @@ import Logout from "./pages/auth/Logout";
 import Teachers from "./pages/teachers/Teachers";
 import AuthInit from "./AuthInit";
 import ClassAdvisory from "./pages/classAdvisory/ClassAdvisory";
+import NewStudent from "./pages/classAdvisory/partials/NewStudent";
+import CurriculumHeads from "./pages/curriculumHead/CurriculumHeads";
+import BulkStudent from "./pages/classAdvisory/partials/BulkAddStudent";
+import InstitutionRegistration from "./pages/public/InstitutionRegistration/InstituionRegistration";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,7 +34,10 @@ export const router = createBrowserRouter(
             <Route element={<Sections />} path="/sections" />
             <Route element={<StudentsGrading />} path="/sections/grading" />
             <Route element={<Teachers />} path="/teachers" />
+            <Route element={<CurriculumHeads />} path="/curriculum-heads" />
             <Route element={<ClassAdvisory />} path="/advisory" />
+            <Route element={<NewStudent />} path="/advisory/new-student" exact/>
+            <Route element={<BulkStudent />} path="/advisory/bulk-new-student" exact/>
             <Route element={<Logout />} path="/logout" />
           </Route>
         </Route>
@@ -38,6 +45,7 @@ export const router = createBrowserRouter(
         <Route element={<Login />} path="/login"/>
       </Route>
       <Route element={<QuickEnrollmentForm />} path="/form/:institution/:grade/:section"/>
+      <Route element={<InstitutionRegistration />} path="/institution-registration"/>
     </Route>
   )
 );

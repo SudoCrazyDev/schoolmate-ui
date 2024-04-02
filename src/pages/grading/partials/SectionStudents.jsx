@@ -42,7 +42,7 @@ export default function SectionStudents({selectedSubject}){
     
     const GetGrading = (grading, student, index) => {
         if(student.grades.length > 0){
-            const filteredGrade = student.grades.filter(grade => Number(grade.grading) === grading);
+            const filteredGrade = student.grades.filter(grade => Number(grade.grading) === grading && selectedSubject.id === grade.subject_id);
             if(filteredGrade.length === 0){
                 return <TextField variant="standard" size="small" onChange={(e) => handleChangeGrade(grading, student, index, e.target.value)}/>
             }else{

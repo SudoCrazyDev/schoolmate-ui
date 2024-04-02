@@ -60,10 +60,10 @@ export default function NewSection(){
             <DialogContent>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="d-flex flex-column gap-3">
-                        <TextField label="Section Name" variant="outlined" disabled={formik.isSubmitting} {...formik.getFieldProps('section_name')}/>
+                        <TextField id="section_name" label="Section Name" variant="outlined" disabled={formik.isSubmitting} {...formik.getFieldProps('section_name')}/>
                         <FormControl>
                             <InputLabel id="grade_level_label">Grade Level</InputLabel>
-                            <Select labelId="grade_level_label" label="Grade Level" fullWidth onChange={(e) => formik.setFieldValue('grade_level_id', e.target.value)} disabled={formik.isSubmitting}>
+                            <Select id="grade_level" labelId="grade_level_label" label="Grade Level" fullWidth onChange={(e) => formik.setFieldValue('grade_level_id', e.target.value)} disabled={formik.isSubmitting}>
                               {gradeLevels.map((gl, index) => (
                                 <MenuItem key={index} value={gl.id}>Grade {gl.grade_level}</MenuItem>
                               ))}
@@ -71,7 +71,7 @@ export default function NewSection(){
                         </FormControl>
                         <Autocomplete
                             disabled={formik.isSubmitting}
-                            id="combo-box-demo"
+                            id="class_adviser"
                             options={teachers}
                             fullWidth
                             disableClearable

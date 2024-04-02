@@ -10,8 +10,12 @@ import { useFormik } from "formik";
 import { useAlert } from '../../../hooks/CustomHooks';
 import { useDispatch } from 'react-redux';
 import { actions } from '../../../redux/slices/OrgSlice';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 
-export default function AddTeacher(){
+export default function AddCurriculumHead(){
     const [open, setOpen] = useState(false);
     const alert = useAlert()
     const dispatch = useDispatch();
@@ -23,14 +27,14 @@ export default function AddTeacher(){
     
     const handleSubmit = (values) => {
       formik.setSubmitting(true);
-      Axios.post('teacher/add', values)
+      Axios.post('curricuum-head/add', values)
       .then(({data}) => {
-        alert.setAlert('success', 'Teacher Added successfully');
-        dispatch(actions.SET_TEACHERS(data));
+        alert.setAlert('success', 'Curriculum Head Added successfully');
+        dispatch(actions.SET_CURRICULUM_HEADS(data));
         handleCloseModal();
       })
       .catch((err) => {
-        alert.setAlert('error', 'Error on creating teacher');
+        alert.setAlert('error', 'Error on creating curriculum head');
       })
       .finally(() => {
         formik.setSubmitting(false);
@@ -42,16 +46,17 @@ export default function AddTeacher(){
         first_name: '',
         middle_name: '',
         last_name: '',
-        email: ""
+        email: "",
+        role: "",
       },
       onSubmit: handleSubmit
     });
     
     return(
         <>
-        <Button variant="contained" className='fw-bolder' onClick={() => setOpen(true)}>Add Teacher</Button>
+        <Button variant="contained" className='fw-bolder' onClick={() => setOpen(true)}>Add Curriculum Head</Button>
         <Dialog open={open} maxWidth="sm" fullWidth onClose={() => handleCloseModal()}>
-            <DialogTitle className='fw-bolder'>Add Teacher</DialogTitle>
+            <DialogTitle className='fw-bolder'>Add Curriculum Head</DialogTitle>
             <Divider />
             <DialogContent>
                 <form onSubmit={formik.handleSubmit}>
@@ -60,6 +65,17 @@ export default function AddTeacher(){
                         <TextField id="middle_name" label="Middle Name" variant="outlined" {...formik.getFieldProps('middle_name')} disabled={formik.isSubmitting}/>
                         <TextField id="last_name" label="Last Name" variant="outlined" {...formik.getFieldProps('last_name')} disabled={formik.isSubmitting}/>
                         <TextField id="email" label="Email" variant="outlined" {...formik.getFieldProps('email')} disabled={formik.isSubmitting}/>
+                        <FormControl>
+                        <InputLabel id="grade_level_label">Assigned Grade Level</InputLabel>
+                        <Select id="grade_level" labelId="grade_level_label" label="Assigned Grade Level" fullWidth {...formik.getFieldProps('role')} disabled={formik.isSubmitting}>
+                            <MenuItem value={"curriculum-head-7"}>Grade 7</MenuItem>
+                            <MenuItem value={"curriculum-head-8"}>Grade 8</MenuItem>
+                            <MenuItem value={"curriculum-head-9"}>Grade 9</MenuItem>
+                            <MenuItem value={"curriculum-head-10"}>Grade 10</MenuItem>
+                            <MenuItem value={"curriculum-head-11"}>Grade 11</MenuItem>
+                            <MenuItem value={"curriculum-head-12"}>Grade 12</MenuItem>
+                        </Select>
+                        </FormControl>
                         <Divider />
                         <div className="d-flex flex-row mt-2 gap-2">
                             <Button type="submit" variant="contained" color="primary" disabled={formik.isSubmitting}>Submit {formik.isSubmitting && <span className="ms-2 spinner-border spinner-border-sm"></span>}</Button>

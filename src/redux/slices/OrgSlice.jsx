@@ -8,11 +8,13 @@ import {all, call} from "redux-saga/effects";
 export const actionTypes = {
     SET_TEACHERS: "SET TEACHERS",
     SET_GRADELEVELS: "SET GRADELEVELS",
+    SET_CURRICULUM_HEADS: "SET CURRICULUM_HEADS",
     LOGOUT: 'LOGOUT'
 };
 
 const initialState = {
     teachers: [],
+    curriculumHeads: [],
     gradeLevels: [],
 };
 
@@ -27,6 +29,8 @@ export const reducer = persistReducer(persistConfig, (state = initialState, acti
             return {...state, teachers: action.payload};
         case actionTypes.SET_GRADELEVELS:
             return {...state, gradeLevels: action.payload};
+        case actionTypes.SET_CURRICULUM_HEADS:
+            return {...state, curriculumHeads: action.payload};
         case actionTypes.LOGOUT:
             return state = initialState;
         default:
@@ -37,18 +41,24 @@ export const reducer = persistReducer(persistConfig, (state = initialState, acti
 export const actions = {
     SET_TEACHERS: (teachers) => ({type: actionTypes.SET_TEACHERS, payload: teachers}),
     SET_GRADELEVELS: (gradeLevels) => ({type: actionTypes.SET_GRADELEVELS, payload: gradeLevels}),
+    SET_CURRICULUM_HEADS: (curriculumHeads) => ({type: actionTypes.SET_CURRICULUM_HEADS, payload: curriculumHeads}),
     SET_LOGOUT: () => ({type: actionTypes.LOGOUT}),
 };
 
 
 function* handleTokenChange(){
-    const {token} = yield select(state => state.user);
+    const {token, user} = yield select(state => state.user);
+    if(user.roles.includes('subject-teacher'))return ;
     if(token){
         try {
             const response = yield call(() => Axios.get('teachers', {
                 headers: {Authorization: `Bearer ${token}`}
             }));
-            yield put(actions.SET_TEACHERS(response.data));
+            const currResponse = yield call(() => Axios.get('curricuum-head', {
+                headers: {Authorization: `Bearer ${token}`}
+            }));
+            yield put(actions.SET_TEACHERS(response.data)); 
+            yield put(actions.SET_CURRICULUM_HEADS(currResponse.data));
         } catch (error) {
             console.error('Error fetching teachers:', error);
         }
@@ -56,7 +66,8 @@ function* handleTokenChange(){
 };
 
 function* handleFetchGradeLevels(){
-    const {token} = yield select(state => state.user);
+    const {token, user} = yield select(state => state.user);
+    if(user.roles.includes('subject-teacher'))return ;
     if(token){
         try {
             const response = yield call(() => Axios.get('sections', {
@@ -70,8 +81,8 @@ function* handleFetchGradeLevels(){
 }
 
 function* watchTokenChange(){
-    yield takeLatest(user.actionTypes.SET_TOKEN, handleTokenChange);
-    yield takeLatest(user.actionTypes.SET_TOKEN, handleFetchGradeLevels)
+    yield takeLatest(user.actionTypes.SET_USER, handleTokenChange);
+    yield takeLatest(user.actionTypes.SET_USER, handleFetchGradeLevels)
 };
 
 export function* saga(){

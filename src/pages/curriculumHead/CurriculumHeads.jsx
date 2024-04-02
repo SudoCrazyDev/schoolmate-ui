@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import AddTeacher from './partials/AddTeacher';
 import TextField from '@mui/material/TextField';
-import EditTeacher from './partials/EditTeacher';
+import AddCurriculumHead from './components/AddCurriculumHead';
 
-export default function Teachers(){
-    const { teachers } = useSelector(state => state.org);
+export default function CurriculumHeads(){
+    const { curriculumHeads } = useSelector(state => state.org);
     const [keyword, setKeyword] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
@@ -23,25 +22,25 @@ export default function Teachers(){
     };
       
     const filteredTeachers = useMemo(() => {
-        const sortedTeachers = teachers.sort((a, b) => {
+        const sortedTeachers = curriculumHeads.sort((a, b) => {
             if(a.details?.last_name.toLowerCase() < b.details?.last_name.toLowerCase()) return -1;
             if(a.details?.last_name.toLowerCase() > b.details?.last_name.toLowerCase()) return 1;
         });
         const filteredResults = sortedTeachers.filter(teacher => flattenObject(teacher).toLowerCase().includes(keyword));
         setTotalPages(Math.ceil(filteredResults.length / itemsPerPage) || 0);
         return filteredResults.slice(startIndex, endIndex);
-    }, [teachers, keyword, currentPage]);
+    }, [curriculumHeads, keyword, currentPage]);
     
     return(
         <div className="d-flex flex-row flex-wrap">
             <div className="col-12 p-2">
                 <div className="card p-3 d-flex flex-row align-items-center">
                     <div className="d-flex flex-column">
-                        <h2 className="m-0 fw-bolder">TEACHERS</h2>
-                        <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>add or update teachers information.</p>
+                        <h2 className="m-0 fw-bolder">Curriculum Heads</h2>
+                        <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>add or update information.</p>
                     </div>
                     <div className="ms-auto">
-                        <AddTeacher />
+                        <AddCurriculumHead />
                     </div>
                 </div>
             </div>
@@ -49,7 +48,7 @@ export default function Teachers(){
                 <div className="card p-3">
                     <div className="d-flex flex-column">
                         <div className="d-flex flex-row">
-                            <TextField id='search_input' size='small' label="Search" variant="outlined" onChange={(e) => setKeyword(e.target.value.toLowerCase())}/>
+                            <TextField id="search_input" size='small' label="Search" variant="outlined" onChange={(e) => setKeyword(e.target.value.toLowerCase())}/>
                             <div className="ms-auto">
                                 
                             </div>
@@ -61,7 +60,6 @@ export default function Teachers(){
                             <thead>
                                 <tr>
                                     <th className='fw-bold'>Teacher</th>
-                                    <th className='fw-bold'>Advisory</th>
                                     <th className='fw-bold'>Action</th>
                                 </tr>
                             </thead>
@@ -69,9 +67,8 @@ export default function Teachers(){
                                 {filteredTeachers.map((teacher) => (
                                     <tr key={teacher.id}>
                                         <td>{teacher.details.last_name}, {teacher.details.first_name}</td>
-                                        <td>{teacher?.advisory[0]?.section_name}</td>
                                         <td>
-                                            <EditTeacher teacher={teacher} />
+                                            {/* <EditTeacher teacher={teacher} /> */}
                                         </td>
                                     </tr>
                                 ))}
