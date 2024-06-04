@@ -13,7 +13,7 @@ export const actionTypes = {
 };
 
 const initialState = {
-    user: null,
+    info: null,
     token: null,
     institutions: null,
     roles: [],
@@ -29,12 +29,12 @@ export const reducer = persistReducer(persistConfig, (state = initialState, acti
     switch (action.type) {
         case actionTypes.SET_TOKEN:
             return {...state, token: action.payload};
+        case actionTypes.SET_USER:
+            return {...state, info: action.payload};
         case actionTypes.SET_ROLES:
             return {...state, roles: action.payload};
         case actionTypes.SET_INSTITUTIONS:
             return {...state, institutions: action.payload};
-        case actionTypes.SET_USER:
-            return {...state, user: action.payload};
         case actionTypes.LOGOUT:
             return state = initialState;
         default:
@@ -54,13 +54,14 @@ function* handleFetchUser(){
     const {token} = yield select(state => state.user);
     if(token){
         try {
-            const response = yield call(() => Axios.get('user', {
+            let response = yield call(() => Axios.get('user', {
                 headers: {Authorization: `Bearer ${token}`}
             }));
-            const active_institution = response.data.institutions.filter((institution) => institution.pivot.is_active === 1)[0];
-            yield put(actions.SET_USER(response.data));
-            yield put(actions.SET_INSTITUTIONS(active_institution));
+            yield put(actions.SET_INSTITUTIONS(response.data.institutions));
+            delete response.data['institutions'];
             yield put(actions.SET_ROLES(response.data.roles));
+            delete response.data['roles'];
+            yield put(actions.SET_USER(response.data));
         } catch (error) {
             console.error('Error fetching user data:', error);
         }

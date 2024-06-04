@@ -23,6 +23,8 @@ import NewStudent from "./pages/classAdvisory/partials/NewStudent";
 import CurriculumHeads from "./pages/curriculumHead/CurriculumHeads";
 import BulkStudent from "./pages/classAdvisory/partials/BulkAddStudent";
 import InstitutionRegistration from "./pages/public/InstitutionRegistration/InstituionRegistration";
+import Institutions from "./pages/institutions/Institutions";
+import Users from "./pages/users/Users";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,6 +40,10 @@ export const router = createBrowserRouter(
             <Route element={<ClassAdvisory />} path="/advisory" />
             <Route element={<NewStudent />} path="/advisory/new-student" exact/>
             <Route element={<BulkStudent />} path="/advisory/bulk-new-student" exact/>
+            
+            {/* ADMIN ONLY ROUTES */}
+            <Route element={<Institutions />} path="/institutions"/>
+            <Route element={<Users />} path="/users"/>
             <Route element={<Logout />} path="/logout" />
           </Route>
         </Route>

@@ -51,14 +51,14 @@ function* handleTokenChange(){
     if(user.roles.includes('subject-teacher'))return ;
     if(token){
         try {
-            const response = yield call(() => Axios.get('teachers', {
-                headers: {Authorization: `Bearer ${token}`}
-            }));
-            const currResponse = yield call(() => Axios.get('curricuum-head', {
-                headers: {Authorization: `Bearer ${token}`}
-            }));
-            yield put(actions.SET_TEACHERS(response.data)); 
-            yield put(actions.SET_CURRICULUM_HEADS(currResponse.data));
+            // const response = yield call(() => Axios.get('teachers', {
+            //     headers: {Authorization: `Bearer ${token}`}
+            // }));
+            // const currResponse = yield call(() => Axios.get('curricuum-head', {
+            //     headers: {Authorization: `Bearer ${token}`}
+            // }));
+            // yield put(actions.SET_TEACHERS(response.data));
+            // yield put(actions.SET_CURRICULUM_HEADS(currResponse.data));
         } catch (error) {
             console.error('Error fetching teachers:', error);
         }
