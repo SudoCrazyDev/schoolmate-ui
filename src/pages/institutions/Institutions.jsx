@@ -4,15 +4,20 @@ import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import CreateIcon from '@mui/icons-material/Create';
+import pb from "../../global/pb";
+import { useAlert } from "../../hooks/CustomHooks";
 
 export default function Institutions(){
     const [institutions, setInstitutions] = useState([]);
-
-    const handleFetchInstitutions = () => {
-        axios.get(`institution/all`)
-        .then(({data}) => {
-            setInstitutions(data.data);
-        });
+    const alert = useAlert();
+    
+    const handleFetchInstitutions = async () => {
+        try {
+            const records = await pb.collection('institutions').getFullList();
+            setInstitutions(records);
+        } catch (error) {
+            alert.setAlert('error', "There's an error fetching institutions");
+        }
     };
 
     useEffect(() => {
@@ -29,7 +34,7 @@ export default function Institutions(){
                             <p className="m-0 fst-italic" style={{fontSize: '12px'}}>Create, Retrieve, Update and Delete institutions.</p>
                         </div>
                         <div className="ms-auto">
-                            <AddInstitution />
+                            <AddInstitution setInstitutions={setInstitutions}/>
                         </div>
                     </div>
                 </div>
@@ -48,7 +53,7 @@ export default function Institutions(){
                             <tbody>
                                 {institutions.map((insititution, index) => (
                                     <tr>
-                                        <td>{insititution.institution}</td>
+                                        <td className="fw-bold">{insititution.title}</td>
                                         <td>{insititution.abbr}</td>
                                         <td>
                                             <div className="d-flex flex-row">

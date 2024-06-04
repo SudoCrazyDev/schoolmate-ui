@@ -8,8 +8,9 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import axios from 'axios';
 import { useAlert } from '../../../hooks/CustomHooks';
+import pb from "../../../global/pb";
 
-export default function AddInstitution(){
+export default function AddInstitution({setInstitutions}){
     const [open, setOpen] = useState(false);
     const alert = useAlert();
     
@@ -18,19 +19,22 @@ export default function AddInstitution(){
         setOpen(!open);
     };
     
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
         formik.setSubmitting(true);
-        axios.post('institution/create', values)
-        .then(({data}) => {
+        try {
+            const record = await pb.collection('institutions')
+            .create({
+                title: values.institution,
+                abbr: values.abbr
+            });
+            setInstitutions(prevState => [...prevState, record])
             alert.setAlert('success', 'New Institution Created');
             handleModalState();
-        })
-        .catch(() => {
+        } catch (error) {
             alert.setAlert('error', 'Failed to create Institution');
-        })
-        .finally(() => {
+        } finally {
             formik.setSubmitting(false);
-        });
+        }
     };
     
     const formik = useFormik({
@@ -52,7 +56,7 @@ export default function AddInstitution(){
                     <div className="d-flex flex-column gap-2">
                         <TextField variant='outlined' label="Insitution" {...formik.getFieldProps('institution')} disabled={formik.isSubmitting}/>
                         <TextField variant='outlined' label="Abbrevation (Eg. ILSNHMD, GSCNSSAT)" {...formik.getFieldProps('abbr')} disabled={formik.isSubmitting}/>
-                        <TextField variant='outlined' label="School ID" {...formik.getFieldProps('gov_id')} disabled={formik.isSubmitting}/>
+                        {/* <TextField variant='outlined' label="School ID" {...formik.getFieldProps('gov_id')} disabled={formik.isSubmitting}/> */}
                     </div>
                 </DialogContent>
                 <DialogActions className='d-flex flex-row justify-content-start'>
