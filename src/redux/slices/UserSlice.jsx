@@ -3,6 +3,7 @@ import storage from "redux-persist/lib/storage"
 import { put, takeLatest, select } from "redux-saga/effects";
 import Axios from 'axios';
 import {all, call} from "redux-saga/effects";
+import pb from '../../global/pb';
 
 export const actionTypes = {
     SET_TOKEN: "SET TOKEN",
@@ -15,7 +16,7 @@ export const actionTypes = {
 const initialState = {
     info: null,
     token: null,
-    institutions: null,
+    institutions: [],
     roles: [],
 };
 
@@ -50,18 +51,14 @@ export const actions = {
     SET_LOGOUT: () => ({type: actionTypes.LOGOUT})
 };
 
-function* handleFetchUser(){
+function* handleFetchUserInfo(){
     const {token} = yield select(state => state.user);
     if(token){
         try {
-            let response = yield call(() => Axios.get('user', {
-                headers: {Authorization: `Bearer ${token}`}
-            }));
-            yield put(actions.SET_INSTITUTIONS(response.data.institutions));
-            delete response.data['institutions'];
-            yield put(actions.SET_ROLES(response.data.roles));
-            delete response.data['roles'];
-            yield put(actions.SET_USER(response.data));
+            let user_institutions = yield call(() => pb.collection('user_institutions').getFullList({expand: "institutions"}));
+            let user_roles = yield call(() => pb.collection('user_roles').getFullList({expand: "roles"}));
+            yield put(actions.SET_INSTITUTIONS(user_institutions[0].expand.institutions));
+            yield put(actions.SET_ROLES(user_roles[0].expand.roles));
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -69,7 +66,7 @@ function* handleFetchUser(){
 };
 
 function* watchTokenChange(){
-    yield takeLatest(actionTypes.SET_TOKEN, handleFetchUser);
+    yield takeLatest(actionTypes.SET_TOKEN, handleFetchUserInfo);
 };
 
 export function* saga(){

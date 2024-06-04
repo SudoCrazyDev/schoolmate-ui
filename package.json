@@ -19,6 +19,7 @@
     "axios": "^1.6.2",
     "bootstrap": "^5.3.2",
     "formik": "^2.4.5",
+    "jest": "^29.7.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "pocketbase": "^0.21.3",

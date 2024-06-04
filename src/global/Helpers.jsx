@@ -31,13 +31,13 @@ export const getUserId = () => {
  */
 export const GetActiveInstitution = () => {
     const institution = useSelector(state => state.user?.institutions?.filter(institution => institution.pivot.is_active));
-    if(institution){
-        return {
-            id: institution[0].id,
-            institution: institution[0].institution,
-            abbr: institution[0].abbr
-        };
-    }
+    // if(institution){
+    //     return {
+    //         id: institution[0].id,
+    //         institution: institution[0].institution,
+    //         abbr: institution[0].abbr
+    //     };
+    // }
     return {
         id: 0,
         institution: 'NO INSTITUTION',
