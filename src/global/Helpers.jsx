@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 export const userHasRole = (accessRoles) => {
     const { roles } = useSelector(state => state.user);
     if(roles){
-        const hasRole = accessRoles.some(role => roles.includes(role));
+        const hasRole = accessRoles.some(accessRole => roles.some(userRole => userRole.title === accessRole));
         return hasRole;
     }
     return false;
@@ -30,7 +30,7 @@ export const getUserId = () => {
  * @returns{{id: String, institution: String, abbr: String}}
  */
 export const GetActiveInstitution = () => {
-    const institution = useSelector(state => state.user?.institutions?.filter(institution => institution.pivot.is_active));
+    // const institution = useSelector(state => state.user?.institutions?.filter(institution => institution.pivot.is_active));
     // if(institution){
     //     return {
     //         id: institution[0].id,
