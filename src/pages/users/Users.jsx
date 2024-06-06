@@ -1,17 +1,24 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import NewUser from "./components/NewUser";
+import pb from "../../global/pb";
+import { useAlert } from "../../hooks/CustomHooks";
 
 export default function Users(){
     const [users, setUsers] = useState([]);
+    const alert = useAlert();
     
-    const handleFetchAllUsers = () => {
-        axios.get(`user/all`)
-        .then(({data}) => {
-            setUsers(data.data);
-        });
+    const handleFetchAllUsers = async () => {
+        try {
+            const records = await pb.collection('user_relationships').getFullList({
+                sort: '-created',
+                expand: "user,institutions,personal_info,"
+            });
+            setUsers(records);
+        } catch (error) {
+            alert.setAlert('error', 'Failed to fetch users');
+        }
     };
-    
     
     useEffect(() => {
         handleFetchAllUsers();
@@ -27,7 +34,7 @@ export default function Users(){
                             <p className="m-0 fst-italic" style={{fontSize: '12px'}}>Create, Retrieve, Update and Delete users.</p>
                         </div>
                         <div className="ms-auto">
-                            <NewUser />
+                            <NewUser refreshUsers={handleFetchAllUsers}/>
                         </div>
                     </div>
                 </div>
@@ -38,17 +45,15 @@ export default function Users(){
                         <table className="table table-bordere">
                             <thead>
                                 <tr>
-                                    <th>Full Name</th>
                                     <th>Email</th>
-                                    <th>Institutions</th>
+                                    <th>Name</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {users.map((user, index) => (
                                     <tr key={index}>
-                                        <td className="text-capitalize">{user.details?.last_name}, {user.details?.first_name}</td>
-                                        <td className="text-capitalize">{user.email}</td>
-                                        <td className="text-capitalize">{user.institutions.length}</td>
+                                        <td className="fw-bold">{user.expand.user.email}</td>
+                                        <td className="text-uppercase fw-bold">{user.expand.personal_info.last_name}, {user.expand.personal_info.first_name} {String(user.expand.personal_info.last_name).charAt(0)}.</td>
                                     </tr>
                                 ))}
                             </tbody>
