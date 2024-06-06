@@ -20,7 +20,7 @@ export default function Login(){
         formik.setSubmitting(true);
         try {
             const authData = await pb.collection('users').authWithPassword(values.email, values.password);
-            dispatch(actions.SET_TOKEN(authData.token));
+            dispatch(actions.SET_TOKEN(authData.record.id));
         } catch (error) {
             alert.setAlert('error', error.response.message);
         } finally {

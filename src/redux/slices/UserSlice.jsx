@@ -55,10 +55,12 @@ function* handleFetchUserInfo(){
     const {token} = yield select(state => state.user);
     if(token){
         try {
-            let user_institutions = yield call(() => pb.collection('user_institutions').getFullList({expand: "institutions"}));
-            let user_roles = yield call(() => pb.collection('user_roles').getFullList({expand: "roles"}));
-            yield put(actions.SET_INSTITUTIONS(user_institutions[0].expand.institutions));
-            yield put(actions.SET_ROLES(user_roles[0].expand.roles));
+            let user = yield call(() => pb.collection('user_relationships').getFullList({
+                filter: `user="${token}"`,
+                expand: "user,roles,personal_info,institutions"
+            }));
+            yield put(actions.SET_INSTITUTIONS(user[0].expand.institutions));
+            yield put(actions.SET_ROLES(user[0].expand.roles));
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
