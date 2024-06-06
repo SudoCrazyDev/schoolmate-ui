@@ -81,8 +81,8 @@ function* handleFetchGradeLevels(){
 }
 
 function* watchTokenChange(){
-    yield takeLatest(user.actionTypes.SET_USER, handleTokenChange);
-    yield takeLatest(user.actionTypes.SET_USER, handleFetchGradeLevels)
+    // yield takeLatest(user.actionTypes.SET_USER, handleTokenChange);
+    // yield takeLatest(user.actionTypes.SET_USER, handleFetchGradeLevels)
 };
 
 export function* saga(){

@@ -30,14 +30,14 @@ export const getUserId = () => {
  * @returns{{id: String, institution: String, abbr: String}}
  */
 export const GetActiveInstitution = () => {
-    // const institution = useSelector(state => state.user?.institutions?.filter(institution => institution.pivot.is_active));
-    // if(institution){
-    //     return {
-    //         id: institution[0].id,
-    //         institution: institution[0].institution,
-    //         abbr: institution[0].abbr
-    //     };
-    // }
+    const institution = useSelector(state => state.user?.institutions[0]);
+    if(institution){
+        return {
+            id: institution.id,
+            title: institution.title,
+            abbr: institution.abbr
+        };
+    }
     return {
         id: 0,
         institution: 'NO INSTITUTION',

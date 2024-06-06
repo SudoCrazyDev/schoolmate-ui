@@ -69,7 +69,7 @@ export default function SideBar(){
                     </div>
                 )}
 
-                {userHasRole(schoolAdminAccess) && (
+                {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
                     <div className="d-flex flex-row m-1 p-1">
                         <NavLink to="/sections" className="h6" style={{textDecoration: 'none'}}>
                             Sections
@@ -77,7 +77,7 @@ export default function SideBar(){
                     </div>
                 )}
 
-                {userHasRole(schoolAdminAccess) && (
+                {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
                     <div className="d-flex flex-row m-1 p-1">
                         <NavLink to="/teachers" className="h6" style={{textDecoration: 'none'}}>
                             Teachers

@@ -59,6 +59,7 @@ function* handleFetchUserInfo(){
                 filter: `user="${token}"`,
                 expand: "user,roles,personal_info,institutions"
             }));
+            yield put(actions.SET_USER(user[0].expand.personal_info));
             yield put(actions.SET_INSTITUTIONS(user[0].expand.institutions));
             yield put(actions.SET_ROLES(user[0].expand.roles));
         } catch (error) {
