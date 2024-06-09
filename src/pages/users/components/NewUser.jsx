@@ -52,7 +52,8 @@ export default function NewUser({refreshUsers}){
             .create({
                 user_id: record_auth.id,
                 institutions: [values.institution],
-                personal_info: record_personal_data.id
+                personal_info: record_personal_data.id,
+                roles: ['f1spbu3ckb07s55']
             });
             alert.setAlert('success', 'New User Added');
             refreshUsers();

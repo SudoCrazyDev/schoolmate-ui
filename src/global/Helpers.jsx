@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-
+import pb from './pb';
 /**
  * Check if the user has certain role.
  * @param {array} accessRole Array of Roles.
@@ -43,4 +43,12 @@ export const GetActiveInstitution = () => {
         institution: 'NO INSTITUTION',
         abbr: ''
     };
+};
+
+export const GetAppInstitutionRoles = async () => {
+    const records = await pb.collection("roles").getFullList({
+        filter: `title!="App Admin"`,
+        fields: `id, title`
+    });
+    return records || [];
 };

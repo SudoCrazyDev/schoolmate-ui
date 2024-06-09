@@ -77,10 +77,15 @@ export default function SideBar(){
                     </div>
                 )}
 
+                <div className="d-flex flex-row m-1 p-1">
+                    <p className="m-0 fw-bolder" style={{letterSpacing: '1px'}}>
+                        HRIS
+                    </p>
+                </div>
                 {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
                     <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/teachers" className="h6" style={{textDecoration: 'none'}}>
-                            Teachers
+                        <NavLink to="/staffs" className="h6 fw-light" style={{textDecoration: 'none'}}>
+                            STAFFS
                         </NavLink>
                     </div>
                 )}

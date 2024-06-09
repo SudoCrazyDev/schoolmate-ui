@@ -35,7 +35,7 @@ export const router = createBrowserRouter(
             <Route element={<Dashboard />} path="/dashboard" />
             <Route element={<Sections />} path="/sections" />
             <Route element={<StudentsGrading />} path="/sections/grading" />
-            <Route element={<Teachers />} path="/teachers" />
+            <Route element={<Teachers />} path="/staffs" />
             <Route element={<CurriculumHeads />} path="/curriculum-heads" />
             <Route element={<ClassAdvisory />} path="/advisory" />
             <Route element={<NewStudent />} path="/advisory/new-student" exact/>
