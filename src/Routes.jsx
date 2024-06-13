@@ -25,6 +25,7 @@ import BulkStudent from "./pages/classAdvisory/partials/BulkAddStudent";
 import InstitutionRegistration from "./pages/public/InstitutionRegistration/InstituionRegistration";
 import Institutions from "./pages/institutions/Institutions";
 import Users from "./pages/users/Users";
+import ScheduleVisualizer from "./pages/scheduleVisualizer/ScheduleVisualizer";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +35,7 @@ export const router = createBrowserRouter(
           <Route element={<SharedLayout />} path="/">
             <Route element={<Dashboard />} path="/dashboard" />
             <Route element={<Sections />} path="/sections" />
+            <Route element={<ScheduleVisualizer />} path="/sections/visualizer" />
             <Route element={<StudentsGrading />} path="/sections/grading" />
             <Route element={<Teachers />} path="/staffs" />
             <Route element={<CurriculumHeads />} path="/curriculum-heads" />

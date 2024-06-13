@@ -12,6 +12,7 @@ export default function AutoCreateSections(){
     const [newSubject, setNewSubject] = useState("");
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
+    const [schedule, setSchedule] = useState("daily");
     const [subjects, setSubjects] = useState([]);
     const [teachers, setTeachers] = useState([]);
     const [sections, setSections] = useState([]);
@@ -57,12 +58,14 @@ export default function AutoCreateSections(){
                 temp_id: crypto.randomUUID(),
                 subject: newSubject,
                 start_time: startTime,
-                end_time: endTime
+                end_time: endTime,
+                schedule: schedule
             }
         ]);
         setNewSubject("");
         setStartTime("");
         setEndTime("");
+        setSchedule("daily");
     };
 
     const handleRemoveSubject = (temp_id) => {
@@ -136,7 +139,8 @@ export default function AutoCreateSections(){
                         section: section_record.id,
                         title: subjects[j].subject,
                         start_time: subjects[j].start_time,
-                        end_time: subjects[j].end_time
+                        end_time: subjects[j].end_time,
+                        schedule: subjects[j].schedule
                     });
                     await new Promise((resolve) => setTimeout(resolve, 1500));
                 }
@@ -175,6 +179,7 @@ export default function AutoCreateSections(){
                                     <th>Subject</th>
                                     <th>START TIME</th>
                                     <th>END TIME</th>
+                                    <th>SCHEDULE</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -194,6 +199,9 @@ export default function AutoCreateSections(){
                                         <td style={{verticalAlign: 'middle'}}>
                                             {subject.end_time}
                                         </td>
+                                        <td style={{verticalAlign: 'middle'}}>
+                                            {subject.schedule}
+                                        </td>
                                     </tr>
                                 ))}
                                 <tr>
@@ -210,6 +218,14 @@ export default function AutoCreateSections(){
                                     </td>
                                     <td>
                                         <input type="time" className="form-control" value={endTime} onChange={(e) => setEndTime(e.target.value)}/>
+                                    </td>
+                                    <td>
+                                        <select className="form-select" value={schedule} onChange={(e) => setSchedule(e.target.value)}>
+                                            <option value={`daily`}>Daily</option>
+                                            <option value={`mwf`}>Monday, Wednesday, Friday</option>
+                                            <option value={`tth`}>Tuesday, Thursday</option>
+                                            <option value={`weekends`}>Weekends</option>
+                                        </select>
                                     </td>
                                 </tr>
                             </tbody>

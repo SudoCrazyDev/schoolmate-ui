@@ -74,10 +74,19 @@ export default function SideBar(){
                         SCHEDULING
                     </p>
                 </div>
+
                 {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
                     <div className="d-flex flex-row m-1 p-1">
                         <NavLink to="/sections" className="h6 fw-light" style={{textDecoration: 'none'}}>
                             SECTIONS
+                        </NavLink>
+                    </div>
+                )}
+
+                {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
+                    <div className="d-flex flex-row m-1 p-1">
+                        <NavLink to="/sections/visualizer" className="h6 fw-light" style={{textDecoration: 'none'}}>
+                            SCHEDULE VISUALIZER
                         </NavLink>
                     </div>
                 )}

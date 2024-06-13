@@ -28,6 +28,7 @@ export default function Sections(){
     const [fetchingSubjects, setFetchingsSubjects] = useState(false);
 
     const handleFilterSectionByGradeLevel = async (gl) => {
+        setFetchingSections(true);
         try {
             const records = await pb.collection("institution_sections")
             .getFullList({
@@ -38,6 +39,8 @@ export default function Sections(){
             setSections(records);
         } catch (error) {
             alert.setAlert("error", "Failed to Filter Sections")
+        } finally {
+            setFetchingSections(false);
         }
         
     };
@@ -142,7 +145,12 @@ export default function Sections(){
                             ))}
                         </Select> */}
                     </div>
-                    {sections.map(section => (
+                    {fetchingSections && Array(5).fill().map((_, i) => (
+                        <div key={i} className="d-flex flex-row align-items-center align-items-center class-section border my-1 rounded">
+                            <Skeleton variant="rectangle" sx={{ width: '100%', height: '15px' }} />
+                        </div>
+                    ))}
+                    {!fetchingSections && sections.map(section => (
                         <div key={section.id} className="d-flex flex-row align-items-center align-items-center class-section border my-1 rounded" onClick={() => setSelectedSection(section)}>
                             <h6 className="m-0" style={{padding: '8px'}}>{section.title}</h6>
                             {/* <EditSection section={section} /> */}
@@ -180,13 +188,14 @@ export default function Sections(){
                                     <th className='fw-bold'>Subject</th>
                                     <th className='fw-bold'>Start/End Time</th>
                                     <th className='fw-bold'>Teacher</th>
+                                    <th className='fw-bold'>Schedule</th>
                                     <th className='fw-bold'>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {fetchingSubjects && (
                                     <tr>
-                                        <td colSpan={4}><Skeleton variant="text" sx={{ fontSize: '1rem' }} /></td>
+                                        <td colSpan={5}><Skeleton variant="text" sx={{ fontSize: '1rem' }} /></td>
                                     </tr>
                                 )}
                                 {!fetchingSubjects && subjects && subjects.map((subject, index) => (
@@ -194,8 +203,9 @@ export default function Sections(){
                                         <td>{subject.title}</td>
                                         <td>{subject.start_time} - {subject.end_time}</td>
                                         <td className='fw-bolder'>{subject.assigned_teacher === "" ? <Tooltip title="NO ASSIGNED TEACHER"><ReportGmailerrorredIcon color='error' /></Tooltip>: `${String(subject.expand.assigned_teacher.expand.personal_info.last_name).toUpperCase()}, ${String(subject.expand.assigned_teacher.expand.personal_info.first_name).toUpperCase()}`}</td>
+                                        <td className='text-uppercase'>{subject.schedule}</td>
                                         <td>
-                                            <EditSubject subject={subject} refresh={handleFetchSections}/>
+                                            <EditSubject subject={subject} refresh={handleFetchSectionSubjects}/>
                                             {/* <DeleteSubject subject={subject} setSubjects={setSubjects}/> */}
                                         </td>
                                     </tr>

@@ -31,9 +31,11 @@ export default function EditSubject({subject, refresh}){
         title,
         start_time,
         end_time,
-        assigned_teacher
+        schedule
     } = subject;
     
+    const assigned_teacher = subject.expand?.assigned_teacher;
+
     const handleModalState = () => {
         setOpenModal(!open);
     };
@@ -42,9 +44,12 @@ export default function EditSubject({subject, refresh}){
         formik.setSubmitting(true)
         try {
             await pb.collection("section_subjects")
-            .update(id, values);
+            .update(id, {...values, assigned_teacher: values.assigned_teacher.id});
             alert.setAlert('success', 'Subject updated successfully');
+            refresh();
+            handleModalState();
         } catch (error) {
+            console.log(values);
             alert.setAlert('error', 'Subject updated failed');
         } finally {
             formik.setSubmitting(false);
@@ -72,7 +77,8 @@ export default function EditSubject({subject, refresh}){
             title: title,
             start_time: start_time,
             end_time: end_time,
-            assigned_teacher: assigned_teacher
+            assigned_teacher: assigned_teacher,
+            schedule: schedule
         },
         onSubmit: handleSubmit
     });
@@ -104,10 +110,9 @@ export default function EditSubject({subject, refresh}){
                             disableClearable
                             getOptionDisabled={(option) => option.id === "sample"}
                             onChange={(event, newValue) =>{
-                                setSelectedAdviser(newValue);
+                                formik.setFieldValue('assigned_teacher', newValue);
                             }}
                             defaultValue={assigned_teacher}
-                            isOptionEqualToValue={(option, value) => console.log(option, value)}
                             getOptionKey={(option) => option.id}
                             getOptionLabel={(option) => `${String(option.expand?.personal_info.last_name).toUpperCase()} ${String(option.expand?.personal_info.first_name).toUpperCase()}`}
                             renderInput={(params) => <TextField {...params} label="Subject Teacher" />}
