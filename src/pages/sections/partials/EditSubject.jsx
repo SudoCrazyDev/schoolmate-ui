@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -16,51 +16,72 @@ import { useFormik } from 'formik';
 import Axios from "axios";
 import { useSelector } from 'react-redux';
 import { useAlert } from '../../../hooks/CustomHooks';
+import pb from '../../../global/pb';
+import { GetActiveInstitution } from '../../../global/Helpers';
 
-export default function EditSubject({subject, setSubjects}){
+export default function EditSubject({subject, refresh}){
     const [open, setOpenModal] = useState(false);
-    const { teachers } = useSelector(state => state.org);
     const alert = useAlert();
+    const {id: institutionId} = GetActiveInstitution();
+    const [teachers, setTeachers] = useState([]);
+    const [fetching, setFetching] = useState(false);
     
     const {
-        subject_title,
-        schedule,
+        id,
+        title,
         start_time,
         end_time,
-        user_id,
-        id
+        assigned_teacher
     } = subject;
     
     const handleModalState = () => {
         setOpenModal(!open);
     };
     
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
         formik.setSubmitting(true)
-        Axios.put(`section/subject/update/${id}`, values)
-        .then(({data}) => {
-            setSubjects(data);
+        try {
+            await pb.collection("section_subjects")
+            .update(id, values);
             alert.setAlert('success', 'Subject updated successfully');
-            handleModalState();
-        })
-        .catch(() => {
+        } catch (error) {
             alert.setAlert('error', 'Subject updated failed');
-        })
-        .finally(() => {
-            formik.setSubmitting(false)
-        });
+        } finally {
+            formik.setSubmitting(false);
+        }
+    };
+    
+    const handleFetchTeachers = async () => {
+        setFetching(true);
+        try {
+            const records = await pb.collection("user_relationships")
+            .getList(1, 10, {
+                expand: 'user,personal_info,roles',
+                filter: `institutions~"${institutionId}" && roles!~"fodxbvsy6176gxd"`
+            })
+            setTeachers(records.items);
+        } catch (error) {
+            alert.setAlert('error', "Failed to load Teachers.")
+        } finally {
+            setFetching(false);
+        }
     };
     
     const formik = useFormik({
         initialValues: {
-            subject_title: subject_title,
-            user_id: user_id,
+            title: title,
             start_time: start_time,
             end_time: end_time,
-            schedule: schedule
+            assigned_teacher: assigned_teacher
         },
         onSubmit: handleSubmit
     });
+    
+    useEffect(() => {
+        if(open){
+            handleFetchTeachers();
+        }
+    }, [open]);
     
     return(
         <>
@@ -72,22 +93,25 @@ export default function EditSubject({subject, setSubjects}){
             <form onSubmit={formik.handleSubmit}>
                 <DialogContent dividers>
                     <div className="d-flex flex-column gap-3">
-                        <TextField label="Subject Title" variant="outlined" {...formik.getFieldProps('subject_title')} disabled={formik.isSubmitting}/>
+                        <TextField label="Subject Title" variant="outlined" {...formik.getFieldProps('title')} disabled={formik.isSubmitting}/>
+                        <TextField type="time" label="Start Time" variant="outlined" {...formik.getFieldProps('start_time')} disabled={formik.isSubmitting}/>
+                        <TextField type="time" label="End Time" variant="outlined" {...formik.getFieldProps('end_time')} disabled={formik.isSubmitting}/>
                         <Autocomplete
-                            disabled={formik.isSubmitting}
-                            id="combo-box-demo"
+                            disabled={fetching}
+                            id="teachers"
                             options={teachers}
                             fullWidth
                             disableClearable
+                            getOptionDisabled={(option) => option.id === "sample"}
                             onChange={(event, newValue) =>{
-                              formik.setFieldValue('user_id', newValue.id);
+                                setSelectedAdviser(newValue);
                             }}
-                            defaultValue={teachers[teachers.map(teacher => teacher.id).indexOf(user_id)]}
-                            getOptionLabel={(option) => `${option.details?.first_name} ${option.details?.last_name}`}
+                            defaultValue={assigned_teacher}
+                            isOptionEqualToValue={(option, value) => console.log(option, value)}
+                            getOptionKey={(option) => option.id}
+                            getOptionLabel={(option) => `${String(option.expand?.personal_info.last_name).toUpperCase()} ${String(option.expand?.personal_info.first_name).toUpperCase()}`}
                             renderInput={(params) => <TextField {...params} label="Subject Teacher" />}
                         />
-                        <TextField type="time" label="Start Time" variant="outlined" value={"07:30"} {...formik.getFieldProps('start_time')} disabled={formik.isSubmitting}/>
-                        <TextField type="time" label="End Time" variant="outlined" value={"07:30"} {...formik.getFieldProps('end_time')} disabled={formik.isSubmitting}/>
                         <FormControl>
                             <InputLabel id="grade_level_label">Schedule</InputLabel>
                             <Select labelId="grade_level_label" label="Schedule" fullWidth defaultValue={'daily'} {...formik.getFieldProps('schedule')} disabled={formik.isSubmitting}>

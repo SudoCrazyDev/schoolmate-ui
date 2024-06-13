@@ -69,10 +69,15 @@ export default function SideBar(){
                     </div>
                 )}
 
+                <div className="d-flex flex-row m-1 p-1">
+                    <p className="m-0 fw-bolder" style={{letterSpacing: '1px'}}>
+                        SCHEDULING
+                    </p>
+                </div>
                 {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
                     <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/sections" className="h6" style={{textDecoration: 'none'}}>
-                            Sections
+                        <NavLink to="/sections" className="h6 fw-light" style={{textDecoration: 'none'}}>
+                            SECTIONS
                         </NavLink>
                     </div>
                 )}
@@ -82,6 +87,7 @@ export default function SideBar(){
                         HRIS
                     </p>
                 </div>
+                
                 {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
                     <div className="d-flex flex-row m-1 p-1">
                         <NavLink to="/staffs" className="h6 fw-light" style={{textDecoration: 'none'}}>
