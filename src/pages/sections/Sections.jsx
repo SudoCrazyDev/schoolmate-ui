@@ -49,22 +49,22 @@ export default function Sections(){
         setFetchingSections(true);
         try {
             let filterField = `institution="${id}"&&grade_level="7"`
-            if(roles[0].title === "Curriculum - 7"){
+            if(roles[0].title === "Curriculum Head - 7"){
                 filterField = `institution="${id}"&&grade_level="7"`
             }
-            if(roles[0].title === "Curriculum - 8"){
+            if(roles[0].title === "Curriculum Head - 8"){
                 filterField = `institution="${id}"&&grade_level="8"`
             }
-            if(roles[0].title === "Curriculum - 9"){
+            if(roles[0].title === "Curriculum Head - 9"){
                 filterField = `institution="${id}"&&grade_level="9"`
             }
-            if(roles[0].title === "Curriculum - 10"){
+            if(roles[0].title === "Curriculum Head - 10"){
                 filterField = `institution="${id}"&&grade_level="10"`
             }
-            if(roles[0].title === "Curriculum - 11"){
+            if(roles[0].title === "Curriculum Head - 11"){
                 filterField = `institution="${id}"&&grade_level="11"`
             }
-            if(roles[0].title === "Curriculum - 12"){
+            if(roles[0].title === "Curriculum Head - 12"){
                 filterField = `institution="${id}"&&grade_level="12"`
             }
             const records = await pb.collection("institution_sections")
@@ -139,11 +139,6 @@ export default function Sections(){
                         </select>
                         </>
                        )}
-                       {/* <Select displayEmpty fullWidth size="small" defaultValue='' onChange={(e) => handleGradeLevelSelect(e)} value={selected}>
-                            {filteredGradeLevels && filteredGradeLevels.map((gradeLevel, index) => (
-                                <MenuItem key={index} value={gradeLevel.id}>Grade {gradeLevel.grade_level}</MenuItem>
-                            ))}
-                        </Select> */}
                     </div>
                     {fetchingSections && Array(5).fill().map((_, i) => (
                         <div key={i} className="d-flex flex-row align-items-center align-items-center class-section border my-1 rounded">
@@ -156,12 +151,6 @@ export default function Sections(){
                             {/* <EditSection section={section} /> */}
                         </div>
                     ))}
-                    {/* {filteredSections && filteredSections.map((section, index) => (
-                        <div key={index} className="d-flex flex-row align-items-center align-items-center class-section" onClick={() => handleSelectSection(section)}>
-                            <h6 className="m-0" style={{padding: '8px'}}>{section.section_name}</h6>
-                            <EditSection section={section} />
-                        </div>
-                    ))} */}
                 </div>
             </div>
             <div className="col-9 p-2">
@@ -175,7 +164,7 @@ export default function Sections(){
                             </div>
                             <div className="ms-auto">
                                 {/* {selectedSection && (
-                                  <AddSubject selectedSection={selectedSection} setSubjects={setSubjects}/>  
+                                    <AddSubject selectedSection={selectedSection} setSubjects={setSubjects}/>  
                                 )} */}
                             </div>
                         </div>

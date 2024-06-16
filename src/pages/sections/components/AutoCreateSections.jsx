@@ -6,8 +6,9 @@ import { useAlert } from "../../../hooks/CustomHooks";
 import pb from "../../../global/pb";
 import Autocomplete from '@mui/material/Autocomplete';
 import { GetActiveInstitution } from "../../../global/Helpers";
+import { useSelector } from "react-redux";
 
-export default function AutoCreateSections(){
+export default function AutoCreateSections({allowedGradeLevel}){
     const [open, setOpen] = useState(false);
     const [newSubject, setNewSubject] = useState("");
     const [startTime, setStartTime] = useState("");
@@ -23,6 +24,9 @@ export default function AutoCreateSections(){
     const [overallProgress, setOverAllProgress] = useState(0);
     const {id} = GetActiveInstitution();
     const alert = useAlert();
+    const [selectedGradeLevel, setSelectedGradeLevel] = useState("");
+    const {roles} = useSelector(state => state.user);
+    const [progressDetails, setProgressDetails] = useState("");
 
     const handleModalState = () => {
         setNewSubject("");
@@ -119,6 +123,10 @@ export default function AutoCreateSections(){
             alert.setAlert('error', 'No Subjects');
             return ;
         }
+        if(selectedGradeLevel === ""){
+            alert.setAlert('error', 'No Grade Level');
+            return ;
+        }
         setSubmitting(true);
         try {
             for(let i = 0; i < sections.length; i++){
@@ -127,7 +135,7 @@ export default function AutoCreateSections(){
                 .create({
                     institution: id,
                     academic_year: '2024-2025',
-                    grade_level: 7,
+                    grade_level: selectedGradeLevel,
                     title: sections[i].title,
                     class_adviser: sections[i].adviser.expand.personal_info.id,
                 });
@@ -142,6 +150,7 @@ export default function AutoCreateSections(){
                         end_time: subjects[j].end_time,
                         schedule: subjects[j].schedule
                     });
+                    setProgressDetails(`${sections[i].title} - ${subjects[j].subject}`);
                     await new Promise((resolve) => setTimeout(resolve, 1500));
                 }
             }
@@ -153,9 +162,34 @@ export default function AutoCreateSections(){
         }
     };
 
+    const handleSelectedGradeLevel = () => {
+        if(roles[0].title === "Curriculum Head - 7"){
+            setSelectedGradeLevel("7");
+        }
+        if(roles[0].title === "Curriculum Head - 8"){
+            setSelectedGradeLevel("8");
+        }
+        if(roles[0].title === "Curriculum Head - 9"){
+            setSelectedGradeLevel("9");
+        }
+        if(roles[0].title === "Curriculum Head - 10"){
+            setSelectedGradeLevel("10");
+        }
+        if(roles[0].title === "Curriculum Head - 11"){
+            setSelectedGradeLevel("11");
+        }
+        if(roles[0].title === "Curriculum Head - 12"){
+            setSelectedGradeLevel("12");
+        }
+        if(roles[0].title === "Principal"){
+            setSelectedGradeLevel("all");
+        }
+    };
+
     useEffect(() => {
         if(open){
             handleFetchTeachers();
+            handleSelectedGradeLevel();
         }
     }, [open]);
 
@@ -167,9 +201,26 @@ export default function AutoCreateSections(){
                 <DialogContent dividers>
                     <div className="d-flex flex-column">
                         {submitting && (
-                            <div className="progress mb-3" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                <div className="progress-bar progress-bar-striped progress-bar-animated" style={{width: `${(Number(overallProgress)/sections.length) * 100}%`}}>{overallProgress}/{sections.length}</div>
+                            <div className="d-flex flex-column">
+                                <div className="progress mb-3" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                    <div className="progress-bar progress-bar-striped progress-bar-animated" style={{width: `${(Number(overallProgress)/sections.length) * 100}%`}}>{overallProgress}/{sections.length}</div>
+                                </div>
+                                <h5 className="fw-bolder">{progressDetails}</h5>
                             </div>
+                            
+                        )}
+                        {roles[0].title === "Principal" && (
+                            <>
+                            <h2 className="m-0 fw-bolder" style={{padding: '8px'}}>FOR: </h2>
+                            <select className='form-select' onChange={(e) => setSelectedGradeLevel(e.target.value)}>
+                                <option value={`7`}>Grade 7</option>
+                                <option value={`8`}>Grade 8</option>
+                                <option value={`9`}>Grade 9</option>
+                                <option value={`10`}>Grade 10</option>
+                                <option value={`11`}>Grade 11</option>
+                                <option value={`12`}>Grade 12</option>
+                            </select>
+                            </>
                         )}
                         <h2>Create Subjects</h2>
                         <table className="table table-bordered">
