@@ -3,7 +3,8 @@ import pb from "../../global/pb";
 import { GetActiveInstitution } from "../../global/Helpers";
 import { useAlert } from "../../hooks/CustomHooks";
 import { Skeleton } from "@mui/material";
-
+import EditSubject from "./components/EditSubject";
+import './style.scss';
 const tableHeaderStlyes = {
     fontSize: '20px',
     textAlign: 'center',
@@ -18,17 +19,18 @@ export default function ScheduleVisualizer(){
     const [sections, setSections] = useState([]);
     const [fetchingSections, setFetchingSections] = useState(false);
     const alert = useAlert();
-
+    const [selectedSubject, setSelectedSubject] = useState(null);
+    
     const handleFetchSections = async () => {
         setFetchingSections(true)
         try {
             const records = await pb.collection('institution_sections')
             .getFullList({
                 filter: `institution="${id}"`,
-                fields: `academic_year,expand,grade_level,title`,
+                fields: `id,academic_year,expand,grade_level,title`,
                 expand: `section_subjects(section).assigned_teacher.personal_info`
             });
-            setSections(records);    
+            setSections(records);
         } catch (error) {
             alert.setAlert("error", 'Error Fetching Sections');
         } finally {
@@ -86,10 +88,10 @@ export default function ScheduleVisualizer(){
                                     </h6>
                                 </td>
                                 {section.expand?.['section_subjects(section)'].map(subject => (
-                                <td key={subject.id} className="text-white">
-                                    <div className="bg-success d-flex flex-column p-2 rounded shadow">
+                                <td key={subject.id} className="text-white" onClick={() => setSelectedSubject(subject)}>
+                                    <div className={`section-subject bg-${subject.expand ? "success" : "danger"} d-flex flex-column p-2 rounded shadow`}>
                                         <h5 className="m-0">{subject.title}</h5>
-                                        <p className="m-0">{subject.expand?.assigned_teacher?.expand?.personal_info ? `${subject.expand?.assigned_teacher?.expand?.personal_info?.last_name}, ${subject.expand?.assigned_teacher?.expand?.personal_info?.first_name}` : 'No Teacher'}</p>
+                                        <p className="m-0 text-capitalize">{subject.expand?.assigned_teacher?.expand?.personal_info ? `${subject.expand?.assigned_teacher?.expand?.personal_info?.last_name}, ${subject.expand?.assigned_teacher?.expand?.personal_info?.first_name}` : 'No Teacher'}</p>
                                         <p className="m-0 text-capitalize">{subject.schedule ? subject.schedule : 'No Schedule'}</p>
                                     </div>
                                 </td>
@@ -99,6 +101,7 @@ export default function ScheduleVisualizer(){
                     </tbody>
                 </table>
             </div>
+            <EditSubject subject={[selectedSubject, setSelectedSubject]} refresh={handleFetchSections}/>
         </div>
     );
 };

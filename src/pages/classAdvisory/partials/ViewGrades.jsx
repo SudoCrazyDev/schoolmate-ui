@@ -2,27 +2,56 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Page, Text, View, Document, PDFViewer, Image  } from '@react-pdf/renderer';
+import pb from '../../../global/pb';
+import PrintIcon from '@mui/icons-material/Print';
+import { IconButton, Tooltip } from '@mui/material';
+import { GetActiveInstitution } from '../../../global/Helpers';
 
 export default function ViewGrades({student}){
     const [open ,setOpen] = useState(false);
+    const [subjectGrades, setSubjectGrades] = useState([]);
+    const {title} = GetActiveInstitution();
     
     const handleModalState = () => {
         setOpen(!open);
     };
     
-    const handleFilterStudentGrade = (subject, grading) => {
-        if(student.grades.length === 0) return '';
-        const filteredResult = student.grades.filter(grade => grade.subject_id === subject && grade.grading === grading);
-        if(filteredResult.length === 0) return '';
-        return Number(filteredResult[0].value);
+    const handleFetchStudentGrades = async () => {
+        try {
+            const subject_grades = await pb.collection("student_grades")
+            .getFullList({
+                filter: `student="${student.id}"`,
+                expand: 'subject'
+            });
+            setSubjectGrades(subject_grades);
+        } catch (error) {
+            console.log(error);
+        }
     };
     
-    console.log(student);
+    const handleFilterStudentGrade = (subject, grading) => {
+        // if(student.grades.length === 0) return '';
+        // const filteredResult = student.grades.filter(grade => grade.subject_id === subject && grade.grading === grading);
+        // if(filteredResult.length === 0) return '';
+        // return Number(filteredResult[0].value);
+        return 0;
+    };
+    
+    useEffect(() => {
+        if(open){
+            handleFetchStudentGrades();
+        }
+    }, [open]);
     return(
         <>
-        <Button size="small" variant='contained' color='primary' onClick={() => handleModalState()}>View Grades</Button>
+        <Tooltip title="Print Grades">
+            <IconButton size="small" onClick={() => handleModalState()} color="primary">
+                <PrintIcon fontSize="small"/>
+            </IconButton>
+        </Tooltip>
+        {/* <Button size="small" variant='contained' color='primary' onClick={() => handleModalState()}>View Grades</Button> */}
         <Dialog
         open={open}
         fullScreen
@@ -57,24 +86,24 @@ export default function ViewGrades({student}){
                         <div className="col-2 border-top border-bottom border-end d-flex flex-column justify-content-center align-items-center">
                             <p className='m-0 fw-bolder fs-5'>Remarks</p>
                         </div>
-                        {student.section.subjects.map((subject, index) => (
+                        {subjectGrades.map((subject, index) => (
                             <div key={index} className="d-flex flex-row col-12">
                                 <div className="col-3 border-bottom border-start border-end d-flex flex-column justify-content-center align-items-center">
-                                    <p className='m-0 fw-bolder fs-5'>{subject.subject_title}</p>
+                                    <p className='m-0 fw-bolder fs-5'>{subject?.expand?.subject?.title}</p>
                                 </div>
                                 <div className="col-4 border-bottom d-flex flex-column h-100">
                                     <div className="d-flex flex-row h-100">
                                         <div className="col-3 border-end">
-                                            <p className='m-0 fw-bolder fs-5 d-flex flex-column justify-content-center align-items-center h-100'>{handleFilterStudentGrade(subject.id, '1')}</p>
+                                            <p className='m-0 fw-bolder fs-5 d-flex flex-column justify-content-center align-items-center h-100'>{subject.quarter_one}</p>
                                         </div>
                                         <div className="col-3 border-end">
-                                            <p className='m-0 fw-bolder fs-5 d-flex flex-column justify-content-center align-items-center'>{handleFilterStudentGrade(subject.id, '2')}</p>
+                                            <p className='m-0 fw-bolder fs-5 d-flex flex-column justify-content-center align-items-center'>{subject.quarter_two}</p>
                                         </div>
                                         <div className="col-3 border-end">
-                                            <p className='m-0 fw-bolder fs-5 d-flex flex-column justify-content-center align-items-center'>{handleFilterStudentGrade(subject.id, '3')}</p>
+                                            <p className='m-0 fw-bolder fs-5 d-flex flex-column justify-content-center align-items-center'>{subject.quarter_three}</p>
                                         </div>
                                         <div className="col-3 border-end">
-                                            <p className='m-0 fw-bolder fs-5 d-flex flex-column justify-content-center align-items-center'>{handleFilterStudentGrade(subject.id, '4')}</p>
+                                            <p className='m-0 fw-bolder fs-5 d-flex flex-column justify-content-center align-items-center'>{subject.quarter_four}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -111,8 +140,8 @@ export default function ViewGrades({student}){
                             </div>
                         </div>
                     </div>
-                    <div className="col-12">
-                        <PDFViewer className='w-100' style={{height: '450px'}}>
+                    <div className="col-12 mt-5">
+                        <PDFViewer className='w-100' style={{height: '600px'}}>
                             <Document>
                                 <Page size="A5" orientation="landscape" style={{display: 'flex', flexDirection: 'row'}}>
                                     <View style={{width: '50%', padding: '20px'}}>
@@ -305,25 +334,25 @@ export default function ViewGrades({student}){
                                                 </View>
                                                 <Image source={'/gscnssat_logo.png'} style={{height: 45, width: 49}}></Image>
                                             </View>
-                                            <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold'}}>GENERAL SANTOS CITY NATTIONAL SECONDARY SCHOOL OF ARTS AND TRADES</Text>
+                                            <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold'}}>{title}</Text>
                                             <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold'}}>Lagao, General Santos City</Text>
                                             
                                             <View style={{marginTop: '14px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start'}}>
-                                                <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Name: {student.student.details.last_name}, {student.student.details.first_name}</Text>
+                                                {/* <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Name: {student.student.details.last_name}, {student.student.details.first_name}</Text> */}
                                             </View>
                                             
                                             <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '5px'}}>
                                                 <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Age: </Text>
-                                                <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Sex: {String(student.student.details.gender).toUpperCase()}</Text>
+                                                {/* <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Sex: {String(student.student.details.gender).toUpperCase()}</Text> */}
                                             </View>
                                             
                                             <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '5px'}}>
-                                                <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Grade/Section: {student.section.grade_level.grade_level} - {student.section.section_name}</Text>
+                                                {/* <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Grade/Section: {student.section.grade_level.grade_level} - {student.section.section_name}</Text> */}
                                                 <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Curriculum: </Text>
                                             </View>
                                             
                                             <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '5px'}}>
-                                                <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>School Year: 2023 - 2024</Text>
+                                                <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>School Year: 2024 - 2025</Text>
                                                 <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>LRN: </Text>
                                             </View>
                                             
@@ -421,23 +450,23 @@ export default function ViewGrades({student}){
                                             </View>
                                         </View>
                                         {/* BEGIN TABLE CONTENT HERE */}
-                                        {student.section.subjects.map((subject, i) => (
+                                        {subjectGrades.map((subject, i) => (
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{width: '30%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}>{subject.subject_title}</Text>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}>{subject?.expand?.subject?.title}</Text>
                                                 </View>
                                                 <View style={{width: '40%', display: 'flex', flexDirection: 'row', borderRight: '1px solid black', alignItems: 'center', justifyContent: 'center'}}>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        <Text>{handleFilterStudentGrade(subject.id, '1')}</Text>
+                                                        <Text>{subject.quarter_one}</Text>
                                                     </View>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        <Text>{handleFilterStudentGrade(subject.id, '2')}</Text>
+                                                        <Text>{subject.quarter_two}</Text>
                                                     </View>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        <Text>{handleFilterStudentGrade(subject.id, '3')}</Text>
+                                                        <Text>{subject.quarter_three}</Text>
                                                     </View>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        <Text>{handleFilterStudentGrade(subject.id, '4')}</Text>
+                                                        <Text>{subject.quarter_four}</Text>
                                                     </View>
                                                 </View>
                                                 <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>

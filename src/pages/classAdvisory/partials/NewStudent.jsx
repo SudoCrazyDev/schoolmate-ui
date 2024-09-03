@@ -13,10 +13,10 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import Axios from "axios";
 import { useAlert } from '../../../hooks/CustomHooks';
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { NavLink } from 'react-router-dom';
-
+import { GetActiveInstitution } from '../../../global/Helpers';
+import pb from '../../../global/pb';
 const validationSchema = yup.object().shape({
     basic_information: yup.object().shape({
         first_name: yup.string().required('Required'),
@@ -25,6 +25,8 @@ const validationSchema = yup.object().shape({
 });
 export default function NewStudent(){
     const { user } = useSelector(state => state.user);
+    const {section_id} = useParams();
+    const {id} = GetActiveInstitution();
     const navigate  = useNavigate();
     const [activeTab, setActiveTab] = useState(0);
     const alert = useAlert();
@@ -40,20 +42,35 @@ export default function NewStudent(){
         }
     };
     
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
         formik.setSubmitting(true);
-        Axios.post('student/add', values)
-        .then(() => {
-            alert.setAlert('success', 'Student added successfully');
-            formik.resetForm();
-            navigate('/advisory');
-        })
-        .catch(() => {
-            alert.setAlert('error', 'Failed to add student');
-        })
-        .finally(() => {
+        try {
+            const record = await pb.collection("student_base")
+            .create({
+                lrn: values.basic_information.lrn,
+                status: 'active',
+                institution: id,
+                section: values.section
+            });
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            await pb.collection("student_personal_data")
+            .create({
+                student: record.id,
+                first_name: String(values.basic_information.first_name).toUpperCase(),
+                middle_name: String(values.basic_information.middle_name).toUpperCase(),
+                last_name: String(values.basic_information.last_name).toUpperCase(),
+                extension: values.basic_information.ext_name,
+                birthdate: values.basic_information.birthdate,
+                gender: values.basic_information.gender,
+                religion: values.basic_information.religion,
+            });
+            alert.setAlert("success", "Student Added");
             formik.setSubmitting(false);
-        });
+        } catch (error) {
+            alert.setAlert("error", "Student failed to add");
+        } finally {
+            formik.resetForm();
+        }
     };
     
     const handleCancel = () => {
@@ -63,7 +80,7 @@ export default function NewStudent(){
     
     const formik = useFormik({
         initialValues:{
-            section: user.advisory[0].id,
+            section: section_id,
             basic_information:{
                 first_name: '',
                 middle_name: '',
@@ -123,7 +140,14 @@ export default function NewStudent(){
         <div className="d-flex flex-column">
             <form onSubmit={formik.handleSubmit}>
                 <div className="d-flex flex-row">
-                    <div className="col-8 d-flex flex-column gap-2">
+                    <div className="col-2">
+                        <div className="card h-100">
+                            <div className="card-body">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-10 d-flex flex-column gap-2">
                         <div className="d-flex flex-row flex-wrap align-items-center">
                             <div className="p-2 col-4">
                                 <TextField
@@ -206,18 +230,15 @@ export default function NewStudent(){
                         </div>
                         
                     </div>
-                    <div className="col-4">
-                        
-                    </div>
                 </div>
                 <div className="d-flex flex-column mt-2">
-                    {/* <Tabs value={activeTab} aria-label="basic tabs example" className='w-100' onChange={(e, newValue) => setActiveTab(newValue)}>
-                        <Tab label="BASIC INFORMATION" />
-                        <Tab label="PARENT/GURADIAN" />
-                        <Tab label="BALIK ARAL/TRANSFEREE"/>
-                        <Tab label="SENIOR HIGH"/>
+                    <Tabs value={activeTab} aria-label="basic tabs example" className='w-100' onChange={(e, newValue) => setActiveTab(newValue)}>
+                        <Tab className="fw-bold" label="BASIC INFORMATION" />
+                        <Tab className="fw-bold" label="PARENT/GURADIAN" />
+                        {/* <Tab className="fw-bold" label="BALIK ARAL/TRANSFEREE"/>
+                        <Tab className="fw-bold" label="SENIOR HIGH"/> */}
                     </Tabs>
-                    {GetActiveTab(activeTab, formik)} */}
+                    {GetActiveTab(activeTab, formik)}
                 </div>
                 <div className="d-flex flex-row gap-2">
                     <Button type='submit' variant='contained' className='fw-bolder' disabled={formik.isSubmitting}>

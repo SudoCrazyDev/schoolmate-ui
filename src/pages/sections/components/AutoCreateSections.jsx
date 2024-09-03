@@ -26,7 +26,7 @@ export default function AutoCreateSections({allowedGradeLevel}){
     const alert = useAlert();
     const [selectedGradeLevel, setSelectedGradeLevel] = useState("");
     const {roles} = useSelector(state => state.user);
-    const [progressDetails, setProgressDetails] = useState("");
+    const [progressDetails, setProgressDetails] = useState("7");
 
     const handleModalState = () => {
         setNewSubject("");
@@ -155,6 +155,7 @@ export default function AutoCreateSections({allowedGradeLevel}){
                 }
             }
             alert.setAlert('success', 'Sections with Subjects created successfully');
+            handleModalState();
         } catch (error) {
             alert.setAlert("error", 'An error occured during generating')
         } finally {
@@ -182,7 +183,7 @@ export default function AutoCreateSections({allowedGradeLevel}){
             setSelectedGradeLevel("12");
         }
         if(roles[0].title === "Principal"){
-            setSelectedGradeLevel("all");
+            // setSelectedGradeLevel("all");
         }
     };
 
@@ -195,7 +196,7 @@ export default function AutoCreateSections({allowedGradeLevel}){
 
     return(
         <>
-        <button className="fw-bolder btn btn-primary" onClick={() => handleModalState()}>Auto-Generate</button>
+        <button className="fw-bolder btn btn-primary" onClick={() => handleModalState()}>Bulk Section</button>
         <Dialog open={open} fullScreen>
             <DialogTitle className="fw-bolder text-uppercase">Auto Generate Subjects and Sections</DialogTitle>
                 <DialogContent dividers>
@@ -257,7 +258,7 @@ export default function AutoCreateSections({allowedGradeLevel}){
                                 ))}
                                 <tr>
                                     <td>
-                                        <IconButton color="primary" onClick={() => handleAddSubject()}>
+                                        <IconButton id="add-subject" color="primary" onClick={() => handleAddSubject()}>
                                             <AddCircleIcon fontSize="medium"/>
                                         </IconButton>
                                     </td>
@@ -276,6 +277,12 @@ export default function AutoCreateSections({allowedGradeLevel}){
                                             <option value={`mwf`}>Monday, Wednesday, Friday</option>
                                             <option value={`tth`}>Tuesday, Thursday</option>
                                             <option value={`weekends`}>Weekends</option>
+                                            <option value={`mon`}>Monday</option>
+                                            <option value={`tue`}>Tuesday</option>
+                                            <option value={`wed`}>Wednesday</option>
+                                            <option value={`thr`}>Thursday</option>
+                                            <option value={`frd`}>Friday</option>
+                                            <option value={`sat`}>Saturday</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -308,7 +315,7 @@ export default function AutoCreateSections({allowedGradeLevel}){
                                 ))}
                                 <tr>
                                     <td style={{verticalAlign: "middle"}}>
-                                        <IconButton color="primary" onClick={() => handleAddSection()}>
+                                        <IconButton id="add-section" color="primary" onClick={() => handleAddSection()}>
                                             <AddCircleIcon fontSize="medium"/>
                                         </IconButton>
                                     </td>

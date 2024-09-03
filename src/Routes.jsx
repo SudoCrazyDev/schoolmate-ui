@@ -26,6 +26,7 @@ import InstitutionRegistration from "./pages/public/InstitutionRegistration/Inst
 import Institutions from "./pages/institutions/Institutions";
 import Users from "./pages/users/Users";
 import ScheduleVisualizer from "./pages/scheduleVisualizer/ScheduleVisualizer";
+import Assignatory from "./pages/assignatory/Assignatory";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,9 +41,9 @@ export const router = createBrowserRouter(
             <Route element={<Teachers />} path="/staffs" />
             <Route element={<CurriculumHeads />} path="/curriculum-heads" />
             <Route element={<ClassAdvisory />} path="/advisory" />
-            <Route element={<NewStudent />} path="/advisory/new-student" exact/>
+            <Route element={<NewStudent />} path="/advisory/new-student/:section_id" exact/>
             <Route element={<BulkStudent />} path="/advisory/bulk-new-student" exact/>
-            
+            <Route element={<Assignatory />} path="/assignatory/:subject_id" exact/>
             {/* ADMIN ONLY ROUTES */}
             <Route element={<Institutions />} path="/institutions"/>
             <Route element={<Users />} path="/users"/>

@@ -30,7 +30,7 @@ export const getUserId = () => {
  * @returns{{id: String, institution: String, abbr: String}}
  */
 export const GetActiveInstitution = () => {
-    const institution = useSelector(state => state.user?.institutions[0]);
+    const institution = useSelector(state => state.user?.institutions?.[0]);
     if(institution){
         return {
             id: institution.id,

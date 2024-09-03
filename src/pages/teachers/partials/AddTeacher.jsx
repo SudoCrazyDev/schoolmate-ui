@@ -5,12 +5,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
-import Axios from 'axios';
 import { useFormik } from "formik";
 import { useAlert, useIsAllowedTo } from '../../../hooks/CustomHooks';
-import { useDispatch } from 'react-redux';
-import { actions } from '../../../redux/slices/OrgSlice';
-import { GetActiveInstitution, GetAppInstitutionRoles } from '../../../global/Helpers';
+import { GetActiveInstitution } from '../../../global/Helpers';
 import pb from '../../../global/pb';
 
 export default function AddTeacher({refreshTeachers}){
@@ -34,8 +31,11 @@ export default function AddTeacher({refreshTeachers}){
     };
     
     const handleFetchRoles = async () => {
-      const roles = await GetAppInstitutionRoles();
-      setRoles(roles);
+      const records = await pb.collection("roles").getFullList({
+        filter: `title!="App Admin"`,
+        fields: `id, title`
+      });
+      setRoles(records || []);
     };
 
     const handleSubmit = async (values) => {
@@ -88,8 +88,10 @@ export default function AddTeacher({refreshTeachers}){
     });
     
     useEffect(() => {
-      handleFetchRoles();
-    }, []);
+      if(open){
+        handleFetchRoles();
+      }
+    }, [open]);
 
     return(
         <>
@@ -106,6 +108,7 @@ export default function AddTeacher({refreshTeachers}){
                         <TextField id="middle_name" label="Middle Name" variant="outlined" {...formik.getFieldProps('middle_name')} disabled={formik.isSubmitting}/>
                         <TextField id="last_name" label="Last Name" variant="outlined" {...formik.getFieldProps('last_name')} disabled={formik.isSubmitting}/>
                         <TextField id="email" label="Email" variant="outlined" {...formik.getFieldProps('email')} disabled={formik.isSubmitting}/>
+                        <label className='fw-bold m-0'>Staff Role</label>
                         <select className='form-select' value={formik.values.roles} onChange={(e) => formik.setFieldValue('roles', e.target.value)}>
                           {roles.map((role, index) => (
                               <option id={index} value={role.id}>

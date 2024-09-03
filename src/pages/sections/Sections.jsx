@@ -15,7 +15,8 @@ import { useAlert } from '../../hooks/CustomHooks';
 import AutoCreateSections from './components/AutoCreateSections';
 import Skeleton from '@mui/material/Skeleton';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import { Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function Sections(){
     const [selectedSection, setSelectedSection] = useState(null);
@@ -26,7 +27,7 @@ export default function Sections(){
     const [sections, setSections] = useState([]);
     const [fetchingSections, setFetchingSections] = useState(false);
     const [fetchingSubjects, setFetchingsSubjects] = useState(false);
-
+    
     const handleFilterSectionByGradeLevel = async (gl) => {
         setFetchingSections(true);
         try {
@@ -120,6 +121,7 @@ export default function Sections(){
                         {/* <SectionSubjectTemplate />
                         <NewSection /> */}
                         <AutoCreateSections />
+                        <NewSection refresh={handleFetchSections}/>
                     </div>
                 </div>
             </div>
@@ -148,7 +150,7 @@ export default function Sections(){
                     {!fetchingSections && sections.map(section => (
                         <div key={section.id} className="d-flex flex-row align-items-center align-items-center class-section border my-1 rounded" onClick={() => setSelectedSection(section)}>
                             <h6 className="m-0" style={{padding: '8px'}}>{section.title}</h6>
-                            {/* <EditSection section={section} /> */}
+                            <EditSection section={section} />
                         </div>
                     ))}
                 </div>
@@ -159,13 +161,12 @@ export default function Sections(){
                         <div className="d-flex flex-row">
                             <div className="d-flex flex-column">
                                 <h2 className="m-0 fw-bolder">{selectedSection?.grade_level} - {selectedSection?.title}</h2>
-                                <h6 className="m-0"></h6>
-                                {/* <p className="m-0 text-muted fw-bolder" style={{fontSize: '12px'}}>Class adviser: {selectedSection?.adviser?.details.first_name} {selectedSection?.adviser?.details.last_name}</p> */}
+                                <h6 className="m-0">{selectedSection?.expand?.class_adviser?.first_name} {selectedSection?.expand?.class_adviser?.last_name}</h6>
                             </div>
                             <div className="ms-auto">
-                                {/* {selectedSection && (
-                                    <AddSubject selectedSection={selectedSection} setSubjects={setSubjects}/>  
-                                )} */}
+                                {selectedSection && (
+                                    <AddSubject selectedSection={selectedSection} setSubjects={setSubjects} handleFetchSectionSubjects={handleFetchSectionSubjects}/>
+                                )}
                             </div>
                         </div>
                         <div className="d-flex flex-column mt-1">

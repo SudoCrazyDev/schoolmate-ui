@@ -25,7 +25,7 @@ export default function EditSubject({subject, refresh}){
     const {id: institutionId} = GetActiveInstitution();
     const [teachers, setTeachers] = useState([]);
     const [fetching, setFetching] = useState(false);
-    
+
     const {
         id,
         title,
@@ -33,13 +33,13 @@ export default function EditSubject({subject, refresh}){
         end_time,
         schedule
     } = subject;
-    
+
     const assigned_teacher = subject.expand?.assigned_teacher;
 
     const handleModalState = () => {
         setOpenModal(!open);
     };
-    
+
     const handleSubmit = async (values) => {
         formik.setSubmitting(true)
         try {
@@ -49,13 +49,13 @@ export default function EditSubject({subject, refresh}){
             refresh();
             handleModalState();
         } catch (error) {
-            console.log(values);
+            console.log(error);
             alert.setAlert('error', 'Subject updated failed');
         } finally {
             formik.setSubmitting(false);
         }
     };
-    
+
     const handleFetchTeachers = async () => {
         setFetching(true);
         try {
@@ -71,7 +71,7 @@ export default function EditSubject({subject, refresh}){
             setFetching(false);
         }
     };
-    
+
     const formik = useFormik({
         initialValues: {
             title: title,
@@ -82,13 +82,13 @@ export default function EditSubject({subject, refresh}){
         },
         onSubmit: handleSubmit
     });
-    
+
     useEffect(() => {
         if(open){
             handleFetchTeachers();
         }
     }, [open]);
-    
+
     return(
         <>
         <IconButton size='small' color='primary' onClick={() => handleModalState()}>

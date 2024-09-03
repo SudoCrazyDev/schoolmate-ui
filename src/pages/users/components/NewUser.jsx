@@ -14,7 +14,6 @@ import pb from '../../../global/pb';
 export default function NewUser({refreshUsers}){
     const [open, setOpen] = useState(false);
     const [institutions, setInstitutions] = useState([]);
-    const [selectedInstitution, setSelectedInstitution] = useState(null);
     const alert = useAlert();
     
     const handleModalState = () => {
@@ -40,17 +39,17 @@ export default function NewUser({refreshUsers}){
             await new Promise((resolve) => setTimeout(resolve, 2500));
             const record_personal_data = await pb.collection("user_personal_data")
             .create({
-                user: record_auth.id,
-                first_name: values.first_name,
-                middle_name: values.middle_name,
-                last_name: values.last_name,
+                user_id: record_auth.id,
+                first_name: String(values.first_name).toUpperCase(),
+                middle_name: values.middle_name.toUpperCase(),
+                last_name: values.last_name.toUpperCase(),
                 gender: values.gender,
                 birthdate: values.birthdate
             });
             await new Promise((resolve) => setTimeout(resolve, 2500));
             await pb.collection('user_relationships')
             .create({
-                user_id: record_auth.id,
+                user: record_auth.id,
                 institutions: [values.institution],
                 personal_info: record_personal_data.id,
                 roles: ['f1spbu3ckb07s55']
@@ -68,6 +67,7 @@ export default function NewUser({refreshUsers}){
             first_name: "",
             middle_name: "",
             last_name: "",
+            email: "",
             birthdate: new Date().toLocaleDateString('en-CA'),
             gender: "male"
         },

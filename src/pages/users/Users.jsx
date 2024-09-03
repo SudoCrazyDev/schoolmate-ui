@@ -52,7 +52,7 @@ export default function Users(){
                             <tbody>
                                 {users.map((user, index) => (
                                     <tr key={index}>
-                                        <td className="fw-bold">{user.expand.user.email}</td>
+                                        <td className="fw-bold">{user.expand?.user?.email}</td>
                                         <td className="text-uppercase fw-bold">{user.expand.personal_info.last_name}, {user.expand.personal_info.first_name} {String(user.expand.personal_info.last_name).charAt(0)}.</td>
                                     </tr>
                                 ))}

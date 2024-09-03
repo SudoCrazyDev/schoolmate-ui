@@ -1,6 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { GetActiveInstitution, userHasRole } from "../../global/Helpers";
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+import { useSelector } from 'react-redux';
+import SensorDoorIcon from '@mui/icons-material/SensorDoor';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import GroupsIcon from '@mui/icons-material/Groups';
+import { useEffect, useState } from "react";
+import pb from "../../global/pb";
 
 const adminAccess = [
     'Super Administrator'
@@ -37,14 +43,82 @@ const teachersAccess = [
 ];
 
 export default function SideBar(){
-    const institution = GetActiveInstitution();
+    const user = useSelector(state => state.user);
+    const {id} = GetActiveInstitution();
+    const [advisory, setAdvisory] = useState(null);
+    const [asignatories, setAsignatories] = useState([]);
+    
+    const handleCheckAdvisory = async() => {
+        try {
+            const records = await pb.collection("institution_sections").getFullList({
+                filter: `class_adviser="${user.info.id}"`
+            });
+            setAdvisory(records);
+        } catch (error) {
+            
+        }
+    };
+    
+    const handleAsignatories = async() => {
+        try {
+            const personal = await pb.collection("user_relationships").getFullList({
+                filter: `personal_info="${user.info.id}"`
+            });
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            const subjects = await pb.collection("section_subjects")
+            .getFullList({
+                filter: `assigned_teacher="${personal[0].id}"`,
+                expand: `section`
+            })
+            setAsignatories(subjects);
+        } catch (error) {
+            
+        }
+    };
+    
+    useEffect(() => {
+        handleCheckAdvisory();
+        handleAsignatories();
+    }, []);
+    
     return(
         <div className="d-flex flex-column bg-dark text-white col-2" style={{position: 'fixed'}}>
             <div className="d-flex flex-column" style={{minHeight: '100vh'}}>
+                
                 <div className="d-flex flex-row justify-content-center p-2">
-                    <h1 className="m-0 fw-bolder" style={{letterSpacing: '4px'}}>{institution.abbr ? institution.abbr: 'ABCD'}</h1>
+                    <h3 className="m-0 fw-bolder text-center text-capitalize">
+                        Hi, {user?.info?.first_name}
+                    </h3>
                 </div>
 
+                {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
+                    <div className="d-flex flex-column p-2">
+                        <p className="fw-bolder m-0">CLASS MANAGEMENT</p>
+                        <div className="d-flex flex-row p-2">
+                            <NavLink to="/sections" className="h6 fw-light" style={{textDecoration: 'none'}}>
+                                <div className="d-flex flex-row align-items-center">
+                                    <BookmarksIcon />
+                                    <p className="p-1 m-0 text-center">SECTIONS</p>
+                                </div>
+                            </NavLink>
+                        </div>
+                    </div>
+                )}
+                
+                {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
+                    <div className="d-flex flex-column p-2">
+                        <p className="fw-bolder m-0">HUMAN RESOURCE</p>
+                        <div className="d-flex flex-row p-2">
+                            <NavLink to="/staffs" className="h6 fw-light" style={{textDecoration: 'none'}}>
+                                <div className="d-flex flex-row align-items-center">
+                                    <GroupsIcon />
+                                    <p className="p-1 m-0 text-center">STAFFS</p>
+                                </div>
+                            </NavLink>
+                        </div>
+                    </div>
+                )}
+                
                 {userHasRole(dashboardAccess) && (
                     <div className="d-flex flex-row m-1 p-1 align-items-center">
                         <NavLink to="/dashboard" className="h6" style={{textDecoration: 'none'}}>
@@ -53,7 +127,7 @@ export default function SideBar(){
                     </div>
                 )}
 
-                {userHasRole(schoolAdminAccess) && (
+                {userHasRole(schoolAdminAccess) || userHasRole(['Subject Teacher']) && advisory && (
                     <div className="d-flex flex-row m-1 p-1">
                         <NavLink to="/advisory" className="h6" style={{textDecoration: 'none'}}>
                             Class Advisory
@@ -61,6 +135,19 @@ export default function SideBar(){
                     </div>
                 )}
 
+                <div className="d-flex flex-column p-2">
+                    <p className="fw-bolder m-0">ASSIGNATORIES</p>
+                    {asignatories.map((assignatory, i) => (
+                        <div key={assignatory.id} className="d-flex flex-row p-2">
+                            <NavLink to={`/assignatory/${assignatory.id}`} className="fw-light text-white" style={{textDecoration: 'none'}}>
+                                <div className="d-flex flex-row align-items-center">
+                                    <p className="p-1 m-0 text-center">{assignatory?.expand?.section?.title} - {`(${assignatory?.title})`}</p>
+                                </div>
+                            </NavLink>
+                        </div>
+                    ))}
+                </div>
+                
                 {userHasRole(schoolAdminAccess) && (
                     <div className="d-flex flex-row m-1 p-1">
                         <NavLink to="/sections/grading" className="h6" style={{textDecoration: 'none'}}>
@@ -69,33 +156,13 @@ export default function SideBar(){
                     </div>
                 )}
 
-                <div className="d-flex flex-row m-1 p-1">
-                    <p className="m-0 fw-bolder" style={{letterSpacing: '1px'}}>
-                        SCHEDULING
-                    </p>
-                </div>
-
-                {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
-                    <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/sections" className="h6 fw-light" style={{textDecoration: 'none'}}>
-                            SECTIONS
-                        </NavLink>
-                    </div>
-                )}
-
-                {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
+                {/* {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
                     <div className="d-flex flex-row m-1 p-1">
                         <NavLink to="/sections/visualizer" className="h6 fw-light" style={{textDecoration: 'none'}}>
                             SCHEDULE VISUALIZER
                         </NavLink>
                     </div>
                 )}
-
-                <div className="d-flex flex-row m-1 p-1">
-                    <p className="m-0 fw-bolder" style={{letterSpacing: '1px'}}>
-                        HRIS
-                    </p>
-                </div>
                 
                 {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
                     <div className="d-flex flex-row m-1 p-1">
@@ -103,7 +170,7 @@ export default function SideBar(){
                             STAFFS
                         </NavLink>
                     </div>
-                )}
+                )} */}
 
                 {userHasRole(schoolAdminAccess) && (
                     <div className="d-flex flex-row m-1 p-1">

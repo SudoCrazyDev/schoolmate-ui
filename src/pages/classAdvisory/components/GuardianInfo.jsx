@@ -65,7 +65,7 @@ export default function GuardianInfo({formik}){
                 label="Mother's First Name"
                 fullWidth
                 {...formik.getFieldProps('parent_guardian.mother.first_name')}
-                error={formik.touched.parent_guardian?.mother.first_name && formik.errors.parent_guardian?.mother.first_name}
+                error={formik.touched.parent_guardian?.mother?.first_name && formik.errors.parent_guardian?.mother?.first_name}
                 helperText={formik.errors.parent_guardian?.mother.first_name}
                 />
             </div>
@@ -77,7 +77,7 @@ export default function GuardianInfo({formik}){
                 label="Mother's Middle Name"
                 fullWidth
                 {...formik.getFieldProps('parent_guardian.mother.middle_name')}
-                error={formik.touched.parent_guardian?.mother.middle_name && formik.errors.parent_guardian?.mother.middle_name}
+                error={formik.touched.parent_guardian?.mother?.middle_name && formik.errors.parent_guardian?.mother?.middle_name}
                 helperText={formik.errors.parent_guardian?.mother.middle_name}
                 />
             </div>
@@ -89,7 +89,7 @@ export default function GuardianInfo({formik}){
                 label="Mother's Last Name"
                 fullWidth
                 {...formik.getFieldProps('parent_guardian.mother.last_name')}
-                error={formik.touched.parent_guardian?.mother.last_name && formik.errors.parent_guardian?.mother.last_name}
+                error={formik.touched.parent_guardian?.mother?.last_name && formik.errors.parent_guardian?.mother?.last_name}
                 helperText={formik.errors.parent_guardian?.mother.last_name}
                 />
             </div>
@@ -101,8 +101,8 @@ export default function GuardianInfo({formik}){
                 label="Mother's Contact"
                 fullWidth
                 {...formik.getFieldProps('parent_guardian.mother.contact_no')}
-                error={formik.touched.parent_guardian?.mother.contact_no && formik.errors.parent_guardian?.mother.contact_no}
-                helperText={formik.errors.parent_guardian?.mother.contact_no}
+                error={formik.touched.parent_guardian?.mother?.contact_no && formik.errors.parent_guardian?.mother?.contact_no}
+                helperText={formik.errors.parent_guardian?.mother?.contact_no}
                 />
             </div>
             <div className="p-2 col-3">
@@ -113,8 +113,8 @@ export default function GuardianInfo({formik}){
                 label="Guardian's First Name"
                 fullWidth
                 {...formik.getFieldProps('parent_guardian.guardian.first_name')}
-                error={formik.touched.parent_guardian?.guardian.first_name && formik.errors.parent_guardian?.guardian.first_name}
-                helperText={formik.errors.parent_guardian?.guardian.first_name}
+                error={formik.touched.parent_guardian?.guardian?.first_name && formik.errors.parent_guardian?.guardian?.first_name}
+                helperText={formik.errors.parent_guardian?.guardian?.first_name}
                 />
             </div>
             <div className="p-2 col-3">
@@ -125,8 +125,8 @@ export default function GuardianInfo({formik}){
                 label="Guardian's Middle Name"
                 fullWidth
                 {...formik.getFieldProps('parent_guardian.guardian.middle_name')}
-                error={formik.touched.parent_guardian?.guardian.middle_name && formik.errors.parent_guardian?.guardian.middle_name}
-                helperText={formik.errors.parent_guardian?.guardian.middle_name}
+                error={formik.touched.parent_guardian?.guardian?.middle_name && formik.errors.parent_guardian?.guardian?.middle_name}
+                helperText={formik.errors.parent_guardian?.guardian?.middle_name}
                 />
             </div>
             <div className="p-2 col-3">
@@ -137,8 +137,8 @@ export default function GuardianInfo({formik}){
                 label="Guardian's Last Name"
                 fullWidth
                 {...formik.getFieldProps('parent_guardian.guardian.last_name')}
-                error={formik.touched.parent_guardian?.guardian.last_name && formik.errors.parent_guardian?.guardian.last_name}
-                helperText={formik.errors.parent_guardian?.guardian.last_name}
+                error={formik.touched.parent_guardian?.guardian?.last_name && formik.errors.parent_guardian?.guardian?.last_name}
+                helperText={formik.errors.parent_guardian?.guardian?.last_name}
                 />
             </div>
             <div className="p-2 col-3">
@@ -149,8 +149,8 @@ export default function GuardianInfo({formik}){
                 label="Guardian's Contact"
                 fullWidth
                 {...formik.getFieldProps('parent_guardian.guardian.contact_no')}
-                error={formik.touched.parent_guardian?.guardian.contact_no && formik.errors.parent_guardian?.guardian.contact_no}
-                helperText={formik.errors.parent_guardian?.guardian.contact_no}
+                error={formik.touched.parent_guardian?.guardian?.contact_no && formik.errors.parent_guardian?.guardian?.contact_no}
+                helperText={formik.errors.parent_guardian?.guardian?.contact_no}
                 />
             </div>
         </div>
