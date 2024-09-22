@@ -7,6 +7,7 @@ import pb from "../../../global/pb";
 import Autocomplete from '@mui/material/Autocomplete';
 import { GetActiveInstitution } from "../../../global/Helpers";
 import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 export default function AutoCreateSections({allowedGradeLevel}){
     const [open, setOpen] = useState(false);
@@ -196,9 +197,14 @@ export default function AutoCreateSections({allowedGradeLevel}){
 
     return(
         <>
-        <button className="fw-bolder btn btn-primary" onClick={() => handleModalState()}>Bulk Section</button>
+        {/* <button className="fw-bolder btn btn-primary" onClick={() => handleModalState()}>Create Section</button> */}
+        <NavLink to={"new-section"}>
+            <button className="fw-bolder btn btn-primary">
+                Create Section
+            </button>
+        </NavLink>
         <Dialog open={open} fullScreen>
-            <DialogTitle className="fw-bolder text-uppercase">Auto Generate Subjects and Sections</DialogTitle>
+            <DialogTitle className="fw-bolder text-uppercase">Create Section and Subject</DialogTitle>
                 <DialogContent dividers>
                     <div className="d-flex flex-column">
                         {submitting && (
@@ -208,7 +214,6 @@ export default function AutoCreateSections({allowedGradeLevel}){
                                 </div>
                                 <h5 className="fw-bolder">{progressDetails}</h5>
                             </div>
-                            
                         )}
                         {roles[0].title === "Principal" && (
                             <>

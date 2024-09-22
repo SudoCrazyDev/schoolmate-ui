@@ -11,7 +11,7 @@ import Axios from "axios";
 import { useSelector } from 'react-redux';
 import { useAlert } from '../../../hooks/CustomHooks';
 
-export default function DeleteSubject({subject, setSubjects}){
+export default function DeleteSubject({subject, refresh}){
     const [open, setOpenModal] = useState(false);
     const alert = useAlert();
     
@@ -21,9 +21,9 @@ export default function DeleteSubject({subject, setSubjects}){
     
     const handleSubmit = () => {
         formik.setSubmitting(true);
-        Axios.delete(`section/subject/delete/${subject.id}`)
+        Axios.delete(`subjects/${subject.id}`)
         .then(({data}) => {
-            setSubjects(data);
+            refresh();
             alert.setAlert('success', 'Subject deleted successfully')
             handleModalState();
         })
@@ -45,7 +45,7 @@ export default function DeleteSubject({subject, setSubjects}){
     return(
         <>
         <IconButton size='small' color='error' onClick={() => handleModalState()}>
-            <DeleteIcon />
+            <DeleteIcon fontSize="small"/>
         </IconButton>
         <Dialog open={open} maxWidth="sm" fullWidth>
             <DialogTitle className='fw-bolder'>Delete Subject</DialogTitle>

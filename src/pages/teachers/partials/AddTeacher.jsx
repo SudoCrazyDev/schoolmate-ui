@@ -9,18 +9,16 @@ import { useFormik } from "formik";
 import { useAlert, useIsAllowedTo } from '../../../hooks/CustomHooks';
 import { GetActiveInstitution } from '../../../global/Helpers';
 import pb from '../../../global/pb';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 export default function AddTeacher({refreshTeachers}){
     const [open, setOpen] = useState(false);
     const alert = useAlert()
-    const { isAllowed, isLoading } = useIsAllowedTo('create-subject-teacher');
-    const { id } = GetActiveInstitution();
     const [roles, setRoles] = useState([]);
+    const {institutions} = useSelector(state => state.user);
     
     const handleModalState = () => {
-      if(!isAllowed){
-        return ;
-      }
       formik.resetForm();
       setOpen(!open);
     };
@@ -31,49 +29,23 @@ export default function AddTeacher({refreshTeachers}){
     };
     
     const handleFetchRoles = async () => {
-      const records = await pb.collection("roles").getFullList({
-        filter: `title!="App Admin"`,
-        fields: `id, title`
-      });
-      setRoles(records || []);
+      await axios.get('roles/all')
+      .then((res) => {
+        setRoles(res.data.data || []);
+      })
     };
 
     const handleSubmit = async (values) => {
       formik.setSubmitting(true);
-      try {
-        const record_auth = await pb.collection('users')
-        .create({
-            username: crypto.randomUUID(),
-            email: values.email,
-            emailVisibility: true,
-            password: 'password',
-            passwordConfirm: 'password'
-        });
-        await new Promise((resolve) => setTimeout(resolve, 2500));
-        const record_personal_data = await pb.collection("user_personal_data")
-        .create({
-            user_id: record_auth.id,
-            first_name: values.first_name,
-            middle_name: values.middle_name,
-            last_name: values.last_name,
-        });
-        await new Promise((resolve) => setTimeout(resolve, 2500));
-        await pb.collection('user_relationships')
-        .create({
-            user: record_auth.id,
-            institutions: [id],
-            personal_info: record_personal_data.id,
-            roles: values.roles
-        });
-        alert.setAlert('success', 'Teacher Added successfully');
+      await axios.post('users/add', values)
+      .then((res) => {
         refreshTeachers();
-      } catch (error) {
-        alert.setAlert('error', 'Error on creating teacher');
-      } finally {
-        formik.setSubmitting(false);
-        handleCloseModal();
-      }
-      
+        handleModalState();
+        alert.setAlert('success', 'Staff Created!');
+      })
+      .catch((err) => {
+        alert.setAlert('error', 'Failed to create staff!');
+      });
     };
 
     const formik = useFormik({
@@ -81,8 +53,12 @@ export default function AddTeacher({refreshTeachers}){
         first_name: '',
         middle_name: '',
         last_name: '',
+        ext_name: "",
         email: "",
-        roles: "tv6buv1rj90q81f"
+        gender: "",
+        birthdate: "",
+        role_id: "",
+        institution_id: institutions[0].id
       },
       onSubmit: handleSubmit
     });
@@ -95,11 +71,12 @@ export default function AddTeacher({refreshTeachers}){
 
     return(
         <>
-        <Button variant="contained" className='fw-bolder' onClick={() => handleModalState()} disabled={!isAllowed}>
+        <button className="btn btn-primary fw-bold" onClick={() => handleModalState()}>NEW STAFF</button>
+        {/* <Button variant="contained" className='fw-bolder' onClick={() => handleModalState()} disabled={!isAllowed}>
           {isLoading ? <div className='spinner-border spinner-border-sm'></div> : "ADD STAFF"}
-        </Button>
+        </Button> */}
         <Dialog open={open} maxWidth="sm" fullWidth onClose={() => handleCloseModal()}>
-            <DialogTitle className='fw-bolder'>ADD STAFF</DialogTitle>
+            <DialogTitle className='fw-bolder'>CREATE STAFF</DialogTitle>
             <Divider />
             <DialogContent>
                 <form onSubmit={formik.handleSubmit}>
@@ -109,7 +86,7 @@ export default function AddTeacher({refreshTeachers}){
                         <TextField id="last_name" label="Last Name" variant="outlined" {...formik.getFieldProps('last_name')} disabled={formik.isSubmitting}/>
                         <TextField id="email" label="Email" variant="outlined" {...formik.getFieldProps('email')} disabled={formik.isSubmitting}/>
                         <label className='fw-bold m-0'>Staff Role</label>
-                        <select className='form-select' value={formik.values.roles} onChange={(e) => formik.setFieldValue('roles', e.target.value)}>
+                        <select className='form-select' value={formik.values.roles} onChange={(e) => formik.setFieldValue('role_id', e.target.value)}>
                           {roles.map((role, index) => (
                               <option id={index} value={role.id}>
                                 {role.title}

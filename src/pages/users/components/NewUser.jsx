@@ -14,6 +14,7 @@ import pb from '../../../global/pb';
 export default function NewUser({refreshUsers}){
     const [open, setOpen] = useState(false);
     const [institutions, setInstitutions] = useState([]);
+    const [roles, setRoles] = useState([]);
     const alert = useAlert();
     
     const handleModalState = () => {
@@ -22,44 +23,21 @@ export default function NewUser({refreshUsers}){
     };
 
     const handleOpenModalState = () => {
-        handleFetchInstitutions();
         formik.resetForm();
         setOpen(true);
     };
+    
     const handleSubmit = async(values) => {
-        try {
-            const record_auth = await pb.collection('users')
-            .create({
-                username: crypto.randomUUID(),
-                email: values.email,
-                emailVisibility: true,
-                password: 'password',
-                passwordConfirm: 'password'
-            })
-            await new Promise((resolve) => setTimeout(resolve, 2500));
-            const record_personal_data = await pb.collection("user_personal_data")
-            .create({
-                user_id: record_auth.id,
-                first_name: String(values.first_name).toUpperCase(),
-                middle_name: values.middle_name.toUpperCase(),
-                last_name: values.last_name.toUpperCase(),
-                gender: values.gender,
-                birthdate: values.birthdate
-            });
-            await new Promise((resolve) => setTimeout(resolve, 2500));
-            await pb.collection('user_relationships')
-            .create({
-                user: record_auth.id,
-                institutions: [values.institution],
-                personal_info: record_personal_data.id,
-                roles: ['f1spbu3ckb07s55']
-            });
-            alert.setAlert('success', 'New User Added');
-            refreshUsers();
+        await axios.post('users/add', values)
+        .then((res) => {
+            alert.setAlert('success', 'New User Created');
             handleModalState();
-        } catch (error) {
-            alert.setAlert('error', 'Failed to add user');
-        }
+            refreshUsers();
+        })
+        .catch(() => {
+            alert.setAlert('error', 'Failed to Create User');
+            formik.setSubmitting(false);
+        })
     };
 
     const formik = useFormik({
@@ -69,23 +47,42 @@ export default function NewUser({refreshUsers}){
             last_name: "",
             email: "",
             birthdate: new Date().toLocaleDateString('en-CA'),
-            gender: "male"
+            gender: "male",
+            institution_id: "",
+            role_id: ""
         },
         onSubmit: handleSubmit
     });
 
     const handleFetchInstitutions = async () => {
         formik.setSubmitting(true);
-        try {
-            const records = await pb.collection("institutions").getFullList();
-            setInstitutions(records);
-        } catch (error) {
-            alert.setAlert('error', 'Failed to fetch Institutions');
-        }finally{
+        await axios.get('institution/all')
+        .then((res) => {
+            setInstitutions(res.data.data);
+        })
+        .finally(() => {
             formik.setSubmitting(false);
-        }
+        })
+    };
+    
+    const handleFetchRoles = async () => {
+        formik.setSubmitting(true);
+        await axios.get('roles/all')
+        .then((res) => {
+            setRoles(res.data.data);
+        })
+        .finally(() => {
+            formik.setSubmitting(false);
+        });
     };
 
+    useEffect(() => {
+        if(open){
+            handleFetchInstitutions();
+            handleFetchRoles();
+        }
+    }, [open]);
+    
     return(
         <>
         <button className="btn btn-primary fw-bolder" onClick={() => handleOpenModalState()}>New User</button>
@@ -112,9 +109,18 @@ export default function NewUser({refreshUsers}){
                             disabled={formik.isSubmitting}
                             id="combo-box-demo"
                             options={institutions}
-                            onChange={(e, newValue) => formik.setFieldValue('institution', newValue.id)}
+                            onChange={(e, newValue) => formik.setFieldValue('institution_id', newValue.id)}
                             getOptionLabel={(option) => option.title}
                             renderInput={(params) => <TextField {...params} label="Institution" />}
+                        />
+                        <Autocomplete
+                            disablePortal
+                            disabled={formik.isSubmitting}
+                            id="combo-box-demo"
+                            options={roles}
+                            onChange={(e, newValue) => formik.setFieldValue('role_id', newValue.id)}
+                            getOptionLabel={(option) => option.title}
+                            renderInput={(params) => <TextField {...params} label="Role" />}
                         />
                     </div>
                 </DialogContent>

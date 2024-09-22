@@ -9,15 +9,10 @@ export default function Users(){
     const alert = useAlert();
     
     const handleFetchAllUsers = async () => {
-        try {
-            const records = await pb.collection('user_relationships').getFullList({
-                sort: '-created',
-                expand: "user,institutions,personal_info,"
-            });
-            setUsers(records);
-        } catch (error) {
-            alert.setAlert('error', 'Failed to fetch users');
-        }
+        await axios.get('users/principal')
+        .then((res) => {
+            setUsers(res.data.data.data);
+        });
     };
     
     useEffect(() => {
@@ -52,8 +47,8 @@ export default function Users(){
                             <tbody>
                                 {users.map((user, index) => (
                                     <tr key={index}>
-                                        <td className="fw-bold">{user.expand?.user?.email}</td>
-                                        <td className="text-uppercase fw-bold">{user.expand.personal_info.last_name}, {user.expand.personal_info.first_name} {String(user.expand.personal_info.last_name).charAt(0)}.</td>
+                                        <td className="fw-bold">{user.email}</td>
+                                        <td className="text-uppercase fw-bold">{user.last_name}, {user.first_name}</td>
                                     </tr>
                                 ))}
                             </tbody>

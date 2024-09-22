@@ -6,7 +6,6 @@ import { useAlert } from "../../hooks/CustomHooks";
 import { useDispatch } from "react-redux";
 import { actions } from "../../redux/slices/UserSlice";
 import pb from '../../global/pb';
-import loginBg from '../../assets/login-bg.jpg';
 
 const validationSchema = yup.object().shape({
     email: yup.string().email('Must be a valid email'),
@@ -19,14 +18,17 @@ export default function Login(){
     
     const handleSubmit = async (values) => {
         formik.setSubmitting(true);
-        try {
-            const authData = await pb.collection('users').authWithPassword(values.email, values.password);
-            dispatch(actions.SET_TOKEN(authData.record.id));
-        } catch (error) {
-            alert.setAlert('error', 'Invalid Username and Password');
-        } finally {
+        await Axios.post('login', values)
+        .then((res) => {
+            dispatch(actions.SET_USER(res.data));
+            dispatch(actions.SET_TOKEN(res.data.token));
+            dispatch(actions.SET_ROLES(res.data.roles));
+            dispatch(actions.SET_INSTITUTIONS(res.data.institutions));
+        })
+        .catch(err => {
+            alert.setAlert('error', err.response.data.message);
             formik.setSubmitting(false);
-        }
+        });
     };
     
     const formik = useFormik({
@@ -43,7 +45,7 @@ export default function Login(){
             <div className="col-6 p-5 d-flex flex-column align-items-center">
                 <form onSubmit={formik.handleSubmit} className="d-flex flex-column justify-content-center" style={{width:'500px'}}>
                     <h1 className="m-0 fw-bolder text-center" style={{letterSpacing: '3px'}}>SCHOLASTIC CLOUD</h1>
-                    <p className="m-0 fw-light text-center mb-3" style={{letterSpacing: '5px'}}>EMPOWERING EDUCATION</p>
+                    <p className="m-0 fw-normal text-center mb-3" style={{letterSpacing: '5px'}}>EMPOWERING EDUCATION</p>
                     <hr />
                     <div className="py-3 px-3">
                         <div className="card-body d-flex flex-column gap-2">
@@ -57,9 +59,7 @@ export default function Login(){
                 </form>
             </div>
             <div className="col-6 p-3">
-                <div style={{background: "url('/login-bg.jpg')", minHeight: '93vh'}}>
-                    
-                </div>
+                <iframe className="w-100" style={{minHeight: '95vh'}} src="https://lottie.host/embed/c00b4ad6-461f-49ba-a860-09e94fab466c/Jpi7xwkxI4.json"></iframe>
             </div>
         </div>
     );

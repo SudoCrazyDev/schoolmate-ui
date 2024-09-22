@@ -6,9 +6,8 @@ import Button from "@mui/material/Button";
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import axios from 'axios';
+import Axios from 'axios';
 import { useAlert } from '../../../hooks/CustomHooks';
-import pb from "../../../global/pb";
 
 export default function AddInstitution({setInstitutions}){
     const [open, setOpen] = useState(false);
@@ -21,40 +20,35 @@ export default function AddInstitution({setInstitutions}){
     
     const handleSubmit = async (values) => {
         formik.setSubmitting(true);
-        try {
-            const record = await pb.collection('institutions')
-            .create({
-                title: values.institution,
-                abbr: values.abbr
-            });
-            setInstitutions(prevState => [...prevState, record])
-            alert.setAlert('success', 'New Institution Created');
+        await Axios.post('institution/add', values)
+        .then((res) => {
+            setInstitutions(res.data.data.data);
+            alert.setAlert('success', res.data.message);
             handleModalState();
-        } catch (error) {
-            alert.setAlert('error', 'Failed to create Institution');
-        } finally {
+        })
+        .catch(err => {
+            alert.setAlert('error', err.response.data.message);
             formik.setSubmitting(false);
-        }
+        });
     };
     
     const formik = useFormik({
         initialValues: {
-            institution: '',
-            abbr: '',
-            gov_id: ''
+            title: '',
+            abbr: ''
         },
         onSubmit: handleSubmit
     });
     
     return(
         <>
-        <Button className='fw-bolder' variant='contained' onClick={() => handleModalState()}>Create</Button>
+        <Button className='fw-bolder' variant='contained' onClick={() => handleModalState()}>NEW</Button>
         <Dialog open={open} maxWidth="md" fullWidth>
             <DialogTitle className='fw-bolder'>NEW INSTITUTION</DialogTitle>
             <form onSubmit={formik.handleSubmit}>
                 <DialogContent dividers>
                     <div className="d-flex flex-column gap-2">
-                        <TextField variant='outlined' label="Insitution" {...formik.getFieldProps('institution')} disabled={formik.isSubmitting}/>
+                        <TextField variant='outlined' label="Insitution" {...formik.getFieldProps('title')} disabled={formik.isSubmitting}/>
                         <TextField variant='outlined' label="Abbrevation (Eg. ILSNHMD, GSCNSSAT)" {...formik.getFieldProps('abbr')} disabled={formik.isSubmitting}/>
                         {/* <TextField variant='outlined' label="School ID" {...formik.getFieldProps('gov_id')} disabled={formik.isSubmitting}/> */}
                     </div>

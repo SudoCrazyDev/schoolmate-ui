@@ -4,20 +4,24 @@ import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import CreateIcon from '@mui/icons-material/Create';
-import pb from "../../global/pb";
 import { useAlert } from "../../hooks/CustomHooks";
+import { Skeleton } from "@mui/material";
 
 export default function Institutions(){
+    const [fetching, setFetching] = useState(false);
     const [institutions, setInstitutions] = useState([]);
     const alert = useAlert();
     
     const handleFetchInstitutions = async () => {
-        try {
-            const records = await pb.collection('institutions').getFullList();
-            setInstitutions(records);
-        } catch (error) {
-            alert.setAlert('error', "There's an error fetching institutions");
-        }
+        setFetching(true);
+        await axios.get('institution/all')
+        .then((res) => {
+            console.log(res);
+            setInstitutions(res.data.data);
+        })
+        .finally(() => { 
+            setFetching(false);
+        });
     };
 
     useEffect(() => {
@@ -51,7 +55,12 @@ export default function Institutions(){
                                 </tr>
                             </thead>
                             <tbody>
-                                {institutions.map((insititution, index) => (
+                                {fetching && Array(5).fill().map((_,i) => (
+                                    <tr key={i}>
+                                        <td colSpan={3}><Skeleton className="rounded" variant="rect" height={30}/></td>
+                                    </tr>
+                                ))}
+                                {!fetching && institutions.map((insititution, index) => (
                                     <tr>
                                         <td className="fw-bold">{insititution.title}</td>
                                         <td>{insititution.abbr}</td>

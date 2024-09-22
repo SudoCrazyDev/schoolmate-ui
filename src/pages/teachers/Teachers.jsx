@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import { GetActiveInstitution } from '../../global/Helpers';
+import axios from 'axios';
 
 const intialState = {
     selected_teacher: null,
@@ -46,21 +47,19 @@ export default function Teachers(){
     const [fetching, setFetching] = useState(false);
     const {id} = GetActiveInstitution();
     const alert = useAlert();
+    const {institutions} = useSelector(state => state.user);
+    const [staffs, setStaffs] = useState([]);
     
     const handleFetchTeachers = async () => {
         setFetching(true);
-        try {
-            const records = await pb.collection("user_relationships")
-            .getList(1, 10, {
-                expand: 'user,personal_info,roles',
-                filter: `institutions~"${id}" && roles!~"fodxbvsy6176gxd"`
-            })
-            setTeachers(records.items);
-        } catch (error) {
-            alert.setAlert('error', "Failed to load Teachers.")
-        } finally {
+        await axios.get(`users/all_by_institutions/${institutions[0].id}`)
+        .then(res => {
+            let fetched_staffs = res.data.data.data;
+            setStaffs(fetched_staffs.sort((a,b) => a.last_name.localeCompare(b.last_name, "en", { sensitivity: "base"})));
+        })
+        .finally(() => {
             setFetching(false);
-        }
+        });
     };
     
     const handleSearchTeacher = async () => {
@@ -138,15 +137,15 @@ export default function Teachers(){
                                 </tr>
                             </thead>
                             <tbody>
-                                {teachers.map((teacher) => (
-                                    <tr key={teacher.id}>
-                                        <td className='fw-bolder text-uppercase'>{teacher.expand.personal_info.last_name}, {teacher.expand.personal_info.first_name}</td>
-                                        <td>{teacher.expand.user.email}</td>
-                                        <td>{teacher.expand.roles[0].title}</td>
+                                {staffs.map((staff) => (
+                                    <tr key={staff.id}>
+                                        <td className='fw-bolder text-uppercase'>{staff.last_name}, {staff.first_name}</td>
+                                        <td>{staff.email}</td>
+                                        <td>{staff.roles[0].title}</td>
                                         <td>
-                                            <IconButton onClick={() => handleChangeRole(teacher)} color='primary'>
+                                            {/* <IconButton onClick={() => handleChangeRole(teacher)} color='primary'>
                                                 <AccessibilityIcon fontSize='small' />
-                                            </IconButton>
+                                            </IconButton> */}
                                         </td>
                                     </tr>
                                 ))}

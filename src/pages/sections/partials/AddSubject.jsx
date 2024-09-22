@@ -17,24 +17,29 @@ import { useSelector } from 'react-redux';
 import pb from '../../../global/pb';
 import { GetActiveInstitution } from '../../../global/Helpers';
 
-export default function AddSubject({selectedSection, handleFetchSectionSubjects}){
+export default function AddSubject({selectedSection, refresh}){
     const [open, setOpen] = useState(false);
     const [teachers, setTeachers] = useState([]);
     const {id} = GetActiveInstitution();
+    const { institutions } = useSelector(state => state.user);
     const alert = useAlert()
+    const [fetching, setFetching] = useState(false);
+    const [scheduleConflict, setScheduleConflict] = useState(false);
+    const [conflictSchedules, setConflictSchedules] = useState([]);
     
     const handleFetchTeachers = async () => {
-      try {
-        const records = await pb.collection("user_relationships")
-          .getFullList({
-              expand: 'user,personal_info,roles',
-              filter: `institutions~"${id}" && roles!~"fodxbvsy6176gxd"`
-          });
-          setTeachers(records);
-      } catch (error) {
-        console.log(error);
-        alert.setAlert("error", "Failed to load teacher")
-      }
+      setFetching(true);
+        await Axios.get(`users/all_by_institutions/${institutions[0].id}`)
+        .then((res) => {
+            let fetched = res.data.data.data;
+            setTeachers(fetched.sort((a,b) => a.last_name.localeCompare(b.last_name)));
+        })
+        .catch(() => {
+            alert.setAlert("error", 'Failed to fetch Teachers');
+        })
+        .finally(() => {
+            setFetching(false);
+        });
     };
     
     const handleCloseModal = () => {
@@ -42,49 +47,49 @@ export default function AddSubject({selectedSection, handleFetchSectionSubjects}
       setOpen(false);
     };
 
-    
+    const handleFetchScheduleConflict = async (user_id) => {
+      setFetching(true);
+      await Axios.post(`subjects/validate_conflict`, {
+          subject_teacher: user_id,
+          start_time: formik.values.start_time
+      })
+      .then((res) => {
+          if(res.data.length > 0){
+              setScheduleConflict(true);
+              setConflictSchedules(res.data);
+          }else{
+              setScheduleConflict(false);
+              setConflictSchedules([]);
+          }
+      })
+      .finally(() => {
+          setFetching(false);
+      });
+  };
+  
     const handleSubmit = async (values) => {
       formik.setSubmitting(true);
-      try {
-        await pb.collection("section_subjects")
-        .create({
-            institution: id,
-            section: selectedSection.id,
-            title: values.subject_title,
-            start_time: values.start_time,
-            end_time: values.end_time,
-            schedule: values.schedule,
-            assigned_teacher: values.user_id
-        });
-        handleFetchSectionSubjects();
+      await Axios.post('subjects/add', values)
+      .then(({data}) => {
+        refresh();
+        alert.setAlert('success', 'Subject Created!');
         handleCloseModal();
-      } catch (error) {
-        alert.setAlert("error", "Failed to add subject")
-      } finally {
-        formik.setSubmitting(true);
-      }
-      // Axios.post('section/subject/add', values)
-      // .then(({data}) => {
-      //   setSubjects(data);
-      //   alert.setAlert('success', 'Subject Added successfully');
-      //   handleCloseModal();
-      // })
-      // .catch((err) => {
-      //   alert.setAlert('error', 'Error on adding subject');
-      // })
-      // .finally(() => {
-      //   formik.setSubmitting(false);
-      // });
+      })
+      .catch((err) => {
+        alert.setAlert('error', 'Error on adding subject');
+      })
+      .finally(() => {
+        formik.setSubmitting(false);
+      });
     };
     
     const formik = useFormik({
       initialValues:{
-        subject_title: '',
+        title: '',
         section_id: selectedSection.id,
-        user_id: '',
-        start_time: "07:30",
-        end_time: '08:30',
-        schedule: 'daily'
+        subject_teacher: null,
+        start_time: '',
+        end_time: ''
       },
       enableReinitialize: true,
       onSubmit: handleSubmit
@@ -97,48 +102,38 @@ export default function AddSubject({selectedSection, handleFetchSectionSubjects}
     }, [open]);
     return(
         <>
-        <Button variant="contained" className='fw-bolder' onClick={() => setOpen(true)}>Add Subject</Button>
+        <button className="btn btn-primary fw-bold" onClick={() => setOpen(true)}>Add Subject</button>
         <Dialog open={open} maxWidth="sm" fullWidth onClose={() => handleCloseModal()}>
             <DialogTitle className='fw-bolder'>Add New Subject for {selectedSection.section_name}</DialogTitle>
             <Divider />
             <DialogContent>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="d-flex flex-column gap-3">
-                        <TextField label="Subject Title" variant="outlined" {...formik.getFieldProps('subject_title')} disabled={formik.isSubmitting}/>
+                        <TextField label="Subject Title" variant="outlined" {...formik.getFieldProps('title')} disabled={formik.isSubmitting}/>
+                        <TextField type="time" label="Start Time" variant="outlined" value={"07:30"} {...formik.getFieldProps('start_time')} disabled={formik.isSubmitting}/>
+                        <TextField type="time" label="End Time" variant="outlined" value={"07:30"} {...formik.getFieldProps('end_time')} disabled={formik.isSubmitting}/>
                         <Autocomplete
                             id="teachers"
                             options={teachers}
                             fullWidth
+                            disabled={fetching}
                             disableClearable
                             getOptionDisabled={(option) => option.id === "sample"}
                             onChange={(event, newValue) =>{
-                              formik.setFieldValue('user_id', newValue.id);
+                              formik.setFieldValue('subject_teacher', newValue.id);
+                              handleFetchScheduleConflict(newValue.id);
                             }}
-                            getOptionLabel={(option) => `${String(option.expand?.personal_info.last_name).toUpperCase()} ${String(option.expand?.personal_info.first_name).toUpperCase()}`}
-                            renderInput={(params) => <TextField {...params} label="Subject Teacher" />}
+                            getOptionLabel={(option) => `${String(option.last_name).toUpperCase()}, ${String(option.first_name).toUpperCase()}`}
+                            renderInput={(params) => <TextField {...params} label="Subject Teacher" error={scheduleConflict}/>}
                         />
-                        {/* <Autocomplete
-                            disabled={formik.isSubmitting}
-                            id="combo-box-demo"
-                            options={teachers}
-                            fullWidth
-                            disableClearable
-                            onChange={(event, newValue) =>{
-                              formik.setFieldValue('user_id', newValue.id);
-                            }}
-                            getOptionLabel={(option) => `${option.details?.first_name} ${option.details?.last_name}`}
-                            renderInput={(params) => <TextField {...params} label="Subject Teacher" />}
-                        /> */}
-                        <TextField type="time" label="Start Time" variant="outlined" value={"07:30"} {...formik.getFieldProps('start_time')} disabled={formik.isSubmitting}/>
-                        <TextField type="time" label="End Time" variant="outlined" value={"07:30"} {...formik.getFieldProps('end_time')} disabled={formik.isSubmitting}/>
-                        <FormControl>
-                            <InputLabel id="grade_level_label">Schedule</InputLabel>
-                            <Select labelId="grade_level_label" label="Schedule" fullWidth defaultValue={'daily'} {...formik.getFieldProps('schedule')} disabled={formik.isSubmitting}>
-                                <MenuItem value={"daily"}>Daily</MenuItem>
-                                <MenuItem value={"mwf"}>Monday, Wednesday, Friday</MenuItem>
-                                <MenuItem value={"tth"}>Tuesday, Thursday</MenuItem>
-                            </Select>
-                        </FormControl>
+                        {scheduleConflict && (
+                            <>
+                                <p className='m-0 text-danger'>Conflict Schedules:</p>
+                                {conflictSchedules.map((schedule, index) => (
+                                    <p className="m-0 ms-3 text-danger">{`${schedule.section?.grade_level}-${schedule.section?.title}: ${schedule.title}`}</p>
+                                ))}
+                            </>
+                        )}
                         <Divider />
                         <div className="d-flex flex-row mt-2 gap-2">
                             <Button type="submit" variant="contained" color="primary" disabled={formik.isSubmitting}>Submit {formik.isSubmitting && <span className="ms-2 spinner-border spinner-border-sm"></span>}</Button>

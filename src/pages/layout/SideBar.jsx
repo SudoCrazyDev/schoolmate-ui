@@ -7,6 +7,11 @@ import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { useEffect, useState } from "react";
 import pb from "../../global/pb";
+import HomeIcon from '@mui/icons-material/Home';
+import ClassIcon from '@mui/icons-material/Class';
+import KeyIcon from '@mui/icons-material/Key';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import axios from "axios";
 
 const adminAccess = [
     'Super Administrator'
@@ -44,41 +49,29 @@ const teachersAccess = [
 
 export default function SideBar(){
     const user = useSelector(state => state.user);
+    const {info} = useSelector(state => state.user);
+    const {roles} = useSelector(state => state.user);
     const {id} = GetActiveInstitution();
     const [advisory, setAdvisory] = useState(null);
     const [asignatories, setAsignatories] = useState([]);
     
     const handleCheckAdvisory = async() => {
-        try {
-            const records = await pb.collection("institution_sections").getFullList({
-                filter: `class_adviser="${user.info.id}"`
-            });
-            setAdvisory(records);
-        } catch (error) {
-            
-        }
+        await axios.get(`institution_sections/get_by_user/${info.id}`)
+        .then((res) => {
+            setAdvisory(res.data);
+        });
     };
     
-    const handleAsignatories = async() => {
-        try {
-            const personal = await pb.collection("user_relationships").getFullList({
-                filter: `personal_info="${user.info.id}"`
-            });
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            const subjects = await pb.collection("section_subjects")
-            .getFullList({
-                filter: `assigned_teacher="${personal[0].id}"`,
-                expand: `section`
-            })
-            setAsignatories(subjects);
-        } catch (error) {
-            
-        }
+    const handleTeacherLoads = async () => {
+        await axios.get(`subjects/by_user/${info.id}`)
+        .then((res) => {
+            setAsignatories(res.data);
+        });
     };
     
     useEffect(() => {
         handleCheckAdvisory();
-        handleAsignatories();
+        handleTeacherLoads();
     }, []);
     
     return(
@@ -91,110 +84,106 @@ export default function SideBar(){
                     </h3>
                 </div>
 
-                {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
-                    <div className="d-flex flex-column p-2">
-                        <p className="fw-bolder m-0">CLASS MANAGEMENT</p>
-                        <div className="d-flex flex-row p-2">
-                            <NavLink to="/sections" className="h6 fw-light" style={{textDecoration: 'none'}}>
-                                <div className="d-flex flex-row align-items-center">
-                                    <BookmarksIcon />
-                                    <p className="p-1 m-0 text-center">SECTIONS</p>
-                                </div>
+                {/* START ADMIN ROUTES */}
+                {userHasRole(['app-admin']) && (
+                    <div clasName="d-flex flex-column p-2">
+                        
+                        <p className="ps-2 fw-bolder m-0">APP MANAGEMENT</p>
+                        
+                        <div className="d-flex flex-row m-1 p-1">
+                            <NavLink to="/institutions" className="h6" style={{textDecoration: 'none'}}>
+                                Institutions
                             </NavLink>
                         </div>
+                        
+                        <p className="ps-2 fw-bolder m-0">USER MANAGEMENT</p>
+                        
+                        <div className="d-flex flex-row m-1 p-1">
+                            <NavLink to="/users" className="h6" style={{textDecoration: 'none'}}>
+                                Users
+                            </NavLink>
+                        </div>
+                        
+                        <div className="d-flex flex-row m-1 p-1">
+                            <NavLink to="/roles" className="h6" style={{textDecoration: 'none'}}>
+                                Roles
+                            </NavLink>
+                        </div>
+                        
+                        <div className="d-flex flex-row m-1 p-1">
+                            <NavLink to="/permissions" className="h6" style={{textDecoration: 'none'}}>
+                                Permissions
+                            </NavLink>
+                        </div>
+                        
                     </div>
                 )}
-                
-                {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
+                {/* END ADMIN ROUTES */}
+                {userHasRole(['principal']) && (
                     <div className="d-flex flex-column p-2">
-                        <p className="fw-bolder m-0">HUMAN RESOURCE</p>
+                        <p className="ps-2 fw-bolder m-0">CLASS MANAGEMENT</p>
+                        
+                        <NavLink to="/sections" className="ps-3 h6 fw-light" style={{textDecoration: 'none'}}>
+                            <div className="d-flex flex-row align-items-center">
+                                <HomeIcon />
+                                <p className="p-1 pb-0 m-0 text-center">Sections</p>
+                            </div>
+                        </NavLink>
+
+                        <NavLink to="/teacher-loads" className="ps-3 h6 fw-light" style={{textDecoration: 'none'}}>
+                            <div className="d-flex flex-row align-items-center">
+                                <AccessTimeIcon />
+                                <p className="p-1 pb-0  m-0 text-center">Teacher Loads</p>
+                            </div>
+                        </NavLink>
+
+                        <p className="ps-2 mt-3 fw-bolder m-0">GRADES MANAGEMENT</p>
+
+                        <NavLink to="/staffs" className="ps-3 h6 fw-light" style={{textDecoration: 'none'}}>
+                            <div className="d-flex flex-row align-items-center">
+                                <KeyIcon />
+                                <p className="p-1 pb-0  m-0 text-center">ACCESS</p>
+                            </div>
+                        </NavLink>
+
+                        <p className="ps-2 mt-3 fw-bolder m-0">HRIS</p>
                         <div className="d-flex flex-row p-2">
                             <NavLink to="/staffs" className="h6 fw-light" style={{textDecoration: 'none'}}>
                                 <div className="d-flex flex-row align-items-center">
                                     <GroupsIcon />
-                                    <p className="p-1 m-0 text-center">STAFFS</p>
+                                    <p className="p-1 pb-0  m-0 text-center">STAFFS</p>
                                 </div>
                             </NavLink>
                         </div>
                     </div>
                 )}
-                
-                {userHasRole(dashboardAccess) && (
-                    <div className="d-flex flex-row m-1 p-1 align-items-center">
-                        <NavLink to="/dashboard" className="h6" style={{textDecoration: 'none'}}>
-                            <SpaceDashboardIcon /> Dashboard
-                        </NavLink>
-                    </div>
-                )}
 
-                {userHasRole(schoolAdminAccess) || userHasRole(['Subject Teacher']) && advisory && (
-                    <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/advisory" className="h6" style={{textDecoration: 'none'}}>
-                            Class Advisory
-                        </NavLink>
-                    </div>
-                )}
-
-                <div className="d-flex flex-column p-2">
-                    <p className="fw-bolder m-0">ASSIGNATORIES</p>
-                    {asignatories.map((assignatory, i) => (
-                        <div key={assignatory.id} className="d-flex flex-row p-2">
-                            <NavLink to={`/assignatory/${assignatory.id}`} className="fw-light text-white" style={{textDecoration: 'none'}}>
-                                <div className="d-flex flex-row align-items-center">
-                                    <p className="p-1 m-0 text-center">{assignatory?.expand?.section?.title} - {`(${assignatory?.title})`}</p>
-                                </div>
-                            </NavLink>
-                        </div>
-                    ))}
-                </div>
-                
-                {userHasRole(schoolAdminAccess) && (
-                    <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/sections/grading" className="h6" style={{textDecoration: 'none'}}>
-                            Subject Assignation
-                        </NavLink>
-                    </div>
-                )}
-
-                {/* {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
-                    <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/sections/visualizer" className="h6 fw-light" style={{textDecoration: 'none'}}>
-                            SCHEDULE VISUALIZER
-                        </NavLink>
+                {advisory?.length > 0 && (
+                    <div className="d-flex flex-column p-2">
+                        <p className="ps-2 mt-3 fw-bolder m-0">CLASS ADVISORY</p>
+                        {advisory.length > 0 && advisory.map((advisory, index) => (
+                            <div key={advisory.id} className="d-flex flex-row m-1 p-1">
+                                <NavLink to={`/advisory/${advisory.id}`} className="h6" style={{textDecoration: 'none'}}>
+                                   {`${advisory.grade_level} - ${advisory.title}`}
+                                </NavLink>
+                            </div>
+                        ))}
                     </div>
                 )}
                 
-                {userHasRole(schoolAdminAccess) || userHasRole(['Principal']) && (
-                    <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/staffs" className="h6 fw-light" style={{textDecoration: 'none'}}>
-                            STAFFS
-                        </NavLink>
-                    </div>
-                )} */}
-
-                {userHasRole(schoolAdminAccess) && (
-                    <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/curriculum-heads" className="h6" style={{textDecoration: 'none'}}>
-                            Curriculum Heads
-                        </NavLink>
-                    </div>
-                )}
-
-                {userHasRole(adminAccess) || userHasRole(['App Admin']) && (
-                    <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/institutions" className="h6" style={{textDecoration: 'none'}}>
-                            Institutions
-                        </NavLink>
+                {asignatories?.length > 0 && (
+                    <div className="d-flex flex-column p-2">
+                        <p className="ps-2 mt-3 fw-bolder m-0">ASSIGNED LOADS</p>
+                        {asignatories.length > 0 && asignatories.map((load, index) => (
+                            <div key={load.id} className="d-flex flex-row m-1 p-1">
+                                <NavLink to={`/grading/${load.id}`} className="h6" style={{textDecoration: 'none'}}>
+                                {`${load.section?.grade_level} - ${load.section?.title}: ${load.title}`}
+                                </NavLink>
+                            </div>
+                        ))}
                     </div>
                 )}
                 
-                {userHasRole(adminAccess) || userHasRole(['App Admin']) && (
-                    <div className="d-flex flex-row m-1 p-1">
-                        <NavLink to="/users" className="h6" style={{textDecoration: 'none'}}>
-                            Users
-                        </NavLink>
-                    </div>
-                )}
 
                 <div className="mt-auto py-3">
                     <div className="d-flex flex-row m-1 p-1">

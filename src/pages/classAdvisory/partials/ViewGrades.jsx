@@ -9,7 +9,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import { IconButton, Tooltip } from '@mui/material';
 import { GetActiveInstitution } from '../../../global/Helpers';
 
-export default function ViewGrades({student}){
+export default function ViewGrades({student, subjects}){
     const [open ,setOpen] = useState(false);
     const [subjectGrades, setSubjectGrades] = useState([]);
     const {title} = GetActiveInstitution();
@@ -18,40 +18,13 @@ export default function ViewGrades({student}){
         setOpen(!open);
     };
     
-    const handleFetchStudentGrades = async () => {
-        try {
-            const subject_grades = await pb.collection("student_grades")
-            .getFullList({
-                filter: `student="${student.id}"`,
-                expand: 'subject'
-            });
-            setSubjectGrades(subject_grades);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    
-    const handleFilterStudentGrade = (subject, grading) => {
-        // if(student.grades.length === 0) return '';
-        // const filteredResult = student.grades.filter(grade => grade.subject_id === subject && grade.grading === grading);
-        // if(filteredResult.length === 0) return '';
-        // return Number(filteredResult[0].value);
-        return 0;
-    };
-    
-    useEffect(() => {
-        if(open){
-            handleFetchStudentGrades();
-        }
-    }, [open]);
     return(
         <>
-        <Tooltip title="Print Grades">
+        <Tooltip title="View Grades">
             <IconButton size="small" onClick={() => handleModalState()} color="primary">
                 <PrintIcon fontSize="small"/>
             </IconButton>
         </Tooltip>
-        {/* <Button size="small" variant='contained' color='primary' onClick={() => handleModalState()}>View Grades</Button> */}
         <Dialog
         open={open}
         fullScreen
@@ -59,7 +32,7 @@ export default function ViewGrades({student}){
         >
             <form>
                 <DialogContent dividers>
-                    <div className="d-flex flex-row flex-wrap">
+                    {/* <div className="d-flex flex-row flex-wrap">
                         <div className="col-3 border-top border-bottom border-start border-end d-flex flex-column justify-content-center align-items-center">
                             <p className='m-0 fw-bolder fs-5'>LEARNING AREAS</p>
                         </div>
@@ -139,7 +112,7 @@ export default function ViewGrades({student}){
                                 <p className='m-0 fw-bolder fs-5'>0</p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="col-12 mt-5">
                         <PDFViewer className='w-100' style={{height: '600px'}}>
                             <Document>
@@ -450,23 +423,35 @@ export default function ViewGrades({student}){
                                             </View>
                                         </View>
                                         {/* BEGIN TABLE CONTENT HERE */}
-                                        {subjectGrades.map((subject, i) => (
+                                        {subjects.map((subject, i) => (
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{width: '30%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}>{subject?.expand?.subject?.title}</Text>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}>{subject?.title}</Text>
                                                 </View>
                                                 <View style={{width: '40%', display: 'flex', flexDirection: 'row', borderRight: '1px solid black', alignItems: 'center', justifyContent: 'center'}}>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        <Text>{subject.quarter_one}</Text>
+                                                        {/* <Text>{subject.quarter_one}</Text> */}
+                                                        {student.grades.length > 0 && (
+                                                            <Text>{student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '1')?.[0]?.grade || ""}</Text>
+                                                        )}
                                                     </View>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        <Text>{subject.quarter_two}</Text>
+                                                        {/* <Text>{subject.quarter_two}</Text> */}
+                                                        {student.grades.length > 0 && (
+                                                            <Text>{student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '2')?.[0]?.grade || ""}</Text>
+                                                        )}
                                                     </View>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        <Text>{subject.quarter_three}</Text>
+                                                        {/* <Text>{subject.quarter_three}</Text> */}
+                                                        {student.grades.length > 0 && (
+                                                            <Text>{student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '3')?.[0]?.grade || ""}</Text>
+                                                        )}
                                                     </View>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        <Text>{subject.quarter_four}</Text>
+                                                        {/* <Text>{subject.quarter_four}</Text> */}
+                                                        {student.grades.length > 0 && (
+                                                            <Text>{student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '4')?.[0]?.grade || ""}</Text>
+                                                        )}
                                                     </View>
                                                 </View>
                                                 <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>

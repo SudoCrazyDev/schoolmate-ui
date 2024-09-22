@@ -9,7 +9,7 @@ import pb from './pb';
 export const userHasRole = (accessRoles) => {
     const { roles } = useSelector(state => state.user);
     if(roles){
-        const hasRole = accessRoles.some(accessRole => roles.some(userRole => userRole.title === accessRole));
+        const hasRole = accessRoles.some(accessRole => roles.some(userRole => userRole.slug === accessRole));
         return hasRole;
     }
     return false;

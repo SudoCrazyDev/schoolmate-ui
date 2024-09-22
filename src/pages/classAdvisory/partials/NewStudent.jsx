@@ -17,6 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { GetActiveInstitution } from '../../../global/Helpers';
 import pb from '../../../global/pb';
+import axios from 'axios';
 const validationSchema = yup.object().shape({
     basic_information: yup.object().shape({
         first_name: yup.string().required('Required'),
@@ -24,7 +25,7 @@ const validationSchema = yup.object().shape({
     })
 });
 export default function NewStudent(){
-    const { user } = useSelector(state => state.user);
+    const { institutions } = useSelector(state => state.user);
     const {section_id} = useParams();
     const {id} = GetActiveInstitution();
     const navigate  = useNavigate();
@@ -44,44 +45,29 @@ export default function NewStudent(){
     
     const handleSubmit = async (values) => {
         formik.setSubmitting(true);
-        try {
-            const record = await pb.collection("student_base")
-            .create({
-                lrn: values.basic_information.lrn,
-                status: 'active',
-                institution: id,
-                section: values.section
-            });
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            await pb.collection("student_personal_data")
-            .create({
-                student: record.id,
-                first_name: String(values.basic_information.first_name).toUpperCase(),
-                middle_name: String(values.basic_information.middle_name).toUpperCase(),
-                last_name: String(values.basic_information.last_name).toUpperCase(),
-                extension: values.basic_information.ext_name,
-                birthdate: values.basic_information.birthdate,
-                gender: values.basic_information.gender,
-                religion: values.basic_information.religion,
-            });
-            alert.setAlert("success", "Student Added");
-            formik.setSubmitting(false);
-        } catch (error) {
-            alert.setAlert("error", "Student failed to add");
-        } finally {
+        await axios.post('students/add', values)
+        .then(() => {
+            alert.setAlert('success', 'Student Created!');
             formik.resetForm();
-        }
+        })
+        .catch(() => {
+            alert.setAlert('error', 'Failed to create Student');
+        })
+        .finally(() => {
+            formik.setSubmitting(false);
+        });
     };
     
     const handleCancel = () => {
         formik.resetForm();
-        navigate('/advisory');
+        navigate(-1);
     };
     
     const formik = useFormik({
         initialValues:{
             section: section_id,
             basic_information:{
+                institution_id: institutions[0].id,
                 first_name: '',
                 middle_name: '',
                 last_name: '',

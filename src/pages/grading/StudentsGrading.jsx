@@ -28,7 +28,7 @@ export default function StudentsGrading(){
             <div className="col-12 p-2">
                 <div className="card p-3 d-flex flex-row align-items-center">
                     <div className="d-flex flex-column">
-                        <h2 className="m-0">Subject Assignation</h2>
+                        <h2 className="m-0 fw-bold">Subject Assignation</h2>
                         <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>Student Grades and assigned subjects.</p>
                     </div>
                 </div>
