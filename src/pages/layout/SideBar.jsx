@@ -119,7 +119,7 @@ export default function SideBar(){
                     </div>
                 )}
                 {/* END ADMIN ROUTES */}
-                {userHasRole(['principal']) && (
+                {userHasRole(['principal', 'curriculum-heads']) && (
                     <div className="d-flex flex-column p-2">
                         <p className="ps-2 fw-bolder m-0">CLASS MANAGEMENT</p>
                         
@@ -136,16 +136,25 @@ export default function SideBar(){
                                 <p className="p-1 pb-0  m-0 text-center">Teacher Loads</p>
                             </div>
                         </NavLink>
+                    </div>
+                )}
+
+                {userHasRole(['principal', 'app-admin']) && (
+                    <div className="d-flex flex-column p-2">
 
                         <p className="ps-2 mt-3 fw-bolder m-0">GRADES MANAGEMENT</p>
 
-                        <NavLink to="/staffs" className="ps-3 h6 fw-light" style={{textDecoration: 'none'}}>
+                        <NavLink to="/grades-access-management" className="ps-3 h6 fw-light" style={{textDecoration: 'none'}}>
                             <div className="d-flex flex-row align-items-center">
                                 <KeyIcon />
                                 <p className="p-1 pb-0  m-0 text-center">ACCESS</p>
                             </div>
                         </NavLink>
-
+                    </div>
+                )}
+                
+                {userHasRole(['principal', 'curriculum-heads']) && (
+                    <div className="d-flex flex-column p-2">
                         <p className="ps-2 mt-3 fw-bolder m-0">HRIS</p>
                         <div className="d-flex flex-row p-2">
                             <NavLink to="/staffs" className="h6 fw-light" style={{textDecoration: 'none'}}>
@@ -157,7 +166,7 @@ export default function SideBar(){
                         </div>
                     </div>
                 )}
-
+                
                 {advisory?.length > 0 && (
                     <div className="d-flex flex-column p-2">
                         <p className="ps-2 mt-3 fw-bolder m-0">CLASS ADVISORY</p>

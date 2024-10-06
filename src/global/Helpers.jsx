@@ -52,3 +52,23 @@ export const GetAppInstitutionRoles = async () => {
     });
     return records || [];
 };
+
+export const calculateAge = (birthdate) => {
+    const birthdateParts = birthdate.split('-');
+    const birthYear = parseInt(birthdateParts[0]);
+    const birthMonth = parseInt(birthdateParts[1])
+    const birthDay = parseInt(birthdateParts[2]);
+
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+    const currentDay = today.getDate();
+
+    let age = currentYear - birthYear;
+
+    if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+        age--;
+    }
+
+  return age;
+};

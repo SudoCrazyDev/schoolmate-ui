@@ -93,6 +93,10 @@ export default function NewSection(){
     };
 
     const handleSubmit = async () => {
+        if(sections.length === 0){
+            alert.setAlert('error', 'No Sections!');
+            return;
+        }
         setSubmitting(true);
         for(let i = 0; i < sections.length; i++){
             await axios.post(`institution_sections/add_with_subjects`,{...sections[i], subjects: subjects})
@@ -166,7 +170,7 @@ export default function NewSection(){
                             </div>
                             <form className="mt-3 d-flex flex-column gap-2">
                                 <div className="d-flex flex-row gap-2">
-                                <input type="text" value={sectionTitle} className="form-control" placeholder='Section Title' onChange={(e) => setSectionTitle(e.target.value)} />
+                                <input type="text" value={sectionTitle} className="form-control text-uppercase" placeholder='Section Title' onChange={(e) => setSectionTitle(String(e.target.value).toUpperCase())} />
                                 <Autocomplete
                                     disabled={fetching}
                                     id="teachers"

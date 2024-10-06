@@ -36,7 +36,7 @@ export default function SubmitGrades({gradesToSubmit, refresh}){
             <DialogTitle className="fw-bold">SUBMIT GRADES</DialogTitle>
             <DialogContent dividers>
                 <div className="d-flex flex-column">
-                    <h5 className="m-0">Once submitted, you'll not be able to edit grades anymore. Please review carefully.</h5>
+                    {/* <h5 className="m-0">Once submitted, you'll not be able to edit grades anymore. Please review carefully.</h5> */}
                     <div className="d-flex flex-row align-items-center mt-3">
                         <Checkbox checked={checked} className="m-0" sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }} onChange={(e) => setChecked(e.target.checked)} disabled={submitting}/>
                         <p className='m-0 fst-italic fw-bold' style={{fontSize: '18px'}}>I hereby affirm that all grades provided are accurate and have been verified for correctness.</p>

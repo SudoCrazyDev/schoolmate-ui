@@ -32,6 +32,8 @@ import Permissions from "./pages/permissions/Permissions";
 import NewSection from "./pages/sections/NewSection";
 import TeacherLoads from "./pages/teacherLoads/TeacherLoads";
 import StudentSubjectGrades from "./pages/studentSubjectGrades/StudentSubjectGrades";
+import AccessManagement from "./pages/accessManagement/AccessManagement";
+import ViewLoads from "./pages/accessManagement/ViewLoads";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -52,6 +54,8 @@ export const router = createBrowserRouter(
             <Route element={<Assignatory />} path="/assignatory/:subject_id" exact/>
             <Route element={<TeacherLoads />} path="/teacher-loads" exact/>
             <Route element={<StudentSubjectGrades />} path="/grading/:subject_id" exact/>
+            <Route element={<AccessManagement />} path="/grades-access-management" exact/>
+            <Route element={<ViewLoads />} path="/grades-access-management/:teacher_id" exact/>
             
             {/* ADMIN ONLY ROUTES */}
             <Route element={<Institutions />} path="/institutions"/>

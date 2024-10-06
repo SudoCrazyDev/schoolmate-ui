@@ -23,7 +23,7 @@ export default function ClassAdvisory(){
     const [fetching, setFetching] = useState(false);
     const [fetchingStudents, setFetchingStudents] = useState(false);
     const alert = useAlert();
-    console.log(advisory);
+    
     const handleFetchAdvisoryDetails = async () => {
         setFetching(true);
         await axios.get(`institution_sections/${advisory_id}`)
@@ -56,7 +56,7 @@ export default function ClassAdvisory(){
                         <NavLink to={`/advisory/new-student/${advisory?.id}`}>
                             <Button variant="contained" className='fw-bolder me-2'>NEW STUDENT</Button>
                         </NavLink>
-                        {!fetching && <ViewClassSchedule section={advisory}/>}
+                        {!fetching && <ViewClassSchedule section={advisory} refresh={handleFetchAdvisoryDetails}/>}
                     </div>
                 </div>
             </div>
@@ -109,7 +109,7 @@ export default function ClassAdvisory(){
                                         <td>-</td>
                                         <td>-</td>
                                         <td>
-                                            <ViewGrades student={student} subjects={advisory?.subjects}/>
+                                            <ViewGrades student={student} subjects={advisory?.subjects} advisory={advisory}/>
                                             <Tooltip title="Update Student Info">
                                                 <IconButton size="small" color="primary">
                                                     <EditIcon fontSize='small'/>

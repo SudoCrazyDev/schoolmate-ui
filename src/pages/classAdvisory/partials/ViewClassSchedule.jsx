@@ -7,7 +7,7 @@ import { GetActiveInstitution } from "../../../global/Helpers";
 import { useAlert } from "../../../hooks/CustomHooks";
 import EditIcon from '@mui/icons-material/Edit';
 
-export default function ViewClassSchedule({section}){
+export default function ViewClassSchedule({section, refresh}){
     const [open, setOpen] = useState(false);
     const [subjects, setSubjects] = useState([]);
     const {id} = GetActiveInstitution();
@@ -25,7 +25,7 @@ export default function ViewClassSchedule({section}){
             <DialogTitle className="fw-bolder">CLASS SCHEDULE</DialogTitle>
             <DialogContent className="d-flex flex-column" dividers>
                 <div className="ms-auto mb-3">
-                    {/* <AddSubject selectedSection={section} handleFetchSectionSubjects={handleFetchSectionSubjects}/> */}
+                    <AddSubject selectedSection={section} refresh={refresh}/>
                 </div>
                 <table className="table table-bordered">
                     <thead>
