@@ -119,7 +119,7 @@ export default function SideBar(){
                     </div>
                 )}
                 {/* END ADMIN ROUTES */}
-                {userHasRole(['principal', 'curriculum-heads']) && (
+                {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads']) && (
                     <div className="d-flex flex-column p-2">
                         <p className="ps-2 fw-bolder m-0">CLASS MANAGEMENT</p>
                         
@@ -139,7 +139,7 @@ export default function SideBar(){
                     </div>
                 )}
 
-                {userHasRole(['principal', 'app-admin']) && (
+                {userHasRole(['principal', 'institution-app-admin']) && (
                     <div className="d-flex flex-column p-2">
 
                         <p className="ps-2 mt-3 fw-bolder m-0">GRADES MANAGEMENT</p>
@@ -153,7 +153,7 @@ export default function SideBar(){
                     </div>
                 )}
                 
-                {userHasRole(['principal', 'curriculum-heads']) && (
+                {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads']) && (
                     <div className="d-flex flex-column p-2">
                         <p className="ps-2 mt-3 fw-bolder m-0">HRIS</p>
                         <div className="d-flex flex-row p-2">
