@@ -86,7 +86,7 @@ export default function SideBar(){
 
                 {/* START ADMIN ROUTES */}
                 {userHasRole(['app-admin']) && (
-                    <div clasName="d-flex flex-column p-2">
+                    <div className="d-flex flex-column p-2">
                         
                         <p className="ps-2 fw-bolder m-0">APP MANAGEMENT</p>
                         

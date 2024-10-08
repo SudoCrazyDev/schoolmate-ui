@@ -3,9 +3,10 @@ import AddInstitution from "./components/AddInstution";
 import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import CreateIcon from '@mui/icons-material/Create';
+
 import { useAlert } from "../../hooks/CustomHooks";
 import { Skeleton } from "@mui/material";
+import EditInstitution from "./components/EditInstitution";
 
 export default function Institutions(){
     const [fetching, setFetching] = useState(false);
@@ -16,7 +17,6 @@ export default function Institutions(){
         setFetching(true);
         await axios.get('institution/all')
         .then((res) => {
-            console.log(res);
             setInstitutions(res.data.data);
         })
         .finally(() => { 
@@ -38,7 +38,7 @@ export default function Institutions(){
                             <p className="m-0 fst-italic" style={{fontSize: '12px'}}>Create, Retrieve, Update and Delete institutions.</p>
                         </div>
                         <div className="ms-auto">
-                            <AddInstitution setInstitutions={setInstitutions}/>
+                            <AddInstitution setInstitutions={setInstitutions} refresh={handleFetchInstitutions}/>
                         </div>
                     </div>
                 </div>
@@ -61,16 +61,12 @@ export default function Institutions(){
                                     </tr>
                                 ))}
                                 {!fetching && institutions.map((insititution, index) => (
-                                    <tr>
+                                    <tr key={index}>
                                         <td className="fw-bold">{insititution.title}</td>
                                         <td>{insititution.abbr}</td>
                                         <td>
                                             <div className="d-flex flex-row">
-                                                <Tooltip title="Edit">
-                                                    <IconButton color="primary" size="small">
-                                                        <CreateIcon fontSize="inherit"/>
-                                                    </IconButton>
-                                                </Tooltip>
+                                                <EditInstitution institution={insititution} refresh={handleFetchInstitutions}/>
                                             </div>
                                         </td>
                                     </tr>
