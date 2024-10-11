@@ -1,54 +1,71 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
-import { GetAppInstitutionRoles } from "../../../global/Helpers";
+import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useFormik  } from "formik";
-import pb from "../../../global/pb";
 import { useAlert } from "../../../hooks/CustomHooks";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import axios from "axios";
 
-export default function ChangeRoleModal({reducer, refresh}){
-    const teacher = reducer.state.selected_teacher;
-    const dispatch = reducer.dispatch;
+export default function ChangeRoleModal({teacher, refresh}){
     const [roles, setRoles] = useState([]);
-    const [selectedRole, setSelectedRole] = useState(teacher?.expand?.roles[0].id);
     const [updating, setUpdating] = useState(false);
+    const [open, setOpen] = useState(false);
     const alert = useAlert();
     
-    const handleFetchRoles = async () => {
-        const roles = await GetAppInstitutionRoles();
-        setRoles(roles);
+    const handleModalState = () => {
+        formik.resetForm();
+        setOpen(!open);
     };
     
-    const handleSubmit = async () => {
+    const handleSubmit = async (values) => {
         setUpdating(true);
-        try {
-            await pb.collection("user_relationships")
-            .update(teacher.id, {
-                roles: [selectedRole]
-            });
-            alert.setAlert("success", "User updated.")
-            dispatch(reducer.actions.UPDATE_MODAL_STATE(false));
+        await axios.put(`users/role/${teacher.id}`, values)
+        .then(() => {
+            alert.setAlert('success', 'User Role Updated');
             refresh();
-        } catch (error) {
-            alert.setAlert("error", "Failed to update user.")
-        } finally {
+            handleModalState();
+        })
+        .catch(() => {
+            alert.setAlert('error', 'Failed to update user Role');
+        })
+        .finally(() => {
             setUpdating(false);
-        }
+        })
     };
     
-    useEffect(() => {
-        setSelectedRole(teacher?.expand?.roles[0].id);
-    }, [teacher]);
+    const handleFetchRoles = async () => {
+        await axios.get('roles/all')
+        .then((res) => {
+          setRoles(res.data.data || []);
+        })
+      };
+      
+    const formik = useFormik({
+        initialValues:{
+            roles: teacher.roles[0].id
+        },
+        enableReinitialize: true,
+        onSubmit: handleSubmit,
+    });
     
     useEffect(() => {
-        handleFetchRoles();
-    }, []);
+        if(open){
+            handleFetchRoles();
+        }
+    }, [open]);
     
     return(
-        <Dialog open={reducer?.state.change_role_modal_state} fullWidth maxWidth="md">
+        <>
+        <Tooltip title="Change User Role">
+            <IconButton size="small" color="primary" onClick={() => handleModalState()}>
+                <ManageAccountsIcon fontSize="small"/>
+            </IconButton>
+        </Tooltip>
+        <Dialog open={open} fullWidth maxWidth="md">
             <DialogTitle>Update User Role</DialogTitle>
+            <form onSubmit={formik.handleSubmit}>
                 <DialogContent dividers>
                     <div className="d-flex flex-column">
-                        <select className="form-select" value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)}>
+                        <select className="form-select" value={formik.values.roles} onChange={(e) => formik.setFieldValue('roles', e.target.value)}>
                             {roles.map((role, index) => (
                                 <option key={index} value={role.id}>
                                     {role.title}
@@ -58,11 +75,13 @@ export default function ChangeRoleModal({reducer, refresh}){
                     </div>
                 </DialogContent>
                 <DialogActions className="d-flex justify-content-start">
-                    <button className="btn btn-primary" onClick={() => handleSubmit()} disabled={updating}>
+                    <button type="submit" className="btn btn-primary" disabled={updating}>
                         {updating ? <div className="spinner-border spinner-border-sm"></div> : "Save"}
                     </button>
-                    <button className="btn btn-danger" disabled={updating} onClick={() => dispatch(reducer.actions.UPDATE_MODAL_STATE(false))}>Cancel</button>
+                    <button type="button" className="btn btn-danger" disabled={updating} onClick={() => handleModalState()}>Cancel</button>
                 </DialogActions>
+            </form>
         </Dialog>
+        </>
     )
 };

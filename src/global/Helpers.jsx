@@ -46,11 +46,7 @@ export const GetActiveInstitution = () => {
 };
 
 export const GetAppInstitutionRoles = async () => {
-    const records = await pb.collection("roles").getFullList({
-        filter: `title!="App Admin"`,
-        fields: `id, title`
-    });
-    return records || [];
+    return [];
 };
 
 export const calculateAge = (birthdate) => {

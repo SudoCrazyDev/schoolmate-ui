@@ -5,45 +5,14 @@ import TextField from '@mui/material/TextField';
 import EditTeacher from './partials/EditTeacher';
 import pb from '../../global/pb';
 import ChangeRoleModal from './partials/ChangeRole';
-import Skeleton from '@mui/material/Skeleton';
 import { useAlert } from '../../hooks/CustomHooks';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import { GetActiveInstitution } from '../../global/Helpers';
 import axios from 'axios';
-
-const intialState = {
-    selected_teacher: null,
-    change_role_modal_state: false
-};
-
-const actionTypes = {
-    UPDATE_MODAL_STATE: "UPDATE_MODAL_STATE",
-    SELECT_TEACHER: "SELECT TEACHER"
-};
-
-const actions = {
-    UPDATE_MODAL_STATE: (value) => ({type: actionTypes.UPDATE_MODAL_STATE, payload: value}),
-    SELECT_TEACHER: (value) => ({type: actionTypes.SELECT_TEACHER, payload: value})
-};
-
-const reducer = (state, action) => {
-    switch (action.type) {
-        case actionTypes.UPDATE_MODAL_STATE:
-            return {...state, change_role_modal_state: action.payload}
-        case actionTypes.SELECT_TEACHER:
-            return {...state, selected_teacher: action.payload}
-        default:
-            return state;
-    }
-};
 
 export default function Teachers(){
     const [teachers, setTeachers] = useState([]);
     const [keyword, setKeyword] = useState("");
     const [filterFieldOption, setFilterFieldOption] = useState("first_name");
-    const [state, dispatch] = useReducer(reducer, intialState);
     const [fetching, setFetching] = useState(false);
     const {id} = GetActiveInstitution();
     const alert = useAlert();
@@ -83,14 +52,15 @@ export default function Teachers(){
         }
     };
     
-    const handleChangeRole = (teacher) => {
-        dispatch(actions.UPDATE_MODAL_STATE(true));
-        dispatch(actions.SELECT_TEACHER(teacher));
-    };
+    const filteredStaffs = useMemo(() => {
+        if(keyword === '') return staffs;
+        return staffs.filter(staff => String(Object.values(staff).join("").replaceAll(" ", "").toLowerCase()).includes(String(keyword).toLowerCase()));
+    }, [staffs, keyword]);
     
     useEffect(() => {
         handleFetchTeachers();
     }, []);
+    
     return(
         <div className="d-flex flex-row flex-wrap">
             <div className="col-12 p-2">
@@ -109,20 +79,6 @@ export default function Teachers(){
                     <div className="d-flex flex-column">
                         <div className="d-flex flex-row gap-2">
                             <TextField id='search_input' size='small' label="Search" variant="outlined" onChange={(e) => setKeyword(e.target.value.toLowerCase())}/>
-                            <div className="col-3">
-                                <select placeholder="Search by:" className='form-select' value={filterFieldOption} onChange={(e) => setFilterFieldOption(e.target.value)}>
-                                    <option disabled>Search by:</option>
-                                    <option value={`first_name`}>First Name</option>
-                                    <option value={`last_name`}>Last Name</option>
-                                    <option value={`email`}>Email</option>
-                                </select>
-                            </div>
-                            <div className="d-flex flex-column">
-                                <button className="btn btn-primary" onClick={() => handleSearchTeacher()} disabled={fetching}>
-                                    {fetching ? <div className='spinner-border spinner-border-sm'></div> : "Search"}
-                                </button>
-                            </div>
-                            
                         </div>
                         <div className="d-flex flex-column mb-1">
                             <hr />
@@ -137,15 +93,14 @@ export default function Teachers(){
                                 </tr>
                             </thead>
                             <tbody>
-                                {staffs.map((staff) => (
+                                {filteredStaffs.map((staff) => (
                                     <tr key={staff.id}>
                                         <td className='fw-bolder text-uppercase'>{staff.last_name}, {staff.first_name}</td>
                                         <td>{staff.email}</td>
                                         <td>{staff.roles[0].title}</td>
                                         <td>
-                                            {/* <IconButton onClick={() => handleChangeRole(teacher)} color='primary'>
-                                                <AccessibilityIcon fontSize='small' />
-                                            </IconButton> */}
+                                            <EditTeacher teacher={staff} refresh={handleFetchTeachers}/>
+                                            <ChangeRoleModal teacher={staff} refresh={handleFetchTeachers}/>
                                         </td>
                                     </tr>
                                 ))}
@@ -154,7 +109,7 @@ export default function Teachers(){
                     </div>
                 </div>
             </div>
-            <ChangeRoleModal reducer={{state, dispatch, actions}} refresh={handleFetchTeachers}/>
+            
         </div>
     );
 };
