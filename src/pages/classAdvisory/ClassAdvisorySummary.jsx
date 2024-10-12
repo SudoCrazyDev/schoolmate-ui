@@ -1,7 +1,3 @@
-import WcIcon from '@mui/icons-material/Wc';
-import ManIcon from '@mui/icons-material/Man';
-import WomanIcon from '@mui/icons-material/Woman';
-import { Divider } from '@mui/material';
 import { NavLink, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -10,28 +6,29 @@ export default function ClassAdvisorySummary(){
     const { advisory_id } = useParams();
     const [femaleStudents, setFemaleStudents] = useState([]);
     const [maleStudents, setMaleStudents] = useState([]);
-    
-    const handleFetchStudents = async () => {
-        await axios.get(`students/count/section/${advisory_id}`)
+    const [advisory, setAdvisory] = useState(null);
+    const handleFetchAdvisoryDetails = async () => {
+        await axios.get(`institution_sections/${advisory_id}`)
         .then((res) => {
-            let students = res.data.data;
-            let femaleStudents = students?.filter(student => student.gender === 'female') || [];
-            let maleStudents = students?.filter(student => student.gender === 'male') || [];
-            setFemaleStudents(femaleStudents);
-            setMaleStudents(maleStudents);
-        })
+            let fetched_students = res.data.students || [];
+            let male_students = fetched_students?.filter(student => student.gender === 'male');
+            let female_students = fetched_students?.filter(student => student.gender === 'female');
+            setMaleStudents(male_students.sort((a,b) => a.last_name.localeCompare(b.last_name)));
+            setFemaleStudents(female_students.sort((a,b) => a.last_name.localeCompare(b.last_name)));
+            setAdvisory(res.data);
+        });
     };
     
     useEffect(() => {
-        handleFetchStudents();
-    }, []);
+        handleFetchAdvisoryDetails();
+    }, [advisory_id]);
     
     return(
         <div className="d-flex flex-row flex-wrap">
             <div className="col-12 p-2">
                 <div className="card">
                     <div className="card-body d-flex flex-row">
-                        <h2 className="m-0 fw-bolder">7 - DEJESUS</h2>
+                        <h2 className="m-0 fw-bolder">{advisory && `${advisory?.grade_level} - ${advisory?.title}`}</h2>
                         <div className="ms-auto gap-2 d-flex flex-row align-items-center">
                             {/* <NavLink to={`/advisory/new-student/${advisory_id}`}>
                                 <button className="btn btn-primary fw-bolder">
@@ -99,11 +96,11 @@ export default function ClassAdvisorySummary(){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {Array(10).fill().map((_,i) => (
-                                        <tr key={i}>
-                                            <td>SUBJECT {i + 1}</td>
-                                            <td>TEACHER {i + 1}</td>
-                                            <td>SCHEDULE {i + 1}</td>
+                                    {advisory?.subjects?.map((subject) => (
+                                        <tr key={subject.id}>
+                                            <td className='text-capitalize fw-bold'>{subject.title}</td>
+                                            <td className='text-capitalize fw-bold'>{subject.subject_teacher?.first_name} {subject.subject_teacher?.last_name}</td>
+                                            <td className='text-capitalize fw-bold'>{subject.start_time} - {subject.end_time}</td>
                                         </tr>
                                     ))}
                                 </tbody>

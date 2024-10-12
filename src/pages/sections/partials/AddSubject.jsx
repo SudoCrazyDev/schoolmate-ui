@@ -20,7 +20,6 @@ import { GetActiveInstitution } from '../../../global/Helpers';
 export default function AddSubject({selectedSection, refresh}){
     const [open, setOpen] = useState(false);
     const [teachers, setTeachers] = useState([]);
-    const {id} = GetActiveInstitution();
     const { institutions } = useSelector(state => state.user);
     const alert = useAlert()
     const [fetching, setFetching] = useState(false);

@@ -23,7 +23,6 @@ import axios from 'axios';
 export default function EditSubject({subject, refresh}){
     const [open, setOpenModal] = useState(false);
     const alert = useAlert();
-    const {id: institutionId} = GetActiveInstitution();
     const [teachers, setTeachers] = useState([]);
     const [fetching, setFetching] = useState(false);
     const { institutions } = useSelector(state => state.user);
@@ -156,7 +155,7 @@ export default function EditSubject({subject, refresh}){
                     </div>
                 </DialogContent>
                 <DialogActions className='d-flex flex-row justify-content-start mt-2'>
-                    <Button type="submit" variant="contained" color="primary" disabled={formik.isSubmitting || scheduleConflict}>Submit {formik.isSubmitting && <span className="ms-2 spinner-border spinner-border-sm"></span>}</Button>
+                    <Button type="submit" variant="contained" color="primary" disabled={formik.isSubmitting}>Submit {formik.isSubmitting && <span className="ms-2 spinner-border spinner-border-sm"></span>}</Button>
                     <Button variant="contained" color="error" onClick={() => handleModalState()} disabled={formik.isSubmitting}>Cancel</Button>
                 </DialogActions>
             </form>

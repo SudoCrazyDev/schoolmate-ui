@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SubmitGrades from "./components/SubmitGrades";
 import { useSelector } from "react-redux";
+import { Skeleton } from "@mui/material";
 
 export default function StudentSubjectGrades(){
     const { subject_id } = useParams();
@@ -47,6 +48,11 @@ export default function StudentSubjectGrades(){
         .finally(() => {
             setFetching(false);
         });
+    };
+    
+    const refresh = () => {
+        handleFetchSubjectDetails();
+        handleCheckForGradingAccess();
     };
     
     const handleInput = (quarter, student) => {
@@ -145,8 +151,7 @@ export default function StudentSubjectGrades(){
     };
     
     useEffect(() => {
-        handleFetchSubjectDetails();
-        handleCheckForGradingAccess();
+        refresh();
     }, [subject_id]);
     
     return(
@@ -158,7 +163,7 @@ export default function StudentSubjectGrades(){
                         <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>Assign Grades for Students.</p>
                     </div>
                     <div className="ms-auto">
-                        <SubmitGrades gradesToSubmit={gradeAdd} refresh={handleFetchSubjectDetails}/>
+                        <SubmitGrades gradesToSubmit={gradeAdd} refresh={refresh}/>
                     </div>
                 </div>
             </div>
@@ -188,7 +193,12 @@ export default function StudentSubjectGrades(){
                             </tr>
                         </thead>
                         <tbody>
-                            {maleStudents.map((student, index) => (
+                            {fetching && Array(10).fill().map((_, i) => (
+                                <tr key={i}>
+                                    <td colSpan={8}><Skeleton variant="rect" height={`20px`}/></td>
+                                </tr>
+                            ))}
+                            {!fetching && maleStudents.map((student, index) => (
                                 <tr key={student.id}>
                                     <td className="fw-bold" style={{verticalAlign: 'middle'}}>{`${student?.last_name}, ${student?.first_name}`}</td>
                                     <td>
@@ -221,7 +231,12 @@ export default function StudentSubjectGrades(){
                             </tr>
                         </thead>
                         <tbody>
-                            {femaleStudents.map((student, index) => (
+                            {fetching && Array(10).fill().map((_, i) => (
+                                <tr key={i}>
+                                    <td colSpan={8}><Skeleton variant="rect" height={`20px`}/></td>
+                                </tr>
+                            ))}
+                            {!fetching && femaleStudents.map((student, index) => (
                                 <tr key={student.id}>
                                     <td className="fw-bold" style={{verticalAlign: 'middle'}}>{`${student?.last_name}, ${student?.first_name}`}</td>
                                     <td>

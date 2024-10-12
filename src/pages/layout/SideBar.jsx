@@ -36,7 +36,7 @@ export default function SideBar(){
     
     return(
         <div className="d-flex flex-column bg-dark text-white col-2" style={{position: 'fixed'}}>
-            <div className="d-flex flex-column" style={{minHeight: '100vh'}}>
+            <div className="d-flex flex-column" style={{minHeight: '100vh', maxHeight: '100vh', overflowY: 'scroll'}}>
                 
                 <div className="d-flex flex-row justify-content-center p-2">
                     <h3 className="m-0 fw-bolder text-center text-capitalize">
