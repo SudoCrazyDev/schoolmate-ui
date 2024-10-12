@@ -78,10 +78,11 @@ export default function Sections(){
                         <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>add or update class sections and assign subjects.</p>
                     </div>
                     <div className="ms-auto d-flex flex-row gap-1">
-                        {/* <SectionSubjectTemplate />
-                        <NewSection /> */}
-                        <AutoCreateSections />
-                        {/* <NewSection refresh={handleFetchSections}/> */}
+                        <NavLink to={"new-section"}>
+                            <button className="fw-bolder btn btn-primary">
+                                Create Section
+                            </button>
+                        </NavLink>
                     </div>
                 </div>
             </div>

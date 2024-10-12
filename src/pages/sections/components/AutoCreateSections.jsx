@@ -198,11 +198,7 @@ export default function AutoCreateSections({allowedGradeLevel}){
     return(
         <>
         {/* <button className="fw-bolder btn btn-primary" onClick={() => handleModalState()}>Create Section</button> */}
-        <NavLink to={"new-section"}>
-            <button className="fw-bolder btn btn-primary">
-                Create Section
-            </button>
-        </NavLink>
+        
         <Dialog open={open} fullScreen>
             <DialogTitle className="fw-bolder text-uppercase">Create Section and Subject</DialogTitle>
                 <DialogContent dividers>

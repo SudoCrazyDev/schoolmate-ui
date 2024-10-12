@@ -104,12 +104,46 @@ export default function NewSection(){
                 alert.setAlert('success', `${sections[i].title} Added!`)
             })
             .catch(() => {
-                alert.setAlert('success', `Failed to create ${sections[i].title}!`)
+                alert.setAlert('error', `Failed to create ${sections[i].title}!`)
             });
         }
         setSubmitting(false);
         setSections([]);
         setSubjects([]);
+    };
+    
+    const handleGenerateSubjects = async () => {
+        let defaultSubjects = [];
+        if(selectedGrade === "7"){
+            defaultSubjects = [
+                {title: "Filipino", start_time: '07:30', end_time: '08:30'},
+                {title: "English", start_time: '07:30', end_time: '08:30'},
+                {title: "Mathematics", start_time: '07:30', end_time: '08:30'},
+                {title: "Science", start_time: '07:30', end_time: '08:30'},
+                {title: "Araling Panlipunan", start_time: '07:30', end_time: '08:30'},
+                {title: "Edukasyon sa Pagpakatao", start_time: '07:30', end_time: '08:30'},
+                {title: "TLE", start_time: '07:30', end_time: '08:30'},
+                {title: "MAPEH", start_time: '07:30', end_time: '08:30'},
+                {title: "Music & Arts", start_time: '07:30', end_time: '08:30'},
+                {title: "PE & Health", start_time: '07:30', end_time: '08:30'},
+            ];
+        } else {
+            defaultSubjects = [
+                {title: "Filipino", start_time: '07:30', end_time: '08:30'},
+                {title: "English", start_time: '07:30', end_time: '08:30'},
+                {title: "Mathematics", start_time: '07:30', end_time: '08:30'},
+                {title: "Science", start_time: '07:30', end_time: '08:30'},
+                {title: "Araling Panlipunan", start_time: '07:30', end_time: '08:30'},
+                {title: "Edukasyon sa Pagpakatao", start_time: '07:30', end_time: '08:30'},
+                {title: "TLE", start_time: '07:30', end_time: '08:30'},
+                {title: "MAPEH", start_time: '07:30', end_time: '08:30'},
+                {title: "Music", start_time: '07:30', end_time: '08:30'},
+                {title: "Arts", start_time: '07:30', end_time: '08:30'},
+                {title: "PE", start_time: '07:30', end_time: '08:30'},
+                {title: "HEALTH", start_time: '07:30', end_time: '08:30'},
+            ];
+        }
+        setSubjects([...subjects, ...defaultSubjects]);
     };
     
     useEffect(() => {
@@ -217,7 +251,12 @@ export default function NewSection(){
                 <div className="col-6 p-2">
                     <div className="card">
                         <div className="card-body">
-                        <h3 className="m-0 fw-bold">Subjects</h3>
+                        <div className="d-flex flex-row">
+                            <h3 className="m-0 fw-bold">Subjects</h3>
+                            <div className="ms-auto">
+                                <button className="btn btn-primary" onClick={() => handleGenerateSubjects()}>Generate</button>
+                            </div>
+                        </div>
                         <hr className='m-0 mb-3 mt-2'/>
                         <div className="d-flex flex-column">
                         <form className="mt-3 d-flex flex-column gap-2">
