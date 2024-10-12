@@ -1,27 +1,21 @@
-import { useSelector } from 'react-redux';
 import ViewGrades from './partials/ViewGrades';
-import Axios from 'axios';
 import { useAlert } from '../../hooks/CustomHooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import Button from '@mui/material/Button';
 import { NavLink, useParams } from 'react-router-dom';
-import pb from '../../global/pb';
 import ViewClassSchedule from './partials/ViewClassSchedule';
 import axios from 'axios';
-import PlagiarismIcon from '@mui/icons-material/Plagiarism';
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton, Tooltip } from '@mui/material';
+import { FormControl, IconButton, InputLabel, MenuItem, Select, Tooltip } from '@mui/material';
 
 export default function ClassAdvisory(){
     const { advisory_id } = useParams();
-    const { user, info } = useSelector(state => state.user);
-    const [students, setStudents] = useState([]);
     const [maleStudents, setMaleStudents] = useState([]);
     const [femaleStudents, setFemaleStudents] = useState([]);
     const [advisory, setAdvisory] = useState(null);
     const [fetching, setFetching] = useState(false);
-    const [fetchingStudents, setFetchingStudents] = useState(false);
+    const [selectedSubject, setSelectedSubject] = useState("GEN_AVE");
     const alert = useAlert();
     
     const handleFetchAdvisoryDetails = async () => {
@@ -38,6 +32,14 @@ export default function ClassAdvisory(){
         .finally(() => {
             setFetching(false);
         });
+    };
+    
+    const handleFilterStudentGrade = (student, quarter) => {
+        if(selectedSubject === 'GEN_AVE'){
+            return "-";
+        }
+        let student_grade = student?.grades?.filter(grade => grade.subject_id === selectedSubject && grade.quarter == quarter)?.[0]?.grade || "-";
+        return student_grade;
     };
     
     useEffect(() => {
@@ -60,13 +62,6 @@ export default function ClassAdvisory(){
                     </div>
                 </div>
             </div>
-            {/* <div className="col-12 p-2">
-                <div className="card">
-                    <div className="card-body bg-warning">
-                        <h5 className="m-0 text-center fw-bold">Adding of Quarter 2 Grades is Now Open!</h5>
-                    </div>
-                </div>
-            </div> */}
             <div className="col-12 p-2">
                 <div className="card p-3">
                     <div className="d-flex flex-column">
@@ -74,8 +69,22 @@ export default function ClassAdvisory(){
                             <thead>
                                 <tr>
                                     <th width={'30%'}></th>
-                                    <th colSpan={5} className='text-center'>QUARTERS {`(GEN. AVERAGE)`}</th>
-                                    <th width={'20%'}>ACTIONS</th>
+                                    <th colSpan={5} className='text-center'>
+                                        <FormControl className='w-100 text-center' variant="standard">
+                                            <InputLabel className='text-center'>Subjects</InputLabel>
+                                            <Select value={selectedSubject} label="subject" disabled={fetching} onChange={(e) => setSelectedSubject(e.target.value)}>
+                                                <MenuItem value={"GEN_AVE"} className='text-uppercase'>
+                                                    GENERAL AVERAGE
+                                                </MenuItem>
+                                                {!fetching && advisory?.subjects?.map((subject) => (
+                                                    <MenuItem key={subject.id} value={subject.id} className='text-uppercase'>
+                                                        {subject.title}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </th>
+                                    <th width={'20%'}></th>
                                 </tr>
                             </thead>
                             <thead>
@@ -86,27 +95,29 @@ export default function ClassAdvisory(){
                                     <th width={'10%'}>3rd</th>
                                     <th width={'10%'}>4th</th>
                                     <th width={'10%'}>Final</th>
-                                    <th width={'20%'}></th>
+                                    <th width={'20%'}>ACTIONS</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {fetching && (
-                                    <tr>
+                                {fetching && Array(10).fill().map((_, i) => (
+                                    <tr key={i}>
                                         <td colSpan={7}>
-                                            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                                            <Skeleton variant="text" sx={{ fontSize: '1rem', height: '40px' }} />
                                         </td>
                                     </tr>
+                                ))}
+                                {!fetching && (
+                                    <tr>
+                                        <td colSpan={7} className='fw-bolder h2'>MALE</td>
+                                    </tr>
                                 )}
-                                <tr>
-                                    <td colSpan={7} className='fw-bolder h2'>MALE</td>
-                                </tr>
-                                {maleStudents.map((student, index) => (
+                                {!fetching && maleStudents.map((student, index) => (
                                     <tr key={student.id}>
                                         <td className='text-uppercase fw-bold'>{student.last_name}, {student.first_name}</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
+                                        <td>{handleFilterStudentGrade(student, 1)}</td>
+                                        <td>{handleFilterStudentGrade(student, 2)}</td>
+                                        <td>{handleFilterStudentGrade(student, 3)}</td>
+                                        <td>{handleFilterStudentGrade(student, 4)}</td>
                                         <td>-</td>
                                         <td>
                                             <ViewGrades student={student} subjects={advisory?.subjects} advisory={advisory}/>
@@ -118,16 +129,18 @@ export default function ClassAdvisory(){
                                         </td>
                                     </tr>
                                 ))}
-                                <tr>
-                                    <td colSpan={2} className='fw-bolder h2'>FEMALE</td>
-                                </tr>
-                                {femaleStudents.map((student, index) => (
+                                {!fetching && (
+                                    <tr>
+                                        <td colSpan={2} className='fw-bolder h2'>FEMALE</td>
+                                    </tr>
+                                )}
+                                {!fetching && femaleStudents.map((student, index) => (
                                     <tr key={student.id}>
                                         <td className='text-uppercase fw-bold'>{student.last_name}, {student.first_name}</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
+                                        <td>{handleFilterStudentGrade(student, 1)}</td>
+                                        <td>{handleFilterStudentGrade(student, 2)}</td>
+                                        <td>{handleFilterStudentGrade(student, 3)}</td>
+                                        <td>{handleFilterStudentGrade(student, 4)}</td>
                                         <td>-</td>
                                         <td>
                                             <ViewGrades student={student} subjects={advisory?.subjects}/>

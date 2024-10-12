@@ -2,56 +2,16 @@ import { NavLink } from "react-router-dom";
 import { GetActiveInstitution, userHasRole } from "../../global/Helpers";
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import { useSelector } from 'react-redux';
-import SensorDoorIcon from '@mui/icons-material/SensorDoor';
-import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { useEffect, useState } from "react";
-import pb from "../../global/pb";
 import HomeIcon from '@mui/icons-material/Home';
-import ClassIcon from '@mui/icons-material/Class';
 import KeyIcon from '@mui/icons-material/Key';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import axios from "axios";
 
-const adminAccess = [
-    'Super Administrator'
-];
-
-const schoolAdminAccess = [
-    'School Principal',
-    'School Admin',
-];
-
-const dashboardAccess = [
-    'administrator',
-    'subject-teacher'
-];
-
-const sectionsAccess = [
-    'administrator',
-    'curriculum-head-7',
-    'curriculum-head-8',
-    'curriculum-head-9',
-    'curriculum-head-10',
-    'curriculum-head-11',
-    'curriculum-head-12',
-];
-
-const teachersAccess = [
-    'administrator',
-    'curriculum-head-7',
-    'curriculum-head-8',
-    'curriculum-head-9',
-    'curriculum-head-10',
-    'curriculum-head-11',
-    'curriculum-head-12',
-];
-
 export default function SideBar(){
     const user = useSelector(state => state.user);
     const {info} = useSelector(state => state.user);
-    const {roles} = useSelector(state => state.user);
-    const {id} = GetActiveInstitution();
     const [advisory, setAdvisory] = useState(null);
     const [asignatories, setAsignatories] = useState([]);
     
@@ -172,7 +132,7 @@ export default function SideBar(){
                         <p className="ps-2 mt-3 fw-bolder m-0">CLASS ADVISORY</p>
                         {advisory.length > 0 && advisory.map((advisory, index) => (
                             <div key={advisory.id} className="d-flex flex-row m-1 p-1">
-                                <NavLink to={`/advisory/${advisory.id}`} className="h6" style={{textDecoration: 'none'}}>
+                                <NavLink to={`/advisory-summary/${advisory.id}`} className="h6" style={{textDecoration: 'none'}}>
                                    {`${advisory.grade_level} - ${advisory.title}`}
                                 </NavLink>
                             </div>
