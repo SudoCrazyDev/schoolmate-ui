@@ -9,12 +9,50 @@ import PrintIcon from '@mui/icons-material/Print';
 import { IconButton, Tooltip } from '@mui/material';
 import { calculateAge, GetActiveInstitution } from '../../../global/Helpers';
 
+const grade7Subjects = [
+    {title: "Filipino"},
+    {title: "English"},
+    {title: "Mathematics"},
+    {title: "Science"},
+    {title: "Araling Panlipunan"},
+    {title: "Edukasyon Sa Pagpapakatao"},
+    {title: "TLE"},
+    {title: "MAPEH", sub_subjects: [
+        {title: "Music & Arts"},
+        {title: "PE & Health"}
+    ]}
+];
+
+const generalSubjects = [
+    {title: "Filipino"},
+    {title: "English"},
+    {title: "Mathematics"},
+    {title: "Science"},
+    {title: "Araling Panlipunan"},
+    {title: "Edukasyon Sa Pagpapakatao"},
+    {title: "TLE"},
+    {title: "MAPEH", sub_subjects: [
+        {title: "Music"},
+        {title: "Arts"},
+        {title: "PE"},
+        {title: "Health"}
+    ]}
+];
+
 export default function ViewGrades({student, subjects, advisory}){
     const [open ,setOpen] = useState(false);
     const {title} = GetActiveInstitution();
+    
     const handleModalState = () => {
         setOpen(!open);
     };
+    
+    const handleFindStudentGrade = (student, subject, quarter) => {
+        let grade_subject = subjects?.filter(advSubject => String(advSubject.title).toLowerCase() === String(subject).toLowerCase())?.[0];
+        let student_grade = student?.grades?.filter(grade => grade.subject_id === grade_subject?.id && grade.quarter === quarter)?.[0]?.grade || 0;
+        return Number(student_grade).toFixed() == 0 ? "" : Number(student_grade).toFixed();
+    };
+    
     return(
         <>
         <Tooltip title="View Grades">
@@ -431,35 +469,24 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </View>
                                         </View>
                                         {/* BEGIN TABLE CONTENT HERE */}
-                                        {subjects.map((subject, i) => (
+                                        {advisory?.grade_level === "7" &&  grade7Subjects.map((subject) => (
+                                            <>
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
-                                                <View style={{width: '30%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}>{subject?.title}</Text>
+                                                <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'left'}}>{subject?.title}</Text>
                                                 </View>
                                                 <View style={{width: '40%', display: 'flex', flexDirection: 'row', borderRight: '1px solid black', alignItems: 'center', justifyContent: 'center'}}>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        {/* <Text>{subject.quarter_one}</Text> */}
-                                                        {student.grades.length > 0 && (
-                                                            <Text>{student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '1')?.[0]?.grade ? Number(student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '1')?.[0]?.grade).toFixed() : ""}</Text>
-                                                        )}
+                                                        <Text>{handleFindStudentGrade(student,subject.title, "1")}</Text>
                                                     </View>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        {/* <Text>{subject.quarter_two}</Text> */}
-                                                        {student.grades.length > 0 && (
-                                                            <Text>{student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '2')?.[0]?.grade ? Number(student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '2')?.[0]?.grade).toFixed() : ""}</Text>
-                                                        )}
+                                                        <Text>{handleFindStudentGrade(student,subject.title, "2")}</Text>
                                                     </View>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        {/* <Text>{subject.quarter_three}</Text> */}
-                                                        {student.grades.length > 0 && (
-                                                            <Text>{student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '3')?.[0]?.grade ? Number(student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '3')?.[0]?.grade).toFixed() : ""}</Text>
-                                                        )}
+                                                        <Text>{handleFindStudentGrade(student,subject.title, "3")}</Text>
                                                     </View>
                                                     <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                                        {/* <Text>{subject.quarter_four}</Text> */}
-                                                        {student.grades.length > 0 && (
-                                                            <Text>{student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '4')?.[0]?.grade ? Number(student.grades.filter(grade=>grade.subject_id === subject.id && grade.quarter === '4')?.[0]?.grade).toFixed() : ""}</Text>
-                                                        )}
+                                                        <Text>{handleFindStudentGrade(student,subject.title, "4")}</Text>
                                                     </View>
                                                 </View>
                                                 <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
@@ -469,7 +496,93 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}></Text>
                                                 </View>
                                             </View>
+                                            {subject.sub_subjects?.length > 0 && subject?.sub_subjects.map((subSubject) => (
+                                                <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
+                                                    <View style={{paddingLeft: '10px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'left'}}>{subSubject?.title}</Text>
+                                                    </View>
+                                                    <View style={{width: '40%', display: 'flex', flexDirection: 'row', borderRight: '1px solid black', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,subSubject.title, "1")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,subSubject.title, "2")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,subSubject.title, "3")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,subSubject.title, "4")}</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center', textAlign: 'center'}}></Text>
+                                                    </View>
+                                                    <View style={{width: '20%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}></Text>
+                                                    </View>
+                                                </View>
+                                            ))}
+                                            </>
                                         ))}
+                                        
+                                        {advisory?.grade_level !== "7" &&  generalSubjects.map((subject) => (
+                                            <>
+                                            <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
+                                                <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'left'}}>{subject?.title}</Text>
+                                                </View>
+                                                <View style={{width: '40%', display: 'flex', flexDirection: 'row', borderRight: '1px solid black', alignItems: 'center', justifyContent: 'center'}}>
+                                                    <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <Text>{handleFindStudentGrade(student,subject.title, "1")}</Text>
+                                                    </View>
+                                                    <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <Text>{handleFindStudentGrade(student,subject.title, "2")}</Text>
+                                                    </View>
+                                                    <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <Text>{handleFindStudentGrade(student,subject.title, "3")}</Text>
+                                                    </View>
+                                                    <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <Text>{handleFindStudentGrade(student,subject.title, "4")}</Text>
+                                                    </View>
+                                                </View>
+                                                <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center', textAlign: 'center'}}></Text>
+                                                </View>
+                                                <View style={{width: '20%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center'}}>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}></Text>
+                                                </View>
+                                            </View>
+                                            {subject.sub_subjects?.length > 0 && subject?.sub_subjects.map((subSubject) => (
+                                                <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
+                                                    <View style={{paddingLeft: '10px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'left'}}>{subSubject?.title}</Text>
+                                                    </View>
+                                                    <View style={{width: '40%', display: 'flex', flexDirection: 'row', borderRight: '1px solid black', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,subSubject.title, "1")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,subSubject.title, "2")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,subSubject.title, "3")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,subSubject.title, "4")}</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center', textAlign: 'center'}}></Text>
+                                                    </View>
+                                                    <View style={{width: '20%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}></Text>
+                                                    </View>
+                                                </View>
+                                            ))}
+                                            </>
+                                        ))}
+                                        
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{width: '70%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
                                                     <Text style={{fontSize: '8px', fontFamily: 'Helvetica-Bold', alignSelf: 'center'}}>GENERAL AVERAGE</Text>
