@@ -1,0 +1,44 @@
+name: Deploy to Hostinger via FTP
+
+on:
+  push:
+    branches:
+      - master  # Trigger deployment on push to the 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # Adjust to your preferred Node.js version
+
+      # Step 3: Create .env file from secret (before building)
+      - name: Create .env file
+        run: |
+          echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
+        env:
+          ENV_FILE_CONTENT: ${{ secrets.ENV_FILE }}
+
+      # Step 4: Install dependencies and build the project
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build  # This builds your Vite project into the 'dist' folder
+
+      # Step 5: Deploy the dist folder to Hostinger using FTP
+      - name: Deploy to FTP server
+        uses: SamKirkland/FTP-Deploy-Action@4.5.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: dist
+          server-dir: /public_html/your_project_folder  # Adjust this to your specific path on the server
