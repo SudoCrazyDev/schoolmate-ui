@@ -111,8 +111,8 @@ export default function Sections(){
                     <div className="d-flex flex-column">
                         <div className="d-flex flex-row">
                             <div className="d-flex flex-column">
-                                <h2 className="m-0 fw-bolder">{selectedSection && `${selectedSection?.grade_level} - ${selectedSection?.title}`}</h2>
-                                <h6 className="m-0">{selectedSection?.class_adviser?.first_name} {selectedSection?.class_adviser?.last_name}</h6>
+                                <h2 className="m-0 fw-bolder text-uppercase">{selectedSection && `${selectedSection?.grade_level} - ${selectedSection?.title}`}</h2>
+                                <h6 className="m-0 text-uppercase">{selectedSection?.class_adviser?.first_name} {selectedSection?.class_adviser?.last_name}</h6>
                             </div>
                             <div className="ms-auto">
                                 {selectedSection && (
@@ -146,7 +146,7 @@ export default function Sections(){
                                 )}
                                 {!fetchingSubjects && subjects.map((subject, index) => (
                                      <tr key={index}>
-                                        <td>{subject.title}</td>
+                                        <td className='text-uppercase fw-bold'>{subject.title}</td>
                                         <td>{subject.start_time} - {subject.end_time}</td>
                                         <td className='fw-bolder'>
                                             {subject.subject_teacher === "" || subject.subject_teacher === null ?

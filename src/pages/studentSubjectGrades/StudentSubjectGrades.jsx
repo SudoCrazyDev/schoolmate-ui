@@ -200,7 +200,7 @@ export default function StudentSubjectGrades(){
                             ))}
                             {!fetching && maleStudents.map((student, index) => (
                                 <tr key={student.id}>
-                                    <td className="fw-bold" style={{verticalAlign: 'middle'}}>{`${student?.last_name}, ${student?.first_name}`}</td>
+                                    <td className="text-uppercase fw-bold" style={{verticalAlign: 'middle'}}>{`${student?.last_name}, ${student?.first_name}`}</td>
                                     <td>
                                         {handleInput(1, student)}
                                     </td>
@@ -238,7 +238,7 @@ export default function StudentSubjectGrades(){
                             ))}
                             {!fetching && femaleStudents.map((student, index) => (
                                 <tr key={student.id}>
-                                    <td className="fw-bold" style={{verticalAlign: 'middle'}}>{`${student?.last_name}, ${student?.first_name}`}</td>
+                                    <td className="text-uppercase fw-bold" style={{verticalAlign: 'middle'}}>{`${student?.last_name}, ${student?.first_name}`}</td>
                                     <td>
                                         {handleInput(1, student)}
                                     </td>
