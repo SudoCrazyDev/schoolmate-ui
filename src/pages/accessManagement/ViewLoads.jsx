@@ -39,8 +39,8 @@ export default function ViewLoads(){
                     grades: student.grades.filter(grade => grade.subject_id === load_id)
                 }
             });
-            let male_students = filter_grades.filter(student => student.gender === 'male').sort((a,b) => a.last_name.localeCompare(b.last_name));
-            let female_students = filter_grades.filter(student => student.gender === 'female').sort((a,b) => a.last_name.localeCompare(b.last_name));
+            let male_students = filter_grades.filter(student => student.gender === 'male').sort((a,b) => a.last_name.localeCompare(b.last_name)) || [];
+            let female_students = filter_grades.filter(student => student.gender === 'female').sort((a,b) => a.last_name.localeCompare(b.last_name)) || [];
             setMaleStudents(male_students);
             setFemaleStudents(female_students);
         })
@@ -86,8 +86,8 @@ export default function ViewLoads(){
                         <div className="col-6 p-2" key={load.id}>
                             <div className="card">
                                 <div className="card-body d-flex flex-column align-items-center">
-                                    <h3 className="m-0 fw-bold">{load.section?.grade_level} - {load.section?.title}</h3>
-                                    <h2 className="m-0 fw-bold">{load.title}</h2>
+                                    <h3 className="m-0 fw-bold text-uppercase">{load.section?.grade_level} - {load.section?.title}</h3>
+                                    <h2 className="m-0 fw-bold text-uppercase">{load.title}</h2>
                                     <div className="d-flex flex-column gap-3 mt-2">
                                         <UnlockSection subject={load}/>
                                         <p className="m-0 fw-bold mt-1 text-center">Lock/Unlock by Student</p>
