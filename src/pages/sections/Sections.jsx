@@ -4,18 +4,17 @@ import EditSubject from './partials/EditSubject';
 import DeleteSubject from './partials/DeleteSubject';
 import EditSection from './partials/EditSection';
 import { useSelector } from 'react-redux';
-import { GetActiveInstitution } from '../../global/Helpers';
 import { useAlert } from '../../hooks/CustomHooks';
 import Skeleton from '@mui/material/Skeleton';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import { Tooltip } from '@mui/material';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
+import DeleteSection from './partials/DeleteSection';
 
 export default function Sections(){
     const [selectedSection, setSelectedSection] = useState(null);
     const [subjects, setSubjects] = useState([]);
-    const {id} = GetActiveInstitution();
     const { institutions } = useSelector(state => state.user);
     const alert = useAlert();
     const [sections, setSections] = useState([]);
@@ -24,6 +23,8 @@ export default function Sections(){
     const [gradeLevel, setGradeLevel] = useState("7");
     
     const handleFetchSections = async () => {
+        setSelectedSection(null);
+        setSubjects([]);
         setFetchingSections(true);
         await axios.get(`institution_sections/all_by_institutions/${institutions[0].id}`)
         .then((res) => {
@@ -102,6 +103,7 @@ export default function Sections(){
                         <div key={section.id} className="d-flex flex-row align-items-center align-items-center class-section border my-1 rounded" onClick={() => setSelectedSection(section)}>
                             <h6 className="m-0" style={{padding: '8px'}}>{section.grade_level} - {section.title}</h6>
                             <EditSection section={section} />
+                            <DeleteSection section={section} refresh={handleFetchSections} />
                         </div>
                     ))}
                 </div>

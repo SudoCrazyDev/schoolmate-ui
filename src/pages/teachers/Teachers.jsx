@@ -8,12 +8,11 @@ import ChangeRoleModal from './partials/ChangeRole';
 import { useAlert } from '../../hooks/CustomHooks';
 import { GetActiveInstitution } from '../../global/Helpers';
 import axios from 'axios';
+import { Skeleton } from '@mui/material';
 
 export default function Teachers(){
     const [keyword, setKeyword] = useState("");
     const [fetching, setFetching] = useState(false);
-    const {id} = GetActiveInstitution();
-    const alert = useAlert();
     const {institutions} = useSelector(state => state.user);
     const [staffs, setStaffs] = useState([]);
     
@@ -70,7 +69,14 @@ export default function Teachers(){
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredStaffs.map((staff) => (
+                                {fetching && Array(10).fill().map((_, i) => (
+                                    <tr key={i}>
+                                        <td colSpan={4}>
+                                            <Skeleton variant='rect' height={'30px'} />
+                                        </td>
+                                    </tr>
+                                ))}
+                                {!fetching && filteredStaffs.map((staff) => (
                                     <tr key={staff.id}>
                                         <td className='fw-bolder text-uppercase'>{staff.last_name}, {staff.first_name}</td>
                                         <td>{staff.email}</td>

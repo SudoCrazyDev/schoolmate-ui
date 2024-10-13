@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { GetActiveInstitution, userHasRole } from "../../global/Helpers";
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+import { userHasRole } from "../../global/Helpers";
 import { useSelector } from 'react-redux';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { useEffect, useState } from "react";
