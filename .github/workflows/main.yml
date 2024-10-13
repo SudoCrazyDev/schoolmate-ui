@@ -37,7 +37,7 @@ jobs:
       - name: Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.harayadevstudio.tech
+          server: ftp.scholastic.cloud
           username: u825103209.scholastic.cloud
           password: 127.0.0.1ismyhomE
           local-dir: dist/
