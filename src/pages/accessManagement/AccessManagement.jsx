@@ -101,7 +101,7 @@ export default function AccessManagement(){
         setFetching(true);
         await axios.get(`users/all_users/${institutions[0].id}`)
         .then((res) => {
-            let fetched = res.data.data.data;
+            let fetched = res.data.data;
             setTeachers(fetched.sort((a,b) => a.last_name.localeCompare(b.last_name)));
         })
         .finally(() => {
