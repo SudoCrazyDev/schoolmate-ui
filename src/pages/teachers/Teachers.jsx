@@ -10,9 +10,7 @@ import { GetActiveInstitution } from '../../global/Helpers';
 import axios from 'axios';
 
 export default function Teachers(){
-    const [teachers, setTeachers] = useState([]);
     const [keyword, setKeyword] = useState("");
-    const [filterFieldOption, setFilterFieldOption] = useState("first_name");
     const [fetching, setFetching] = useState(false);
     const {id} = GetActiveInstitution();
     const alert = useAlert();
@@ -45,7 +43,7 @@ export default function Teachers(){
             <div className="col-12 p-2">
                 <div className="card p-3 d-flex flex-row align-items-center">
                     <div className="d-flex flex-column">
-                        <h2 className="m-0 fw-bolder">SCHOOL STAFFS 1</h2>
+                        <h2 className="m-0 fw-bolder">SCHOOL STAFFS</h2>
                         <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>add or update staff information.</p>
                     </div>
                     <div className="ms-auto">

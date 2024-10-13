@@ -1,21 +1,14 @@
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import NewSection from './partials/NewSection';
 import AddSubject from './partials/AddSubject';
 import { useEffect, useMemo, useState } from 'react';
 import EditSubject from './partials/EditSubject';
 import DeleteSubject from './partials/DeleteSubject';
 import EditSection from './partials/EditSection';
 import { useSelector } from 'react-redux';
-import SectionSubjectTemplate from './components/SectionSubjectTemplate';
-import pb from '../../global/pb';
-import { GetActiveInstitution, userHasRole } from '../../global/Helpers';
+import { GetActiveInstitution } from '../../global/Helpers';
 import { useAlert } from '../../hooks/CustomHooks';
-import AutoCreateSections from './components/AutoCreateSections';
 import Skeleton from '@mui/material/Skeleton';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import { IconButton, Tooltip } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Tooltip } from '@mui/material';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 
@@ -29,11 +22,12 @@ export default function Sections(){
     const [fetchingSections, setFetchingSections] = useState(false);
     const [fetchingSubjects, setFetchingsSubjects] = useState(false);
     const [gradeLevel, setGradeLevel] = useState("7");
+    
     const handleFetchSections = async () => {
         setFetchingSections(true);
         await axios.get(`institution_sections/all_by_institutions/${institutions[0].id}`)
         .then((res) => {
-            setSections(res.data.data);
+            setSections(res.data);
         })
         .catch(() => {
             
@@ -107,7 +101,7 @@ export default function Sections(){
                     {!fetchingSections && filteredSections.map(section => (
                         <div key={section.id} className="d-flex flex-row align-items-center align-items-center class-section border my-1 rounded" onClick={() => setSelectedSection(section)}>
                             <h6 className="m-0" style={{padding: '8px'}}>{section.grade_level} - {section.title}</h6>
-                            {/* <EditSection section={section} /> */}
+                            <EditSection section={section} />
                         </div>
                     ))}
                 </div>

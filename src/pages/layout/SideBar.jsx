@@ -145,7 +145,7 @@ export default function SideBar(){
                         <p className="ps-2 mt-3 fw-bolder m-0">ASSIGNED LOADS</p>
                         {asignatories.length > 0 && asignatories.map((load, index) => (
                             <div key={load.id} className="d-flex flex-row m-1 p-1">
-                                <NavLink to={`/grading/${load.id}`} className="h6" style={{textDecoration: 'none'}}>
+                                <NavLink to={`/grading/${load.id}`} className="h6 text-uppercase" style={{textDecoration: 'none'}}>
                                 {`${load.section?.grade_level} - ${load.section?.title}: ${load.title}`}
                                 </NavLink>
                             </div>

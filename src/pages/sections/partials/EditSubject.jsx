@@ -28,7 +28,7 @@ export default function EditSubject({subject, refresh}){
     const { institutions } = useSelector(state => state.user);
     const [scheduleConflict, setScheduleConflict] = useState(false);
     const [conflictSchedules, setConflictSchedules] = useState([]);
-    
+
     const {
         id,
         title,
@@ -80,7 +80,7 @@ export default function EditSubject({subject, refresh}){
         setFetching(true);
         await axios.get(`users/all_by_institutions/${institutions[0].id}`)
         .then((res) => {
-            let fetched = res.data.data.data;
+            let fetched = res.data.data;
             setTeachers(fetched.sort((a,b) => a.last_name.localeCompare(b.last_name)));
         })
         .catch(() => {
@@ -133,6 +133,9 @@ export default function EditSubject({subject, refresh}){
                                 formik.setFieldValue('subject_teacher', newValue.id)
                                 handleFetchScheduleConflict(newValue.id);
                             }}
+                            defaultValue={subject_teacher}
+                            isOptionEqualToValue={(option, value) => console.log(option === value)}
+                            getOptionKey={(option) => option}
                             getOptionLabel={(option) => `${String(option.last_name).toUpperCase()}, ${String(option.first_name).toUpperCase()}`}
                             renderInput={(params) => <TextField {...params} label="Subject Teacher" error={scheduleConflict}/>}
                         />

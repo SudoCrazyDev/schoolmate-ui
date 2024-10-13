@@ -30,7 +30,7 @@ export default function AddSubject({selectedSection, refresh}){
       setFetching(true);
         await Axios.get(`users/all_by_institutions/${institutions[0].id}`)
         .then((res) => {
-            let fetched = res.data.data.data;
+            let fetched = res.data.data;
             setTeachers(fetched.sort((a,b) => a.last_name.localeCompare(b.last_name)));
         })
         .catch(() => {
