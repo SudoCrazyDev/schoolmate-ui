@@ -23,33 +23,12 @@ export default function Teachers(){
         setFetching(true);
         await axios.get(`users/all_by_institutions/${institutions[0].id}`)
         .then(res => {
-            let fetched_staffs = res.data.data.data;
+            let fetched_staffs = res.data.data;
             setStaffs(fetched_staffs.sort((a,b) => a.last_name.localeCompare(b.last_name, "en", { sensitivity: "base"})));
         })
         .finally(() => {
             setFetching(false);
         });
-    };
-    
-    const handleSearchTeacher = async () => {
-        if(keyword == ""){
-            alert.setAlert("error", "Missing search value");
-            return ;
-        }
-        try {
-            setFetching(true);
-            const filterField = filterFieldOption === 'email' ? `user.${filterFieldOption}` : `personal_info.${filterFieldOption}`;
-            const records = await pb.collection("user_relationships")
-                .getList(1, 50, {
-                    expand: 'user,personal_info,roles',
-                    filter: `institutions~"${id}" && roles!~"fodxbvsy6176gxd" && ${filterField}~"${keyword}"`
-                });
-            setTeachers(records.items);
-        } catch (error) {
-            alert.setAlert("error", "Search Failed");
-        } finally {
-            setFetching(false);
-        }
     };
     
     const filteredStaffs = useMemo(() => {

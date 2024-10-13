@@ -382,7 +382,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             
                                             <View style={{marginTop: '8px', width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                                                 <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                    <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.institution?.principal?.[0].first_name} {String(advisory?.institution?.principal?.[0].middle_name).charAt(0)}. {advisory?.institution?.principal?.[0].last_name}</Text>
+                                                    <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.institution?.principal?.[0]?.first_name} {String(advisory?.institution?.principal?.[0]?.middle_name).charAt(0)}. {advisory?.institution?.principal?.[0]?.last_name}</Text>
                                                     <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Principal</Text>
                                                 </View>
                                                 <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -404,7 +404,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'flex-start'}}>Eligibility for Admission to Grade:_______________________</Text>
                                                 <View style={{display: 'flex', flexDirection: 'row', marginTop: '1px'}}>
                                                     <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                        <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.institution?.principal?.[0].first_name} {String(advisory?.institution?.principal?.[0].middle_name).charAt(0)}. {advisory?.institution?.principal?.[0].last_name}</Text>
+                                                        <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.institution?.principal?.[0]?.first_name} {String(advisory?.institution?.principal?.[0]?.middle_name).charAt(0)}. {advisory?.institution?.principal?.[0]?.last_name}</Text>
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Principal</Text>
                                                     </View>
                                                     <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
