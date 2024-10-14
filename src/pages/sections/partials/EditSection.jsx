@@ -85,7 +85,7 @@ export default function EditSection({section, refresh}){
             <DialogContent>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="d-flex flex-column gap-3">
-                        <TextField label="Section Name" variant="outlined" disabled={formik.isSubmitting} {...formik.getFieldProps('section_name')}/>
+                        <TextField label="Section Name" variant="outlined" disabled={formik.isSubmitting} {...formik.getFieldProps('title')}/>
                         <Autocomplete
                             disabled={formik.isSubmitting}
                             options={teachers}
