@@ -14,7 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { Tooltip } from '@mui/material';
 
-export default function EditSection({section}){
+export default function EditSection({section, refresh}){
     const {institutions} = useSelector(state => state.user);
     const [teachers, setTeachers] = useState([]);
     const [fetching, setFetching] = useState(false);
@@ -41,29 +41,25 @@ export default function EditSection({section}){
       });
   };
   
-    const handleSubmit = (values) => {
-      try {
-        
-      } catch (error) {
-        
-      }
-      // Axios.put(`section/update/${section.id}`, values)
-      // .then(({data}) => {
-      //     alert.setAlert('success', 'Section updated successfully')
-      //     dispatch(actions.SET_GRADELEVELS(data));
-      //     handleModalState();
-      // })
-      // .catch(() => {
-      //   alert.setAlert('error', 'Failed updating section')
-      // })
-      // .finally(() => {
-      //   formik.setSubmitting(false);
-      // });
+    const handleSubmit = async (values) => {
+      await axios.post(`institution_sections/update`, values)
+      .then(({data}) => {
+          alert.setAlert('success', 'Section updated successfully')
+          refresh();
+          handleModalState();
+      })
+      .catch(() => {
+        alert.setAlert('error', 'Failed updating section')
+      })
+      .finally(() => {
+        formik.setSubmitting(false);
+      });
     };
     
     const formik = useFormik({
         initialValues: {
-          section_name: section.title,
+          section_id: section.id,
+          title: section.title,
           class_adviser: section.class_adviser.id
         },
         enableReinitialize: true,

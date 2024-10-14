@@ -102,7 +102,7 @@ export default function Sections(){
                     {!fetchingSections && filteredSections.map(section => (
                         <div key={section.id} className="d-flex flex-row align-items-center align-items-center class-section border my-1 rounded" onClick={() => setSelectedSection(section)}>
                             <h6 className="m-0" style={{padding: '8px'}}>{section.grade_level} - {section.title}</h6>
-                            <EditSection section={section} />
+                            <EditSection section={section} refresh={handleFetchSections}/>
                             <DeleteSection section={section} refresh={handleFetchSections} />
                         </div>
                     ))}
