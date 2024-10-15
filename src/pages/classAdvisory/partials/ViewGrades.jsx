@@ -566,7 +566,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </View>
                                         </View>
 
-                                        {advisory?.grade_level === "7" && (advisory.title !== 'STE' && advisory.title !== 'SPA' && advisory.title !== 'SPJ') && grade7Subjects.map((subject) => (
+                                        {advisory?.grade_level === "7" && (advisory?.title !== 'STE' && advisory?.title !== 'SPA' && advisory?.title !== 'SPJ') && grade7Subjects.map((subject) => (
                                             <>
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
@@ -623,7 +623,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </>
                                         ))}
 
-                                        {advisory?.grade_level === "7" && advisory.title === 'SPA' && spaG7.map((subject) => (
+                                        {advisory?.grade_level === "7" && advisory?.title === 'SPA' && spaG7.map((subject) => (
                                             <>
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
@@ -680,7 +680,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </>
                                         ))}
 
-                                        {advisory?.grade_level === "7" && advisory.title === 'SPJ' && spjG7.map((subject) => (
+                                        {advisory?.grade_level === "7" && advisory?.title === 'SPJ' && spjG7.map((subject) => (
                                             <>
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
@@ -737,7 +737,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </>
                                         ))}
 
-                                        {advisory?.grade_level === "7" && advisory.title === 'STE' && steG7.map((subject) => (
+                                        {advisory?.grade_level === "7" && advisory?.title === 'STE' && steG7.map((subject) => (
                                             <>
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
@@ -794,7 +794,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </>
                                         ))}
 
-                                        {advisory?.grade_level !== "7" && advisory.title === 'SPA' && spa.map((subject) => (
+                                        {advisory?.grade_level !== "7" && advisory?.title === 'SPA' && spa.map((subject) => (
                                             <>
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
@@ -851,7 +851,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </>
                                         ))}
 
-                                        {advisory?.grade_level !== "7" && advisory.title === 'SPJ' && spj.map((subject) => (
+                                        {advisory?.grade_level !== "7" && advisory?.title === 'SPJ' && spj.map((subject) => (
                                             <>
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
@@ -908,7 +908,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </>
                                         ))}
 
-                                        {advisory?.grade_level !== "7" && advisory.title === 'STE' && ste.map((subject) => (
+                                        {advisory?.grade_level !== "7" && advisory?.title === 'STE' && ste.map((subject) => (
                                             <>
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
