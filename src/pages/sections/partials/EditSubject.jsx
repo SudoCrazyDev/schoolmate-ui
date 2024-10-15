@@ -96,7 +96,7 @@ export default function EditSubject({subject, refresh}){
             title: title,
             start_time: start_time,
             end_time: end_time,
-            subject_teacher: subject_teacher,
+            subject_teacher: subject_teacher.id,
             section_id: section_id,
             schedule: schedule
         },
