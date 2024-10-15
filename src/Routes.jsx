@@ -35,6 +35,7 @@ import StudentSubjectGrades from "./pages/studentSubjectGrades/StudentSubjectGra
 import AccessManagement from "./pages/accessManagement/AccessManagement";
 import ViewLoads from "./pages/accessManagement/ViewLoads";
 import ClassAdvisorySummary from "./pages/classAdvisory/ClassAdvisorySummary";
+import CoreValues from "./pages/classAdvisory/partials/CoreValues";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -58,7 +59,7 @@ export const router = createBrowserRouter(
             <Route element={<StudentSubjectGrades />} path="/grading/:subject_id" exact/>
             <Route element={<AccessManagement />} path="/grades-access-management" exact/>
             <Route element={<ViewLoads />} path="/grades-access-management/:teacher_id" exact/>
-            
+            <Route element={<CoreValues />} path="/advisory/core-values/:advisory_id" exact/>
             {/* ADMIN ONLY ROUTES */}
             <Route element={<Institutions />} path="/institutions"/>
             <Route element={<Users />} path="/users"/>

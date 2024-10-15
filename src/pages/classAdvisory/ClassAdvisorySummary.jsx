@@ -30,14 +30,14 @@ export default function ClassAdvisorySummary(){
                     <div className="card-body d-flex flex-row">
                         <h2 className="m-0 fw-bolder">{advisory && `${advisory?.grade_level} - ${advisory?.title}`}</h2>
                         <div className="ms-auto gap-2 d-flex flex-row align-items-center">
-                            {/* <NavLink to={`/advisory/new-student/${advisory_id}`}>
+                            <NavLink to={`/advisory/core-values/${advisory_id}`}>
                                 <button className="btn btn-primary fw-bolder">
-                                    STUDENTS
+                                    Core Values
                                 </button>
-                            </NavLink> */}
+                            </NavLink>
                             <NavLink to={`/advisory-grades/${advisory_id}`}>
                                 <button className="btn btn-primary fw-bold">
-                                    GRADES
+                                    Grades
                                 </button>
                             </NavLink>
                             {/* <NavLink to={`/dashboard`}>

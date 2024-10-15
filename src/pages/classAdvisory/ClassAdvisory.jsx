@@ -1,6 +1,6 @@
 import ViewGrades from './partials/ViewGrades';
 import { useAlert } from '../../hooks/CustomHooks';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import Button from '@mui/material/Button';
 import { NavLink, useParams } from 'react-router-dom';
