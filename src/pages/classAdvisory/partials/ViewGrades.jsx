@@ -444,7 +444,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 </View>
                                                 <Image source={'/gscnssat_logo.png'} style={{height: 45, width: 49}}></Image>
                                             </View>
-                                            <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>{title}</Text>
+                                            <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>{advisory?.institution?.title}</Text>
                                             <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>Lagao, General Santos City</Text>
                                             
                                             <View style={{backgroundColor: 'black', marginTop: '10px', width: '100%', paddingVertical: '4px'}}>
