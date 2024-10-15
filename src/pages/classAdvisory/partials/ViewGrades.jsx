@@ -965,7 +965,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </>
                                         ))}
 
-                                        {advisory?.grade_level !== "7" &&  generalSubjects.map((subject) => (
+                                        {advisory?.grade_level !== "7" &&  (advisory?.title !== 'STE' && advisory?.title !== 'SPA' && advisory?.title !== 'SPJ') && generalSubjects.map((subject) => (
                                             <>
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
