@@ -6,6 +6,7 @@ import { useAlert } from "../../hooks/CustomHooks";
 import { useDispatch } from "react-redux";
 import { actions } from "../../redux/slices/UserSlice";
 import pb from '../../global/pb';
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object().shape({
     email: yup.string().email('Must be a valid email'),
@@ -14,16 +15,21 @@ const validationSchema = yup.object().shape({
 
 export default function Login(){
     const alert = useAlert();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     
     const handleSubmit = async (values) => {
         formik.setSubmitting(true);
         await Axios.post('login', values)
         .then((res) => {
-            dispatch(actions.SET_USER(res.data));
-            dispatch(actions.SET_TOKEN(res.data.token));
-            dispatch(actions.SET_ROLES(res.data.roles));
-            dispatch(actions.SET_INSTITUTIONS(res.data.institutions));
+            if(res.data.is_new){
+                navigate(`/new-user-password/${res.data.id}`);
+            } else {
+                dispatch(actions.SET_USER(res.data));
+                dispatch(actions.SET_TOKEN(res.data.token));
+                dispatch(actions.SET_ROLES(res.data.roles));
+                dispatch(actions.SET_INSTITUTIONS(res.data.institutions));
+            }
         })
         .catch(err => {
             alert.setAlert('error', err.response.data.message);

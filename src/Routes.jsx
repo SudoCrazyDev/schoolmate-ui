@@ -41,7 +41,6 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
         <Route element={<AuthInit><PrivateRoutes /></AuthInit>}>
-          <Route element={<NewUserPassword />} path="/new-user-password" />
           <Route element={<SharedLayout />} path="/">
             <Route element={<Dashboard />} path="/dashboard" />
             <Route element={<Sections />} path="/sections" />
@@ -69,6 +68,7 @@ export const router = createBrowserRouter(
           </Route>
         </Route>
       <Route element={<PublicRoutes />}>
+        <Route element={<NewUserPassword />} path="/new-user-password/:user_id" />
         <Route element={<Login />} path="/login"/>
       </Route>
       <Route element={<QuickEnrollmentForm />} path="/form/:institution/:grade/:section"/>
