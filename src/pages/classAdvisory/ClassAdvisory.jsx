@@ -122,9 +122,11 @@ export default function ClassAdvisory(){
                                         <td>
                                             <ViewGrades student={student} subjects={advisory?.subjects} advisory={advisory}/>
                                             <Tooltip title="Update Student Info">
-                                                <IconButton size="small" color="primary">
-                                                    <EditIcon fontSize='small'/>
-                                                </IconButton>
+                                                <NavLink to={`/advisory/update-student/${student.id}`}>
+                                                    <IconButton size="small" color="primary">
+                                                        <EditIcon fontSize='small'/>
+                                                    </IconButton>
+                                                </NavLink>
                                             </Tooltip>
                                         </td>
                                     </tr>
@@ -145,9 +147,11 @@ export default function ClassAdvisory(){
                                         <td>
                                             <ViewGrades student={student} subjects={advisory?.subjects}/>
                                             <Tooltip title="Update Student Info">
-                                                <IconButton size="small" color="primary">
-                                                    <EditIcon fontSize='small'/>
-                                                </IconButton>
+                                                <NavLink to={`/advisory/update-student/${student.id}`}>
+                                                    <IconButton size="small" color="primary">
+                                                        <EditIcon fontSize='small'/>
+                                                    </IconButton>
+                                                </NavLink>
                                             </Tooltip>
                                         </td>
                                     </tr>

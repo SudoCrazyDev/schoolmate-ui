@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BasicInfo from '../components/BasicInfo';
 import GuardianInfo from '../components/GuardianInfo';
 import Select from "@mui/material/Select";
@@ -14,7 +14,6 @@ import { useFormik } from "formik";
 import { useAlert } from '../../../hooks/CustomHooks';
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { GetActiveInstitution } from '../../../global/Helpers';
 import axios from 'axios';
 
 const validationSchema = yup.object().shape({
@@ -24,19 +23,23 @@ const validationSchema = yup.object().shape({
     })
 });
 
-export default function NewStudent(){
+export default function EditStudent(){
     const { institutions } = useSelector(state => state.user);
-    const {section_id} = useParams();
+    const {student_id} = useParams();
     const navigate  = useNavigate();
     const [activeTab, setActiveTab] = useState(0);
+    const [fetching, setFetching] = useState(false);
+    const [student, setStudent] = useState(null);
     const alert = useAlert();
     
     const GetActiveTab = (activeTab, formik) => {
         switch (activeTab) {
             case 0:
-                return <BasicInfo formik={formik}/>;
+                // return <BasicInfo formik={formik}/>;
+                return ;
             case 1:
-                return <GuardianInfo formik={formik}/>;
+                // return <GuardianInfo formik={formik}/>;
+                return ;
             default:
                 break;
         }
@@ -44,13 +47,14 @@ export default function NewStudent(){
 
     const handleSubmit = async (values) => {
         formik.setSubmitting(true);
-        await axios.post('students/add', values)
+        await axios.put(`students/update/${student.id}`, values)
         .then(() => {
-            alert.setAlert('success', 'Student Created!');
+            alert.setAlert('success', 'Student Updated!');
             formik.resetForm();
+            handleFetchStudentData();
         })
         .catch(() => {
-            alert.setAlert('error', 'Failed to create Student');
+            alert.setAlert('error', 'Failed to update Student');
         })
         .finally(() => {
             formik.setSubmitting(false);
@@ -62,19 +66,32 @@ export default function NewStudent(){
         navigate(-1);
     };
     
+    const handleFetchStudentData = async () => {
+        setFetching(true);
+        await axios.get(`students/info/${student_id}`)
+        .then((res) => {
+            setStudent(res.data.data);
+        })
+        .catch(() => {
+            alert.setAlert('error', 'Failed to fetch student!');
+        })
+        .finally(() => {
+            setFetching(false);
+        });
+    };
+    
     const formik = useFormik({
         initialValues:{
-            section: section_id,
             basic_information:{
                 institution_id: institutions[0].id,
-                first_name: '',
-                middle_name: '',
-                last_name: '',
-                ext_name: '',
-                birthdate: new Date().toLocaleDateString('af-ZA'),
-                gender: 'male',
+                first_name: student?.first_name,
+                middle_name: student?.middle_name,
+                last_name: student?.last_name,
+                ext_name: student?.ext_name,
+                birthdate: new Date(student?.birthdate).toLocaleDateString('af-ZA'),
+                gender: student?.gender,
                 religion: 'catholic',
-                lrn: '',
+                lrn: student?.lrn,
                 psa: '',
                 place_of_birth: '',
                 is_ip: 0,
@@ -119,8 +136,14 @@ export default function NewStudent(){
             }
         },
         validationSchema: validationSchema,
-        onSubmit: handleSubmit
+        onSubmit: handleSubmit,
+        enableReinitialize: true
     });
+    
+    useEffect(() => {
+        handleFetchStudentData();
+    }, [student_id]);
+    
     return(
         <div className="d-flex flex-column">
             <form onSubmit={formik.handleSubmit}>
@@ -144,6 +167,7 @@ export default function NewStudent(){
                                 {...formik.getFieldProps('basic_information.first_name')}
                                 error={formik.touched.basic_information?.first_name && formik.errors.basic_information?.first_name}
                                 helperText={formik.touched.basic_information?.first_name && formik.errors.basic_information?.first_name}
+                                InputLabelProps={{ shrink: true }}
                                 />
                             </div>
                             <div className="p-2 col-4">
@@ -154,6 +178,7 @@ export default function NewStudent(){
                                 label="Middle Name"
                                 fullWidth
                                 {...formik.getFieldProps('basic_information.middle_name')}
+                                InputLabelProps={{ shrink: true }}
                                 />
                             </div>
                             <div className="p-2 col-4">
@@ -164,6 +189,7 @@ export default function NewStudent(){
                                 label="Last Name"
                                 fullWidth
                                 {...formik.getFieldProps('basic_information.last_name')}
+                                InputLabelProps={{ shrink: true }}
                                 />
                             </div>
                             <div className="p-2 col-4">
@@ -175,6 +201,7 @@ export default function NewStudent(){
                                 placeholder='eg. Jr. Sr. III'
                                 fullWidth
                                 {...formik.getFieldProps('basic_information.ext_name')}
+                                InputLabelProps={{ shrink: true }}
                                 />
                             </div>
                             <div className="p-2 col-4">
@@ -189,13 +216,15 @@ export default function NewStudent(){
                                 />
                             </div>
                             <div className="p-2 col-4">
-                                <FormControl fullWidth>
-                                    <InputLabel id="gender-label">Gender</InputLabel>
-                                    <Select labelId='gender-label' label="Gender" fullWidth size='small' {...formik.getFieldProps('basic_information.gender')}>
-                                        <MenuItem value={'male'}>Male</MenuItem>
-                                        <MenuItem value={'female'}>Female</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                {!fetching && formik.values.basic_information.gender && (
+                                    <FormControl fullWidth>
+                                        <InputLabel id="gender-label">Gender</InputLabel>
+                                        <Select labelId='gender-label' value={formik.values.basic_information.gender} label="Gender" fullWidth size='small' onChange={(e) => formik.setFieldValue('basic_information.gender', e.target.value)}>
+                                            <MenuItem value={'male'}>Male</MenuItem>
+                                            <MenuItem value={'female'}>Female</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                )}
                             </div>
                             <div className="p-2 col-4">
                                 <FormControl fullWidth>
@@ -210,22 +239,22 @@ export default function NewStudent(){
                                 </FormControl>
                             </div>
                             <div className="p-2 col-8">
-                                <TextField inputProps={{className: 'text-uppercase'}} variant='outlined' size='small' label="LRN" fullWidth {...formik.getFieldProps('basic_information.lrn')}></TextField>
+                                <TextField InputLabelProps={{ shrink: true }} inputProps={{className: 'text-uppercase'}} variant='outlined' size='small' label="LRN" fullWidth {...formik.getFieldProps('basic_information.lrn')}></TextField>
                             </div>
                         </div>
                         
                     </div>
                 </div>
                 <div className="d-flex flex-column mt-2">
-                    <Tabs value={activeTab} aria-label="basic tabs example" className='w-100' onChange={(e, newValue) => setActiveTab(newValue)}>
+                    {/* <Tabs value={activeTab} aria-label="basic tabs example" className='w-100' onChange={(e, newValue) => setActiveTab(newValue)}>
                         <Tab className="fw-bold" label="BASIC INFORMATION" />
                         <Tab className="fw-bold" label="PARENT/GURADIAN" />
-                        {/* <Tab className="fw-bold" label="BALIK ARAL/TRANSFEREE"/>
-                        <Tab className="fw-bold" label="SENIOR HIGH"/> */}
+                        <Tab className="fw-bold" label="BALIK ARAL/TRANSFEREE"/>
+                        <Tab className="fw-bold" label="SENIOR HIGH"/>
                     </Tabs>
-                    {GetActiveTab(activeTab, formik)}
+                    {GetActiveTab(activeTab, formik)} */}
                 </div>
-                <div className="d-flex flex-row gap-2">
+                <div className="d-flex flex-row gap-2 mt-4">
                     <Button type='submit' variant='contained' className='fw-bolder' disabled={formik.isSubmitting}>
                         Save
                         {formik.isSubmitting && <span className="ms-2 spinner-border spinner-border-sm"></span>}
