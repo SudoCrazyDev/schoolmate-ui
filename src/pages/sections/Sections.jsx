@@ -44,6 +44,7 @@ export default function Sections(){
     
     const handleFetchSectionSubjects = async () => {
         if(!selectedSection) return;
+        setFetchingsSubjects(true);
         await axios.get(`subjects/by_section/${selectedSection.id}`)
         .then((res) => {
             setSubjects(res.data);
@@ -113,8 +114,18 @@ export default function Sections(){
                     <div className="d-flex flex-column">
                         <div className="d-flex flex-row">
                             <div className="d-flex flex-column">
-                                <h2 className="m-0 fw-bolder text-uppercase">{selectedSection && `${selectedSection?.grade_level} - ${selectedSection?.title}`}</h2>
-                                <h6 className="m-0 text-uppercase">{selectedSection?.class_adviser?.first_name} {selectedSection?.class_adviser?.last_name}</h6>
+                                <h2 className="m-0 fw-bolder text-uppercase">
+                                    {fetchingSubjects && (
+                                        <Skeleton variant='text' height={'45px'} width={`300px`}/>
+                                    )}
+                                    {!fetchingSubjects && selectedSection && `${selectedSection?.grade_level} - ${selectedSection?.title}`}
+                                </h2>
+                                <h6 className="m-0 text-uppercase">
+                                    {fetchingSubjects && (
+                                        <Skeleton variant='text' height={'30px'} width={`250px`}/>
+                                    )}
+                                    {!fetchingSubjects && selectedSection?.class_adviser?.first_name} {!fetchingSubjects && selectedSection?.class_adviser?.last_name}
+                                </h6>
                             </div>
                             <div className="ms-auto">
                                 {selectedSection && (
@@ -124,7 +135,6 @@ export default function Sections(){
                                         <button className="btn btn-primary fw-bold">Add Student</button>
                                     </NavLink>
                                     </div>
-                                    
                                 )}
                             </div>
                         </div>
