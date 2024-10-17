@@ -157,21 +157,25 @@ export default function Sections(){
                                     </tr>
                                 )}
                                 {!fetchingSubjects && subjects.map((subject, index) => (
-                                     <tr key={index}>
-                                        <td className='text-uppercase fw-bold'>{subject.title}</td>
-                                        <td>{subject.start_time} - {subject.end_time}</td>
-                                        <td className='fw-bolder'>
-                                            {subject.subject_teacher === "" || subject.subject_teacher === null ?
-                                                <Tooltip title="NO ASSIGNED TEACHER "><ReportGmailerrorredIcon color='error' /></Tooltip> 
-                                                : 
-                                                `${String(subject.subject_teacher?.last_name).toUpperCase()}, ${String(subject.subject_teacher?.first_name).toUpperCase()}`
-                                            }
-                                        </td>
-                                        <td>
-                                            <EditSubject subject={subject} refresh={handleFetchSectionSubjects}/>
-                                            <DeleteSubject subject={subject} refresh={handleFetchSectionSubjects}/>
-                                        </td>
-                                    </tr>
+                                    <>
+                                    {!subject.parent_subject && (
+                                        <tr key={index}>
+                                            <td className='text-uppercase fw-bold'>{subject.title}</td>
+                                            <td>{subject.start_time} - {subject.end_time}</td>
+                                            <td className='fw-bolder'>
+                                                {subject.subject_teacher === "" || subject.subject_teacher === null ?
+                                                    <Tooltip title="NO ASSIGNED TEACHER "><ReportGmailerrorredIcon color='error' /></Tooltip> 
+                                                    : 
+                                                    `${String(subject.subject_teacher?.last_name).toUpperCase()}, ${String(subject.subject_teacher?.first_name).toUpperCase()}`
+                                                }
+                                            </td>
+                                            <td>
+                                                <EditSubject subject={subject} refresh={handleFetchSectionSubjects}/>
+                                                <DeleteSubject subject={subject} refresh={handleFetchSectionSubjects}/>
+                                            </td>
+                                        </tr>
+                                    )}
+                                    </>
                                 ))}
                             </tbody>
                         </table>
