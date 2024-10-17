@@ -1,5 +1,5 @@
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
-@import "https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap";
 
 .class-section{
     transition: all 0.3s ease-in-out;
@@ -14,11 +14,94 @@ h1,h2,h3,h4,h5,h6,p{
     line-height: normal;
 }
 *{
-    font-family: 'Nunito', Helvetica, sans-serif
+    font-family: 'Work Sans';
 }
+
+:root{
+    --heading: #3a3a3a;
+    --sub-heading: #171717;
+}
+
+.sidebar{
+    background: linear-gradient(72deg, rgba(248,241,245,1) 0%, rgba(238,241,245,1) 100%);
+    color: var(--sub-heading);
+    border-right: 2px solid rgb(217, 215, 215);
+}
+.header{
+    background: linear-gradient(72deg, rgba(248,241,245,1) 0%, rgba(238,241,245,1) 100%);
+    color: var(--sub-heading);
+    font-weight: 500;
+    height: 50px;
+    border-bottom: 2px solid rgb(217, 215, 215);
+    top: 0;
+    position: sticky;
+    z-index: 1;
+}
+.menu-title{
+    color: var(--sub-heading);
+    font-size: small;
+    letter-spacing: -1px;
+}
+
+.menu-option-container{
+    letter-spacing: -1px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all ease-in-out 0.1s;
+    padding: 8px;
+    margin: 0px 0px 5px 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid transparent;
+    a{
+        text-decoration: none;
+        color: var(--heading);
+        padding: 0px;
+        margin: 0px;
+        font-weight: 500;
+        transition: all ease-in-out 0.1s;
+    }
+
+    .menu-option{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+        p{
+            margin: 0px;
+        }
+    }
+    
+    &:hover{
+        border: 1px solid rgb(222, 222, 222);
+        border-radius: 5px;
+        box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.75);
+    }
+}
+
+.account-button{
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    &:hover{
+        box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.75);
+    }
+}
+
+/* width */
 ::-webkit-scrollbar {
-    width: 10px;
-}
+    width: 5px;
+  }
+  
+  /* Track */
 ::-webkit-scrollbar-track {
-    border-radius: 5px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(238,241,245,1) 100%;
+    border: 1px solid rgb(225, 225, 225);
+    border-radius: 10px;
   }
