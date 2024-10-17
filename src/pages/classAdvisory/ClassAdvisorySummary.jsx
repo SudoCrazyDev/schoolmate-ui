@@ -1,12 +1,13 @@
 import { NavLink, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function ClassAdvisorySummary(){
     const { advisory_id } = useParams();
     const [femaleStudents, setFemaleStudents] = useState([]);
     const [maleStudents, setMaleStudents] = useState([]);
     const [advisory, setAdvisory] = useState(null);
+    
     const handleFetchAdvisoryDetails = async () => {
         await axios.get(`institution_sections/${advisory_id}`)
         .then((res) => {
@@ -18,6 +19,34 @@ export default function ClassAdvisorySummary(){
             setAdvisory(res.data);
         });
     };
+    
+    const handleRating = (value) => {
+        let numVal = Number(Number(value).toFixed());
+        if(numVal >= 90 && numVal <= 94){
+            return 'WITH HONORS'
+        }
+        if(numVal >= 95 && numVal <= 98){
+            return 'WITH HIGH HONORS'
+        }
+        if(numVal >= 99 && numVal <= 100){
+            return 'WITH HIGHEST HONORS'
+        }
+        return '';
+    };
+    
+    const handleStudentRanking = () => {
+        let students = advisory?.students.map((student) => {
+            return {
+                full_name: `${student.last_name}, ${student.first_name} ${String(student.middle_name).charAt(0)}.`,
+                gen_ave: student.grades.length > 0 ? Number(Number(student.grades.reduce((acc, curr) => {
+                    return acc + Number(Number(curr.grade).toFixed());
+                }, 0) / student.grades.length ).toFixed()) : 0
+            };
+        });
+        return students?.sort((a,b) => b.gen_ave - a.gen_ave) || [];
+    };
+    
+    const studentRankings = useMemo(handleStudentRanking, [advisory]);
     
     useEffect(() => {
         handleFetchAdvisoryDetails();
@@ -117,10 +146,35 @@ export default function ClassAdvisorySummary(){
                     </div>
                 </div>
             </div>
-            <div className="col-12 p-2">
+            <div className="col-6 p-2">
                 <div className="card">
-                    <div className="card-body">
+                    <div className="card-body d-flex flex-column">
+                        <h5 className="m-0 fw-bolder">ACHIEVERS</h5>
+                        <hr />
+                        <table className="table table-striped">
+                            <tbody>
+                                {studentRankings.map((student, index) => (
+                                    <>
+                                    {handleRating(student.gen_ave) !== '' && (
+                                        <tr key={index}>
+                                            <td width={`50%`} className='fw-bold text-uppercase'>{student.full_name}</td>
+                                            <td width={`20%`} className='fw-bold'>{student.gen_ave}</td>
+                                            <td width={`30%`} className='fw-bold'>{handleRating(student.gen_ave)}</td>
+                                        </tr>
+                                    )}
+                                    </>
+                                ))}
+                            </tbody>
+                        </table>
                         
+                    </div>
+                </div>
+            </div>
+            <div className="col-6 p-2">
+                <div className="card">
+                    <div className="card-body d-flex flex-column">
+                        <h5 className="m-0 fw-bolder">ACHIEVERS</h5>
+                        <hr />
                     </div>
                 </div>
             </div>

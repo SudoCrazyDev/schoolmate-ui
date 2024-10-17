@@ -144,7 +144,9 @@ export default function StudentSubjectGrades(){
             }
             if(String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent === 'mapeh'){
                 quarter_grade = Number(student.grades.reduce((accumulator, currentValue) => {
-                    return accumulator + Number(currentValue.grade);
+                    if(currentValue.quarter === String(quarter)){
+                        return accumulator + Number(currentValue.grade);
+                    }
                 }, 0) / student.grades.length).toFixed(2);
             }
             if(quarter_three){
@@ -175,7 +177,9 @@ export default function StudentSubjectGrades(){
             }
             if(String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent === 'mapeh'){
                 quarter_grade = Number(student.grades.reduce((accumulator, currentValue) => {
-                    return accumulator + Number(currentValue.grade);
+                    if(currentValue.quarter === String(quarter)){
+                        return accumulator + Number(currentValue.grade);
+                    }
                 }, 0) / student.grades.length).toFixed(2);
             }
             if(quarter_four){

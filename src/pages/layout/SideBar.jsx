@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { userHasRole } from "../../global/Helpers";
 import { useSelector } from 'react-redux';
 import GroupsIcon from '@mui/icons-material/Groups';
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import HomeIcon from '@mui/icons-material/Home';
 import KeyIcon from '@mui/icons-material/Key';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -142,7 +142,7 @@ export default function SideBar(){
                             ASSIGNED LOADS
                         </MenuTitle>
                         {asignatories.length > 0 && asignatories.map((load, index) => (
-                            <>
+                            <Fragment key={load.id}>
                             {!load.parent_subject && (
                                 <Menu
                                     key={load.id}
@@ -151,7 +151,7 @@ export default function SideBar(){
                                     title={`${load.section?.grade_level} - ${load.section?.title}: ${load.title}`}
                                 />
                             )}
-                            </>
+                            </Fragment>
                         ))}
                     </div>
                 )}
