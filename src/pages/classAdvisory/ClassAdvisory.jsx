@@ -121,13 +121,6 @@ export default function ClassAdvisory(){
                                         <td>-</td>
                                         <td>
                                             <ViewGrades student={student} subjects={advisory?.subjects} advisory={advisory}/>
-                                            <Tooltip title="Update Student Info">
-                                                <NavLink to={`/advisory/update-student/${student.id}`}>
-                                                    <IconButton size="small" color="primary">
-                                                        <EditIcon fontSize='small'/>
-                                                    </IconButton>
-                                                </NavLink>
-                                            </Tooltip>
                                         </td>
                                     </tr>
                                 ))}

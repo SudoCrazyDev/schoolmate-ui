@@ -1,6 +1,7 @@
 import { NavLink, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
+import { Button } from '@mui/material';
 
 export default function ClassAdvisorySummary(){
     const { advisory_id } = useParams();
@@ -59,21 +60,21 @@ export default function ClassAdvisorySummary(){
                     <div className="card-body d-flex flex-row">
                         <h2 className="m-0 fw-bolder">{advisory && `${advisory?.grade_level} - ${advisory?.title}`}</h2>
                         <div className="ms-auto gap-2 d-flex flex-row align-items-center">
+                            <NavLink to={`/advisory/students/${advisory_id}`}>
+                                <Button variant="contained" className='fw-bold'>
+                                    Students
+                                </Button>
+                            </NavLink>
                             <NavLink to={`/advisory/core-values/${advisory_id}`}>
-                                <button className="btn btn-primary fw-bolder">
+                                <Button variant="contained" className='fw-bold'>
                                     Core Values
-                                </button>
+                                </Button>
                             </NavLink>
                             <NavLink to={`/advisory-grades/${advisory_id}`}>
-                                <button className="btn btn-primary fw-bold">
-                                    Grades
-                                </button>
+                                <Button variant="contained" className='fw-bold'>
+                                    Report Card
+                                </Button>
                             </NavLink>
-                            {/* <NavLink to={`/dashboard`}>
-                                <button className="btn btn-primary fw-bold">
-                                    SUBJECTS
-                                </button>
-                            </NavLink> */}
                         </div>
                     </div>
                 </div>

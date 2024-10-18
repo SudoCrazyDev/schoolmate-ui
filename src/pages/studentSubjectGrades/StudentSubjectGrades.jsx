@@ -268,6 +268,11 @@ export default function StudentSubjectGrades(){
                                     <td colSpan={8}><Skeleton variant="rect" height={`20px`}/></td>
                                 </tr>
                             ))}
+                            {!fetching && maleStudents.length == 0 && (
+                                <tr>
+                                    <td className="fw-normal h4" colSpan={8}>NO STUDENTS</td>
+                                </tr>
+                            )}
                             {!fetching && maleStudents.map((student, index) => (
                                 <tr key={student.id}>
                                     <td className="text-uppercase fw-bold" style={{verticalAlign: 'middle'}}>{`${student?.last_name}, ${student?.first_name}`}</td>
@@ -300,6 +305,11 @@ export default function StudentSubjectGrades(){
                                     <td colSpan={8}><Skeleton variant="rect" height={`20px`}/></td>
                                 </tr>
                             ))}
+                            {!fetching && femaleStudents.length == 0 && (
+                                <tr>
+                                    <td className="fw-normal h4" colSpan={8}>NO STUDENTS</td>
+                                </tr>
+                            )}
                             {!fetching && femaleStudents.map((student, index) => (
                                 <tr key={student.id}>
                                     <td className="text-uppercase fw-bold" style={{verticalAlign: 'middle'}}>{`${student?.last_name}, ${student?.first_name}`}</td>

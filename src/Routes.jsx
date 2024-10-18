@@ -37,6 +37,7 @@ import ViewLoads from "./pages/accessManagement/ViewLoads";
 import ClassAdvisorySummary from "./pages/classAdvisory/ClassAdvisorySummary";
 import CoreValues from "./pages/classAdvisory/partials/CoreValues";
 import EditStudent from "./pages/classAdvisory/partials/EditStudent,";
+import ClassAdvisoryStudents from "./pages/classAdvisory/ClassAdvisoryStudents";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -55,12 +56,13 @@ export const router = createBrowserRouter(
             <Route element={<NewStudent />} path="/advisory/new-student/:section_id" exact/>
             <Route element={<EditStudent />} path="/advisory/update-student/:student_id" exact/>
             <Route element={<BulkStudent />} path="/advisory/bulk-new-student" exact/>
+            <Route element={<CoreValues />} path="/advisory/core-values/:advisory_id" exact/>
+            <Route element={<ClassAdvisoryStudents />} path="/advisory/students/:advisory_id" exact/>
             <Route element={<Assignatory />} path="/assignatory/:subject_id" exact/>
             <Route element={<TeacherLoads />} path="/teacher-loads" exact/>
             <Route element={<StudentSubjectGrades />} path="/grading/:subject_id" exact/>
             <Route element={<AccessManagement />} path="/grades-access-management" exact/>
             <Route element={<ViewLoads />} path="/grades-access-management/:teacher_id" exact/>
-            <Route element={<CoreValues />} path="/advisory/core-values/:advisory_id" exact/>
             {/* ADMIN ONLY ROUTES */}
             <Route element={<Institutions />} path="/institutions"/>
             <Route element={<Users />} path="/users"/>

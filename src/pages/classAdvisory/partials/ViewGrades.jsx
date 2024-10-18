@@ -140,7 +140,7 @@ export default function ViewGrades({student, subjects, advisory}){
     const handleModalState = () => {
         setOpen(!open);
     };
-    
+    console.log(advisory);
     const handleFindStudentGrade = (student, subject, quarter) => {
         let grade_subject = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase())?.[0];
         let student_grade = student?.grades?.filter(grade => grade.subject_id === grade_subject?.id && grade.quarter === quarter)?.[0]?.grade || 0;
@@ -449,7 +449,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <Text style={{fontSize: '6px', fontFamily:'Helvetica', marginLeft: 'auto'}}>School ID: 3046555</Text>
                                                 </View>
                                                 <View style={{display: 'flex', flexDirection: 'row', marginBottom: '3px'}}>
-                                                    <Image source={'/gscnssat_logo.png'} style={{height: 45, width: 49}}></Image>
+                                                    <Image source={`/${advisory?.institution?.abbr ? advisory?.institution?.abbr : 'deped'}-logo.png`} style={{height: 49, width: 49}}></Image>
                                                     <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '10px', marginHorizontal: '10px', gap: '1px'}}>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Republic of the Philippines</Text>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Department of Education</Text>
@@ -457,7 +457,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Division of General Santos City</Text>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>General Santos City</Text>
                                                     </View>
-                                                    <Image source={'/gscnssat_logo.png'} style={{height: 45, width: 49}}></Image>
+                                                    <Image source={`/deped-logo.png`} style={{height: 49, width: 49}}></Image>
                                                 </View>
                                                 <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>{advisory?.institution?.title}</Text>
                                                 <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>Lagao, General Santos City</Text>
