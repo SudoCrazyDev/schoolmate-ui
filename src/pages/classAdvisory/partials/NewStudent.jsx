@@ -218,12 +218,12 @@ export default function NewStudent(){
                 </div>
                 <div className="d-flex flex-column mt-2">
                     <Tabs value={activeTab} aria-label="basic tabs example" className='w-100' onChange={(e, newValue) => setActiveTab(newValue)}>
-                        <Tab className="fw-bold" label="BASIC INFORMATION" />
+                        {/* <Tab className="fw-bold" label="BASIC INFORMATION" />
                         <Tab className="fw-bold" label="PARENT/GURADIAN" />
-                        {/* <Tab className="fw-bold" label="BALIK ARAL/TRANSFEREE"/>
+                        <Tab className="fw-bold" label="BALIK ARAL/TRANSFEREE"/>
                         <Tab className="fw-bold" label="SENIOR HIGH"/> */}
                     </Tabs>
-                    {GetActiveTab(activeTab, formik)}
+                    {/* {GetActiveTab(activeTab, formik)} */}
                 </div>
                 <div className="d-flex flex-row gap-2">
                     <Button type='submit' variant='contained' className='fw-bolder' disabled={formik.isSubmitting}>
