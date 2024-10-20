@@ -1,8 +1,9 @@
-import { IconButton, Tooltip } from "@mui/material";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
+import DisableStudent from "./partials/DisableStudent";
 
 export default function ClassAdvisoryStudents(){
     const { advisory_id } = useParams();
@@ -65,8 +66,13 @@ export default function ClassAdvisoryStudents(){
                 <div className="card">
                     <div className="card-body d-flex flex-row">
                         <div className="d-flex flex-column">
-                            <h2 className="m-0 fw-bold">7 - DUNLAP</h2>
+                            <h2 className="m-0 fw-bold text-uppercase">{advisory?.grade_level}-{advisory?.title}</h2>
                             <p className="m-0 fw-light" style={{fontSize: '12px'}}>Manage your students.</p>
+                        </div>
+                        <div className="ms-auto">
+                            <NavLink to={`/advisory/new-student/${advisory?.id}`}>
+                                <Button variant="contained" className='fw-bolder me-2'>NEW STUDENT</Button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>
@@ -115,6 +121,7 @@ export default function ClassAdvisoryStudents(){
                                                     </IconButton>
                                                 </NavLink>
                                             </Tooltip>
+                                            <DisableStudent student={student} refresh={handleFetchAdvisoryDetails}/>
                                         </td>
                                     </tr>
                                 ))}
@@ -142,6 +149,7 @@ export default function ClassAdvisoryStudents(){
                                                     </IconButton>
                                                 </NavLink>
                                             </Tooltip>
+                                            <DisableStudent student={student} refresh={handleFetchAdvisoryDetails}/>
                                         </td>
                                     </tr>
                                 ))}

@@ -55,9 +55,6 @@ export default function ClassAdvisory(){
                     <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>view your students progress.</p>
                     </div>
                     <div className="ms-auto">
-                        <NavLink to={`/advisory/new-student/${advisory?.id}`}>
-                            <Button variant="contained" className='fw-bolder me-2'>NEW STUDENT</Button>
-                        </NavLink>
                         {!fetching && <ViewClassSchedule section={advisory} refresh={handleFetchAdvisoryDetails}/>}
                     </div>
                 </div>
