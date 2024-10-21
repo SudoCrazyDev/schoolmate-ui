@@ -140,13 +140,12 @@ export default function ViewGrades({student, subjects, advisory}){
     const handleModalState = () => {
         setOpen(!open);
     };
-    console.log(advisory);
     const handleFindStudentGrade = (student, subject, quarter) => {
         let grade_subject = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase())?.[0];
         let student_grade = student?.grades?.filter(grade => grade.subject_id === grade_subject?.id && grade.quarter === quarter)?.[0]?.grade || 0;
         if(String(subject).toLowerCase() === 'mapeh'){
             let mapeh = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === 'mapeh')?.[0] || null;
-            let mapeh_subjects = subjects?.filter(mapehSub => mapehSub.parent_subject === mapeh.id);
+            let mapeh_subjects = subjects?.filter(mapehSub => mapehSub.parent_subject === mapeh?.id) || [];
             let mapeh_grade = student?.grades?.reduce((accumulator, currentValue) => {
                 if(currentValue.quarter === String(quarter) && mapeh_subjects.filter(mapehSub => mapehSub.id === currentValue.subject_id).length > 0){
                     return accumulator + Number(Number(currentValue.grade).toFixed());
@@ -155,6 +154,9 @@ export default function ViewGrades({student, subjects, advisory}){
                 }
             }, 0);
             student_grade = mapeh_grade / mapeh_subjects.length;
+        }
+        if(Number(student_grade).toFixed() == 0 || Number(student_grade).toFixed() == 'NaN'){
+            return "";
         }
         return Number(student_grade).toFixed() == 0 ? "" : Number(student_grade).toFixed();
     };
