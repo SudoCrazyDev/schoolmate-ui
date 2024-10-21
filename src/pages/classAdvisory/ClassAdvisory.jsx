@@ -2,7 +2,6 @@ import ViewGrades from './partials/ViewGrades';
 import { useAlert } from '../../hooks/CustomHooks';
 import { useEffect, useState } from 'react';
 import Skeleton from '@mui/material/Skeleton';
-import Button from '@mui/material/Button';
 import { NavLink, useParams } from 'react-router-dom';
 import ViewClassSchedule from './partials/ViewClassSchedule';
 import axios from 'axios';
@@ -16,7 +15,6 @@ export default function ClassAdvisory(){
     const [advisory, setAdvisory] = useState(null);
     const [fetching, setFetching] = useState(false);
     const [selectedSubject, setSelectedSubject] = useState("GEN_AVE");
-    const alert = useAlert();
     
     const handleFetchAdvisoryDetails = async () => {
         setFetching(true);
@@ -135,14 +133,7 @@ export default function ClassAdvisory(){
                                         <td>{handleFilterStudentGrade(student, 4)}</td>
                                         <td>-</td>
                                         <td>
-                                            <ViewGrades student={student} subjects={advisory?.subjects}/>
-                                            <Tooltip title="Update Student Info">
-                                                <NavLink to={`/advisory/update-student/${student.id}`}>
-                                                    <IconButton size="small" color="primary">
-                                                        <EditIcon fontSize='small'/>
-                                                    </IconButton>
-                                                </NavLink>
-                                            </Tooltip>
+                                            <ViewGrades student={student} subjects={advisory?.subjects} advisory={advisory}/>
                                         </td>
                                     </tr>
                                 ))}

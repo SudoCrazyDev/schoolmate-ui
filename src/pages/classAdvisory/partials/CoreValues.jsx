@@ -63,13 +63,15 @@ export default function CoreValues(){
         let student_value = student?.values.filter(value => value.core_value === core_value && value.quarter === quarter)?.[0] || false;
         if(student_value){
             return <select value={coreValues.filter(coreValue => coreValue.student_id === student.id && coreValue.quarter === quarter && coreValue.core_value === selectedBehaviour)?.[0]?.remarks || student_value.remarks} className="form-select" onChange={(e) => handleCoreValue(student.id, quarter, e.target.value)}>
+                    <option></option>
                     <option value={`AO`}>Always Observed</option>
                     <option value={`SO`}>Sometimes Observed</option>
                     <option value={`RO`}>Rarely Observed</option>
                     <option value={`NO`}>Not Observed</option>
                 </select>
         } else {
-            return <select value={coreValues.filter(coreValue => coreValue.student_id === student.id && coreValue.quarter === quarter && coreValue.core_value === selectedBehaviour)?.[0]?.remarks || 'AO'} className="form-select" onChange={(e) => handleCoreValue(student.id, quarter, e.target.value)}>
+            return <select value={coreValues.filter(coreValue => coreValue.student_id === student.id && coreValue.quarter === quarter && coreValue.core_value === selectedBehaviour)?.[0]?.remarks || ''} className="form-select" onChange={(e) => handleCoreValue(student.id, quarter, e.target.value)}>
+                    <option></option>
                     <option value={`AO`}>Always Observed</option>
                     <option value={`SO`}>Sometimes Observed</option>
                     <option value={`RO`}>Rarely Observed</option>

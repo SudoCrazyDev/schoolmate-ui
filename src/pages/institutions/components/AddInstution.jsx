@@ -35,7 +35,9 @@ export default function AddInstitution({setInstitutions}){
     const formik = useFormik({
         initialValues: {
             title: '',
-            abbr: ''
+            abbr: '',
+            address: '',
+            gov_id: ''
         },
         onSubmit: handleSubmit
     });
@@ -50,6 +52,8 @@ export default function AddInstitution({setInstitutions}){
                     <div className="d-flex flex-column gap-2">
                         <TextField variant='outlined' label="Insitution" {...formik.getFieldProps('title')} disabled={formik.isSubmitting}/>
                         <TextField variant='outlined' label="Abbrevation (Eg. ILSNHMD, GSCNSSAT)" {...formik.getFieldProps('abbr')} disabled={formik.isSubmitting}/>
+                        <TextField variant='outlined' label="Address" {...formik.getFieldProps('address')} disabled={formik.isSubmitting}/>
+                        <TextField variant='outlined' label="School ID" {...formik.getFieldProps('gov_id')} disabled={formik.isSubmitting}/>
                         {/* <TextField variant='outlined' label="School ID" {...formik.getFieldProps('gov_id')} disabled={formik.isSubmitting}/> */}
                     </div>
                 </DialogContent>

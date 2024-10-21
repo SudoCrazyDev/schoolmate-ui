@@ -446,7 +446,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                                 <View style={{display: 'flex', flexDirection: 'row', marginBottom: '3px', width: '90%'}}>
                                                     <Text style={{fontSize: '6px', fontFamily:'Helvetica'}}>DepEd Form 138-A</Text>
-                                                    <Text style={{fontSize: '6px', fontFamily:'Helvetica', marginLeft: 'auto'}}>School ID: 3046555</Text>
+                                                    <Text style={{fontSize: '6px', fontFamily:'Helvetica', marginLeft: 'auto'}}>School ID: {advisory?.institution?.gov_id}</Text>
                                                 </View>
                                                 <View style={{display: 'flex', flexDirection: 'row', marginBottom: '3px'}}>
                                                     <Image source={`/${advisory?.institution?.abbr ? advisory?.institution?.abbr : 'deped'}-logo.png`} style={{height: 49, width: 49}}></Image>
@@ -460,7 +460,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <Image source={`/deped-logo.png`} style={{height: 49, width: 49}}></Image>
                                                 </View>
                                                 <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>{advisory?.institution?.title}</Text>
-                                                <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>Lagao, General Santos City</Text>
+                                                <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>{advisory?.institution?.address}</Text>
                                                 
                                                 <View style={{backgroundColor: 'black', marginTop: '10px', width: '100%', paddingVertical: '4px'}}>
                                                     <Text style={{color: 'white', fontSize: '8px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>REPORT CARD </Text>
