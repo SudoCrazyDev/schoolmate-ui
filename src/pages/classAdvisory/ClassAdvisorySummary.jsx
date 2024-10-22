@@ -2,6 +2,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@mui/material';
+import AdvisoryMissingGrades from './components/AdvisoryMissingGrades';
 
 export default function ClassAdvisorySummary(){
     const { advisory_id } = useParams();
@@ -81,7 +82,7 @@ export default function ClassAdvisorySummary(){
             </div>
             <div className="col-12 p-2 d-flex flex-row justify-content-between">
                 <div className="col-3 p-1">
-                    <div className="card">
+                    <div className="card ">
                         <div className="card-body d-flex flex-column justify-content-center align-items-center">
                             <div className="d-flex flex-row gap-3 align-items-center">
                                 <h1 className="m-0 display-1 fw-bolder">{maleStudents.length}</h1>
@@ -108,6 +109,32 @@ export default function ClassAdvisorySummary(){
                             </div>
                             <h1 className='m-0 fw-bolder'>TOTAL</h1>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <AdvisoryMissingGrades advisory={advisory}/>
+            <div className="col-4 p-2">
+                <div className="card h-100">
+                    <div className="card-body d-flex flex-column">
+                        <h5 className="m-0 fw-bolder">ACHIEVERS</h5>
+                        <p className="m-0" style={{ fontSize: '12px' }}>Ranking of students.</p>
+                        <hr />
+                        <table className="table table-striped">
+                            <tbody>
+                                {studentRankings.map((student, index) => (
+                                    <>
+                                    {handleRating(student.gen_ave) !== '' && (
+                                        <tr key={index}>
+                                            <td width={`50%`} className='fw-bold text-uppercase'>{student.full_name}</td>
+                                            <td width={`10%`} className='fw-bold'>{student.gen_ave}</td>
+                                            <td width={`40%`} className='fw-bold'>{handleRating(student.gen_ave)}</td>
+                                        </tr>
+                                    )}
+                                    </>
+                                ))}
+                            </tbody>
+                        </table>
+                        
                     </div>
                 </div>
             </div>
@@ -144,38 +171,6 @@ export default function ClassAdvisorySummary(){
                             <h5 className="m-0 fw-bolder">NOTIFICATIONS</h5>
                             <hr />
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div className="col-6 p-2">
-                <div className="card">
-                    <div className="card-body d-flex flex-column">
-                        <h5 className="m-0 fw-bolder">ACHIEVERS</h5>
-                        <hr />
-                        <table className="table table-striped">
-                            <tbody>
-                                {studentRankings.map((student, index) => (
-                                    <>
-                                    {handleRating(student.gen_ave) !== '' && (
-                                        <tr key={index}>
-                                            <td width={`50%`} className='fw-bold text-uppercase'>{student.full_name}</td>
-                                            <td width={`20%`} className='fw-bold'>{student.gen_ave}</td>
-                                            <td width={`30%`} className='fw-bold'>{handleRating(student.gen_ave)}</td>
-                                        </tr>
-                                    )}
-                                    </>
-                                ))}
-                            </tbody>
-                        </table>
-                        
-                    </div>
-                </div>
-            </div>
-            <div className="col-6 p-2">
-                <div className="card">
-                    <div className="card-body d-flex flex-column">
-                        <h5 className="m-0 fw-bolder">ACHIEVERS</h5>
-                        <hr />
                     </div>
                 </div>
             </div>

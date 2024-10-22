@@ -42,7 +42,6 @@ h1,h2,h3,h4,h5,h6,p{
     font-size: small;
     letter-spacing: -1px;
 }
-
 .menu-option-container{
     letter-spacing: -1px;
     width: 100%;
@@ -81,7 +80,6 @@ h1,h2,h3,h4,h5,h6,p{
         box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.75);
     }
 }
-
 .account-button{
     cursor: pointer;
     transition: all 0.1s ease-in-out;
@@ -104,4 +102,15 @@ h1,h2,h3,h4,h5,h6,p{
     background: rgba(238,241,245,1) 100%;
     border: 1px solid rgb(225, 225, 225);
     border-radius: 10px;
-  }
+}
+
+.sidebar-tools{
+    background: linear-gradient(72deg, rgba(248,241,245,1) 0%, rgba(238,241,245,1) 100%);
+    color: var(--sub-heading);
+    border-right: 2px solid rgb(217, 215, 215);
+}
+
+.topbar-tools{
+    background: linear-gradient(72deg, rgba(248,241,245,1) 0%, rgba(238,241,245,1) 100%);
+    border-bottom: 2px solid rgb(217, 215, 215);
+}

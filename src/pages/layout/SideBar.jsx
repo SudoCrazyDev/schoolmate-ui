@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom";
 import { userHasRole } from "../../global/Helpers";
 import { useSelector } from 'react-redux';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -13,6 +12,7 @@ import CastForEducationIcon from '@mui/icons-material/CastForEducation';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import Account from "./components/Account";
+import AssessmentIcon from '@mui/icons-material/Assessment';
 
 export default function SideBar(){
     const user = useSelector(state => state.user);
@@ -103,6 +103,11 @@ export default function SideBar(){
                             link={`/grades-access-management`}
                             icon={<KeyIcon fontSize="inherit"/>}
                             title={`ACCESS`}
+                        />
+                        <Menu
+                            link={`/grades-consolidation`}
+                            icon={<AssessmentIcon fontSize="inherit"/>}
+                            title={`CONSOLIDATED GRADES`}
                         />
                     </div>
                 )}

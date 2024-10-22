@@ -7,6 +7,7 @@ import ViewClassSchedule from './partials/ViewClassSchedule';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, Tooltip } from '@mui/material';
+import PrintTempReportCard from './partials/PrintTempReportCard';
 
 export default function ClassAdvisory(){
     const { advisory_id } = useParams();
@@ -116,6 +117,7 @@ export default function ClassAdvisory(){
                                         <td>-</td>
                                         <td>
                                             <ViewGrades student={student} subjects={advisory?.subjects} advisory={advisory}/>
+                                            <PrintTempReportCard student={student} subjects={advisory?.subjects} advisory={advisory} />
                                         </td>
                                     </tr>
                                 ))}
@@ -134,6 +136,7 @@ export default function ClassAdvisory(){
                                         <td>-</td>
                                         <td>
                                             <ViewGrades student={student} subjects={advisory?.subjects} advisory={advisory}/>
+                                            <PrintTempReportCard student={student} subjects={advisory?.subjects} advisory={advisory} />
                                         </td>
                                     </tr>
                                 ))}

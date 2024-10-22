@@ -134,7 +134,7 @@ const generalSubjects = [
     ]}
 ];
 
-export default function ViewGrades({student, subjects, advisory}){
+export default function PrintTempReportCard({student, subjects, advisory}){
     const [open ,setOpen] = useState(false);
     
     const handleModalState = () => {
@@ -168,8 +168,8 @@ export default function ViewGrades({student, subjects, advisory}){
     
     return(
         <>
-        <Tooltip title="Print Official Report Card">
-            <IconButton size="small" onClick={() => handleModalState()} color="success">
+        <Tooltip title="Print Temp Report Card">
+            <IconButton size="small" onClick={() => handleModalState()} color="warning">
                 <PrintIcon fontSize="small"/>
             </IconButton>
         </Tooltip>
@@ -184,295 +184,17 @@ export default function ViewGrades({student, subjects, advisory}){
                         {open && (
                             <PDFViewer className='w-100' style={{height: '600px'}}>
                                 <Document>
-                                    <Page size="A5" orientation="landscape" style={{display: 'flex', flexDirection: 'row'}}>
-                                        <View style={{width: '50%', padding: '20px'}}>
-                                            <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                <Text style={{fontSize: '8px', fontFamily: 'Helvetica-Bold', marginBottom: '10px'}}>REPORT OF ATTENDANCE</Text>
-                                                <View style={{width: '100%', display: 'flex', flexDirection: 'column', border: '1px solid black'}}>
-                                                    <View style={{width: '100%', display: 'flex', flexDirection: 'row', borderBottom: '1px solid black'}}>
-                                                        <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
-                                                            <Text style={{fontSize: '5px', textAlign: 'center'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Jun</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Jul</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Aug</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Sep</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Oct</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Nov</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Dec</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Jan</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Feb</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Mar</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Apr</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>Total</Text>
-                                                        </View>
-                                                    </View>
-                                                    <View style={{width: '100%', display: 'flex', flexDirection: 'row', borderBottom: '1px solid black'}}>
-                                                        <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
-                                                            <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of School Days</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                    </View>
-                                                    <View style={{width: '100%', display: 'flex', flexDirection: 'row', borderBottom: '1px solid black'}}>
-                                                        <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
-                                                            <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of days present</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                    </View>
-                                                    <View style={{width: '100%', display: 'flex', flexDirection: 'row'}}>
-                                                        <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
-                                                            <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of days absent</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
-                                                        </View>
-                                                    </View>
-                                                </View>
-                                                <Text style={{fontSize: '10px', fontFamily: 'Helvetica-Bold', marginTop: '50px'}}>PARENT / GUARDIAN'S SIGNATURE</Text>
-                                                <Text style={{fontSize: '10px', fontFamily: 'Helvetica-Bold', marginTop: '20px', alignSelf: 'flex-start'}}>1st Quarter ___________________________________</Text>
-                                                <Text style={{fontSize: '10px', fontFamily: 'Helvetica-Bold', marginTop: '20px', alignSelf: 'flex-start'}}>2nd Quarter ___________________________________</Text>
-                                                <Text style={{fontSize: '10px', fontFamily: 'Helvetica-Bold', marginTop: '20px', alignSelf: 'flex-start'}}>3rd Quarter ___________________________________</Text>
-                                                <Text style={{fontSize: '10px', fontFamily: 'Helvetica-Bold', marginTop: '20px', alignSelf: 'flex-start'}}>4th Quarter ___________________________________</Text>
-                                            </View>
+                                    <Page size="A5" orientation="landscape" style={{height: '100%', display: 'flex', flexDirection: 'row', fontFamily: 'Helvetica', flexWrap: 'wrap'}}>
+                                        <View style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: '10px' }}>
+                                            <Text style={{ textTransform: 'uppercase', textAlign: 'center' }}>{advisory?.institution?.title}</Text>
+                                            <Text style={{ fontSize: '10px', textAlign: 'center' }}>{advisory?.institution?.address}</Text>
                                         </View>
-                                        
-                                        <View style={{width: '50%', padding: '20px'}}>
-                                            
-                                            <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                <View style={{display: 'flex', flexDirection: 'row', marginBottom: '3px', width: '90%'}}>
-                                                    <Text style={{fontSize: '6px', fontFamily:'Helvetica'}}>DepEd Form 138-A</Text>
-                                                    <Text style={{fontSize: '6px', fontFamily:'Helvetica', marginLeft: 'auto'}}>School ID: {advisory?.institution?.gov_id}</Text>
-                                                </View>
-                                                <View style={{display: 'flex', flexDirection: 'row', marginBottom: '3px'}}>
-                                                    <Image source={`/${advisory?.institution?.abbr ? advisory?.institution?.abbr : 'deped'}-logo.png`} style={{height: 49, width: 49}}></Image>
-                                                    <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '10px', marginHorizontal: '10px', gap: '1px'}}>
-                                                        <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Republic of the Philippines</Text>
-                                                        <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Department of Education</Text>
-                                                        {/* <Text style={{fontSize: '8px', fontFamily:'Helvetica-Bold'}}>Region XII</Text> */}
-                                                        <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Division of General Santos City</Text>
-                                                        <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>General Santos City</Text>
-                                                    </View>
-                                                    <Image source={`/deped-logo.png`} style={{height: 49, width: 49}}></Image>
-                                                </View>
-                                                <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>{advisory?.institution?.title}</Text>
-                                                <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>{advisory?.institution?.address}</Text>
-                                                
-                                                <View style={{backgroundColor: 'black', marginTop: '10px', width: '100%', paddingVertical: '4px'}}>
-                                                    <Text style={{color: 'white', fontSize: '8px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>REPORT CARD </Text>
-                                                </View>
-                                                
-                                                <Text style={{fontFamily: 'Helvetica', fontSize: '8px', alignSelf:'flex-end'}}>LRN: {student.lrn}</Text>
-                                                
-                                                <View style={{marginTop: '2px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textTransform: 'uppercase'}}>Name:  {student.last_name}, {student.first_name}</Text>
-                                                </View>
-                                                
-                                                <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '20px'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Age: {calculateAge(student.birthdate)}</Text>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Sex: {String(student.gender).charAt(0).toUpperCase()}</Text>
-                                                </View>
-                                                
-                                                <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '20px'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Grade: {advisory?.grade_level}</Text>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Section: {advisory?.title}</Text>
-                                                </View>
-                                                
-                                                <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '5px'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>School Year: 2024 - 2025</Text>
-                                                </View>
-                                                
-                                                <View style={{marginTop: '5px', display: 'flex', flexDirection: 'column'}}>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginBottom: '5px'}}>Dear Parent:</Text>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginLeft: '10px'}}>This report card shows the ability and progress your child has made</Text>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica'}}>in different learning areas as well as his/her core values.</Text>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginLeft: '10px'}}>The school welcomes you should you desire to know more about your child's progress.</Text>
-                                                </View>
-                                                
-                                                <View style={{marginTop: '8px', width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                                                    <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                        <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.institution?.principal?.[0]?.first_name} {String(advisory?.institution?.principal?.[0]?.middle_name).charAt(0)}. {advisory?.institution?.principal?.[0]?.last_name}</Text>
-                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Principal</Text>
-                                                    </View>
-                                                    <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                        <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.class_adviser.first_name} {String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. {advisory?.class_adviser.last_name}</Text>
-                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Teacher</Text>
-                                                    </View>
-                                                </View>
-                                                
-                                                <View style={{backgroundColor: 'black', marginTop: '5px', width: '100%', paddingVertical: '4px'}}>
-                                                    <Text style={{color: 'white', fontSize: '8px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>Certificate of Transfer </Text>
-                                                </View>
-                                                
-                                                <View style={{marginTop: '0px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '10px'}}></Text>
-                                                    <View style={{display: 'flex', flexDirection: 'row', marginTop: '2px', maringBottom: '5px', alignSelf: 'flex-start'}}>
-                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica'}}>Admitted to Grade:______________</Text>
-                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica'}}>Section:______________</Text>
-                                                    </View>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'flex-start'}}>Eligibility for Admission to Grade:_______________________</Text>
-                                                    <View style={{display: 'flex', flexDirection: 'row', marginTop: '1px'}}>
-                                                        <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                            <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.institution?.principal?.[0]?.first_name} {String(advisory?.institution?.principal?.[0]?.middle_name).charAt(0)}. {advisory?.institution?.principal?.[0]?.last_name}</Text>
-                                                            <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Principal</Text>
-                                                        </View>
-                                                        <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                            <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.class_adviser.first_name} {String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. {advisory?.class_adviser.last_name}</Text>
-                                                            <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Teacher</Text>
-                                                        </View>
-                                                    </View>
-                                                </View>
-                                                
-                                                <View style={{backgroundColor: 'black', marginTop: '5px', width: '100%', paddingVertical: '4px'}}>
-                                                    <Text style={{color: 'white', fontSize: '8px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>CANCELLATION OF ELIGIBILITY TO TRANSFER </Text>
-                                                </View>
-                                                
-                                                <View style={{marginTop: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'flex-start'}}>Admitted To:_______________________</Text>
-                                                    <View style={{display: 'flex', flexDirection: 'row'}}>
-                                                        <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                        </View>
-                                                        <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                            <Text>___________</Text>
-                                                            <Text style={{fontSize: '8px', fontFamily: 'Helvetica'}}>Principal</Text>
-                                                        </View>
-                                                    </View>
-                                                </View>
-                                                
-                                            </View>
-                                            
+                                        <View style={{ paddingHorizontal: '20px', width: '100%', display: 'flex', flexDirection: 'row', marginTop: '5px'}}>
+                                            <Text style={{ textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '12px'}}>{student?.last_name}, {student?.first_name}</Text>
+                                            <Text style={{ marginLeft: 'auto', fontFamily: 'Helvetica-Bold', fontSize: '12px' }}>{student?.lrn}</Text>
                                         </View>
-                                    </Page>
-                                    <Page size="A5" orientation="landscape" style={{display: 'flex', flexDirection: 'row', fontFamily: 'Helvetica'}}>
-                                        
-                                        <View style={{height: '100%', width: '50%', padding: '20px', display: 'flex', flexDirection: 'column'}}>
+                                        <View style={{width: '50%', paddingHorizontal: '20px', display: 'flex', flexDirection: 'column', marginTop: '5px'}}>
                                             <Text style={{fontSize: '8px', fontFamily: 'Helvetica-Bold', marginBottom: '10px'}}>REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</Text>
-                                            {/* TABLE HEADER */}
                                             <View style={{display: 'flex', flexDirection: 'row', border: '1px solid black'}}>
                                                 <View style={{width: '30%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
                                                     <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}>Learning Areas</Text>
@@ -970,7 +692,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     </View>
                                                 </View>
                                                 
-                                                <View style={{marginTop: 'auto', display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
+                                                <View style={{marginTop: '0', display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
                                                     <View style={{width: '40%'}}>
                                                         <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Descriptors</Text>
                                                     </View>
@@ -1036,9 +758,13 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         </View>
                                                     </View>
                                                 </View>
+                                                <View style={{ display: 'flex', flexDirection: 'column', marginTop: '10px', marginBottom: '5px'}}>
+                                                    <Text style={{ textTransform: 'uppercase', fontSize: '10px', fontFamily: 'Helvetica-Bold' }}>{advisory?.class_adviser?.first_name} {String(advisory?.class_adviser?.middle_name).charAt(0)}. {advisory?.class_adviser?.last_name}</Text>
+                                                    <Text style={{ fontSize: '8px'}}>ADVISER</Text>
+                                                </View>
                                         </View>
                                         
-                                        <View style={{height: '100%', width: '50%', padding: '20px', display: 'flex', flexDirection: 'column'}}>
+                                        <View style={{width: '50%', paddingHorizontal: '20px', display: 'flex', flexDirection: 'column', marginTop: '5px'}}>
                                             <Text style={{fontSize: '8px', fontFamily: 'Helvetica-Bold', marginBottom: '10px'}}>REPORT ON LEARNER'S OBSERVED VALUES</Text>
                                             <View style={{display: 'flex', flexDirection: 'row', border: '1px solid black'}}>
                                                 <View style={{width: '18%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
@@ -1305,7 +1031,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 </View>
                                             </View>
                                             
-                                            <View style={{marginTop: 'auto', display: 'flex', flexDirection: 'column'}}>
+                                            <View style={{marginTop: '0', display: 'flex', flexDirection: 'column'}}>
                                                 <View style={{display: 'flex', flexDirection: 'row', paddingBottom: '5px'}}>
                                                     <Text style={{width: '20%', fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Marking</Text>
                                                     <Text style={{fontFamily: 'Helvetica', fontSize: '8px'}}>Non-numerical Rating</Text>
@@ -1333,7 +1059,6 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </View>
                                             
                                         </View>
-                                        
                                     </Page>
                                 </Document>
                             </PDFViewer>

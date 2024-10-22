@@ -38,6 +38,8 @@ import ClassAdvisorySummary from "./pages/classAdvisory/ClassAdvisorySummary";
 import CoreValues from "./pages/classAdvisory/partials/CoreValues";
 import EditStudent from "./pages/classAdvisory/partials/EditStudent,";
 import ClassAdvisoryStudents from "./pages/classAdvisory/ClassAdvisoryStudents";
+import ConsolidatedGrades from "./pages/consolidatedGrades/ConsolidatedGrades";
+import CertificateBuilder from "./pages/certificateBuilder/CertificateBuilder";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -63,6 +65,7 @@ export const router = createBrowserRouter(
             <Route element={<StudentSubjectGrades />} path="/grading/:subject_id" exact/>
             <Route element={<AccessManagement />} path="/grades-access-management" exact/>
             <Route element={<ViewLoads />} path="/grades-access-management/:teacher_id" exact/>
+            <Route element={<ConsolidatedGrades />} path="/grades-consolidation" exact/>
             {/* ADMIN ONLY ROUTES */}
             <Route element={<Institutions />} path="/institutions"/>
             <Route element={<Users />} path="/users"/>
@@ -70,6 +73,7 @@ export const router = createBrowserRouter(
             <Route element={<Permissions />} path="/permissions"/>
             <Route element={<Logout />} path="/logout" />
           </Route>
+          <Route element={<CertificateBuilder />} path="/certificate-builder" />
         </Route>
       <Route element={<PublicRoutes />}>
         <Route element={<NewUserPassword />} path="/new-user-password/:user_id" />
