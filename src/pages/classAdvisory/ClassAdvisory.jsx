@@ -74,7 +74,7 @@ export default function ClassAdvisory(){
                                                 </MenuItem>
                                                 {!fetching && advisory?.subjects?.map((subject) => (
                                                     <MenuItem key={subject.id} value={subject.id} className='text-uppercase'>
-                                                        {subject.title}
+                                                        {`${subject.title} - ${String(subject?.subject_teacher?.last_name).toUpperCase()}`}
                                                     </MenuItem>
                                                 ))}
                                             </Select>

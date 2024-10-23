@@ -13,11 +13,11 @@ export default function AdvisoryMissingGrades({advisory}){
     
     const handleGetStatus = (graded) => {
         if((graded - advisory?.students.length) === 0){
-            return <span class="badge text-bg-success shadow">{graded}/{advisory?.students.length}</span>;
+            return <span className="badge text-bg-success shadow">{graded}/{advisory?.students.length}</span>;
         } else if ((graded - advisory?.students.length) < 0){
-            return <span class="badge text-bg-danger shadow">{graded}/{advisory?.students.length}</span>;
+            return <span className="badge text-bg-danger shadow">{graded}/{advisory?.students.length}</span>;
         } else {
-            return <span class="badge text-bg-warning shadow">{graded}/{advisory?.students.length}</span>;
+            return <span className="badge text-bg-warning shadow">{graded}/{advisory?.students.length}</span>;
         }
     };
     
