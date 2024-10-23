@@ -53,7 +53,7 @@ export default function AdvisoryMissingGrades({advisory}){
                             {subjects.map((subject) => (
                                 <tr key={subject.id}>
                                     <td className="fw-bolder text-uppercase">{subject.title}</td>
-                                    <td className="fw-bolder text-uppercase">{subject.subject_teacher.last_name}, {subject.subject_teacher.first_name}</td>
+                                    <td className="fw-bolder text-uppercase">{subject.subject_teacher?.last_name}, {subject.subject_teacher?.first_name}</td>
                                     <td className="fw-bolder text-uppercase text-center">{handleGetStatus(subject.graded)}</td>
                                 </tr>
                             ))}
