@@ -192,8 +192,8 @@ export default function PrintTempReportCard({student, subjects, advisory}){
                         {open && (
                             <PDFViewer className='w-100' style={{height: '600px'}}>
                                 <Document>
-                                    <Page size="A5" orientation="landscape" style={{height: '100%', display: 'flex', flexDirection: 'row', fontFamily: 'Helvetica', flexWrap: 'wrap'}}>
-                                        <View style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: '10px' }}>
+                                    <Page size="A5" orientation="landscape" style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', fontFamily: 'Helvetica', flexWrap: 'wrap'}}>
+                                        <View style={{ width: '75%', alignContent: "center", display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: '10px' }}>
                                             <Text style={{ textTransform: 'uppercase', textAlign: 'center' }}>{advisory?.institution?.title}</Text>
                                             <Text style={{ fontSize: '10px', textAlign: 'center' }}>{advisory?.institution?.address}</Text>
                                         </View>

@@ -29,15 +29,23 @@ export default function ClassAdvisoryStudents(){
     };
     
     const handleStudentGenAve = (student, quarter) => {
-        let student_grade = student.grades.reduce((acc, curr) => {
+        let mapeh_subjects = student.grades?.filter(grade => grade.subject.parent_subject !== null);
+        let mapeh_ave = mapeh_subjects.reduce((acc, curr) => {
             if(curr.quarter == quarter){
                 return acc + Number(Number(curr.grade).toFixed());
             }else{
                 return acc;
             }
+        }, 0) / mapeh_subjects.length;
+        let student_grade = student.grades.reduce((acc, curr) => {
+            if(curr.quarter == quarter && curr.subject.parent_subject == null){
+                return acc + Number(Number(curr.grade).toFixed());
+            }else{
+                return acc;
+            }
         }, 0);
-        let grade_count = student.grades.filter(grade => grade.quarter == quarter).length;
-        return Number(Number(student_grade / grade_count).toFixed()).toFixed() == 'NaN' ? "-" : Number(Number(student_grade / grade_count).toFixed()).toFixed();
+        let grade_count = student.grades.filter(grade => grade.quarter == quarter && grade.subject.parent_subject == null).length + 1;
+        return Number(Number((student_grade + mapeh_ave) / grade_count).toFixed()).toFixed() == 'NaN' ? "-" : Number(Number((student_grade + mapeh_ave) / grade_count).toFixed()).toFixed();
     };
     
     const handleRating = (value) => {

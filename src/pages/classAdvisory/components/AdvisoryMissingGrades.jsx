@@ -29,14 +29,18 @@ export default function AdvisoryMissingGrades({advisory}){
         <div className="col-8 p-2">
             <div className="card shadow">
                 <div className="card-body d-flex flex-column">
-                    <h5 className="m-0 fw-bold">GRADES STATUS</h5>
-                    <p className="m-0" style={{ fontSize: '12px' }}>Check how many students has grades.</p>
+                    <div className="d-flex flex-row">
+                        <div className="d-flex flex-column">
+                            <h5 className="m-0 fw-bold">GRADES STATUS</h5>
+                            <p className="m-0" style={{ fontSize: '12px' }}>Check how many students has grades.</p>
+                        </div>
+                    </div>
                     <hr />
                     <table className="table table-border">
                         <thead>
                             <tr>
-                                <th width={'50%'}>SUBJECT</th>
-                                <th width={'25%'}>TEACHER</th>
+                                <th width={'40%'}>SUBJECT</th>
+                                <th width={'35%'}>TEACHER</th>
                                 <th width={'25%'} className="text-center">STATUS</th>
                             </tr>
                         </thead>

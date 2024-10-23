@@ -116,6 +116,15 @@ export default function ClassAdvisorySummary(){
             <div className="col-4 p-2">
                 <div className="card h-100">
                     <div className="card-body d-flex flex-column">
+                        <h5 className="m-0 fw-bolder">NOTIFICATIONS</h5>
+                        <p className="m-0" style={{ fontSize: '12px' }}>Important</p>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+            <div className="col-12 p-2">
+                <div className="card h-100">
+                    <div className="card-body d-flex flex-column">
                         <h5 className="m-0 fw-bolder">ACHIEVERS</h5>
                         <p className="m-0" style={{ fontSize: '12px' }}>Ranking of students.</p>
                         <hr />
@@ -139,7 +148,7 @@ export default function ClassAdvisorySummary(){
                 </div>
             </div>
             <div className="col-12 d-flex flex-row justify-content-center">
-                <div className="col-8 p-2">
+                <div className="col-12 p-2">
                     <div className="card h-100">
                         <div className="card-body d-flex flex-column">
                             <h5 className="m-0 fw-bolder">CLASS SCHEDULE</h5>
@@ -162,14 +171,6 @@ export default function ClassAdvisorySummary(){
                                     ))}
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-4 p-2">
-                    <div className="card h-100">
-                        <div className="card-body d-flex flex-column">
-                            <h5 className="m-0 fw-bolder">NOTIFICATIONS</h5>
-                            <hr />
                         </div>
                     </div>
                 </div>
