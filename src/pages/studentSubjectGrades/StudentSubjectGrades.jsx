@@ -90,7 +90,12 @@ export default function StudentSubjectGrades(){
                 }else{
                     return <div className="input-group">
                                 <input disabled={mapehComponent === 'mapeh' && String(subject?.title).toLowerCase() === 'mapeh'} type="number" value={gradeAdd.filter(grade=>grade.student_id === student.id && grade.quarter === String(quarter) && (grade.subject_id === mapehComponent || grade.subject_id === subject_id))?.[0]?.grade || quarter_grade} className="form-control" onChange={(e) => handleAddSubject(student, e.target.value, '1')}/>
-                                {quarter_grade !== "" && mapehComponent !== 'mapeh' && <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>}
+                                {String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh' && quarter_grade !== "" && (
+                                    <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]} />
+                                )}
+                                {String(subject?.title).toLowerCase() !== 'mapeh' && quarter_grade !== "" && (
+                                    <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>
+                                )}
                             </div>
                 }
             }else{
@@ -102,7 +107,12 @@ export default function StudentSubjectGrades(){
                     }else{
                         return <div className="input-group">
                                     <input disabled={mapehComponent === 'mapeh' && String(subject?.title).toLowerCase() === 'mapeh'} type="number" value={gradeAdd.filter(grade=>grade.student_id === student.id && grade.quarter === String(quarter)  && (grade.subject_id === mapehComponent || grade.subject_id === subject_id))?.[0]?.grade || quarter_grade} className="form-control" onChange={(e) => handleAddSubject(student, e.target.value, '1')}/>
-                                    {quarter_grade !== "" && mapehComponent !== 'mapeh' && <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>}
+                                    {String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh' && quarter_grade !== "" && (
+                                        <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]} />
+                                    )}
+                                    {String(subject?.title).toLowerCase() !== 'mapeh' && quarter_grade !== "" && (
+                                        <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>
+                                    )}
                                 </div>
                     }
                 }
@@ -129,7 +139,12 @@ export default function StudentSubjectGrades(){
                 }else{
                     return <div className="input-group">
                                 <input disabled={mapehComponent === 'mapeh' && String(subject?.title).toLowerCase() === 'mapeh'} type="number" value={gradeAdd.filter(grade=>grade.student_id === student.id && grade.quarter === String(quarter) && (grade.subject_id === mapehComponent || grade.subject_id === subject_id))?.[0]?.grade || quarter_grade} className="form-control" onChange={(e) => handleAddSubject(student, e.target.value, '2')}/>
-                                {quarter_grade !== "" && mapehComponent !== 'mapeh' && <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>}
+                                {String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh' && quarter_grade !== "" && (
+                                    <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]} />
+                                )}
+                                {String(subject?.title).toLowerCase() !== 'mapeh' && quarter_grade !== "" && (
+                                    <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>
+                                )}
                             </div>
                 }
             }else{
@@ -141,7 +156,12 @@ export default function StudentSubjectGrades(){
                     }else{
                         return <div className="input-group">
                                     <input disabled={mapehComponent === 'mapeh' && String(subject?.title).toLowerCase() === 'mapeh'} type="number" value={gradeAdd.filter(grade=>grade.student_id === student.id && grade.quarter === String(quarter)  && (grade.subject_id === mapehComponent || grade.subject_id === subject_id))?.[0]?.grade || quarter_grade} className="form-control" onChange={(e) => handleAddSubject(student, e.target.value, '2')}/>
-                                    {quarter_grade !== "" && mapehComponent !== 'mapeh' && <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>}
+                                    {String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh' && quarter_grade !== "" && (
+                                        <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]} />
+                                    )}
+                                    {String(subject?.title).toLowerCase() !== 'mapeh' && quarter_grade !== "" && (
+                                        <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>
+                                    )}
                                 </div>
                     }
                 }
@@ -168,7 +188,12 @@ export default function StudentSubjectGrades(){
                 }else{
                     return <div className="input-group">
                                 <input disabled={mapehComponent === 'mapeh' && String(subject?.title).toLowerCase() === 'mapeh'} type="number" value={gradeAdd.filter(grade=>grade.student_id === student.id && grade.quarter === String(quarter) && (grade.subject_id === mapehComponent || grade.subject_id === subject_id))?.[0]?.grade || quarter_grade} className="form-control" onChange={(e) => handleAddSubject(student, e.target.value, '3')}/>
-                                {quarter_grade !== "" && mapehComponent !== 'mapeh' && <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>}
+                                {String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh' && quarter_grade !== "" && (
+                                    <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]} />
+                                )}
+                                {String(subject?.title).toLowerCase() !== 'mapeh' && quarter_grade !== "" && (
+                                    <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>
+                                )}
                             </div>
                 }
             }else{
@@ -180,7 +205,12 @@ export default function StudentSubjectGrades(){
                     }else{
                         return <div className="input-group">
                                     <input disabled={mapehComponent === 'mapeh' && String(subject?.title).toLowerCase() === 'mapeh'} type="number" value={gradeAdd.filter(grade=>grade.student_id === student.id && grade.quarter === String(quarter)  && (grade.subject_id === mapehComponent || grade.subject_id === subject_id))?.[0]?.grade || quarter_grade} className="form-control" onChange={(e) => handleAddSubject(student, e.target.value, '3')}/>
-                                    {quarter_grade !== "" && mapehComponent !== 'mapeh' && <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>}
+                                    {String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh' && quarter_grade !== "" && (
+                                        <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]} />
+                                    )}
+                                    {String(subject?.title).toLowerCase() !== 'mapeh' && quarter_grade !== "" && (
+                                        <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>
+                                    )}
                                 </div>
                     }
                 }
@@ -207,7 +237,12 @@ export default function StudentSubjectGrades(){
                 }else{
                     return <div className="input-group">
                                 <input disabled={mapehComponent === 'mapeh' && String(subject?.title).toLowerCase() === 'mapeh'} type="number" value={gradeAdd.filter(grade=>grade.student_id === student.id && grade.quarter === String(quarter) && (grade.subject_id === mapehComponent || grade.subject_id === subject_id))?.[0]?.grade || quarter_grade} className="form-control" onChange={(e) => handleAddSubject(student, e.target.value, '4')}/>
-                                {quarter_grade !== "" && mapehComponent !== 'mapeh' && <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>}
+                                {String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh' && quarter_grade !== "" && (
+                                    <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]} />
+                                )}
+                                {String(subject?.title).toLowerCase() !== 'mapeh' && quarter_grade !== "" && (
+                                    <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>
+                                )}
                             </div>
                 }
             }else{
@@ -219,7 +254,12 @@ export default function StudentSubjectGrades(){
                     }else{
                         return <div className="input-group">
                                     <input disabled={mapehComponent === 'mapeh' && String(subject?.title).toLowerCase() === 'mapeh'} type="number" value={gradeAdd.filter(grade=>grade.student_id === student.id && grade.quarter === String(quarter)  && (grade.subject_id === mapehComponent || grade.subject_id === subject_id))?.[0]?.grade || quarter_grade} className="form-control" onChange={(e) => handleAddSubject(student, e.target.value, '4')}/>
-                                    {quarter_grade !== "" && mapehComponent !== 'mapeh' && <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>}
+                                    {String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh' && quarter_grade !== "" && (
+                                        <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]} />
+                                    )}
+                                    {String(subject?.title).toLowerCase() !== 'mapeh' && quarter_grade !== "" && (
+                                        <DeleteGrade refresh={refresh} grade={student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]}/>
+                                    )}
                                 </div>
                     }
                 }
