@@ -30,7 +30,7 @@ export default function DeleteGrade({grade, refresh}){
     
     return(
         <>
-        <button className="btn btn-outline-danger" onClick={() => handleModalState()}>
+        <button className="btn btn-outline-danger" onClick={() => handleModalState()} style={{ zIndex: 0 }}>
             <Tooltip title="Delete Grade">
                 <DeleteForeverIcon />
             </Tooltip>
