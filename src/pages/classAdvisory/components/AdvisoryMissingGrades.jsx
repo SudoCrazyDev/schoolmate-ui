@@ -26,8 +26,8 @@ export default function AdvisoryMissingGrades({advisory}){
     }, [advisory]);
     
     return(
-        <div className="col-8 p-2">
-            <div className="card shadow">
+        <div className="col-7 p-2">
+            <div className="card shadow h-100">
                 <div className="card-body d-flex flex-column">
                     <div className="d-flex flex-row">
                         <div className="d-flex flex-column">
@@ -52,9 +52,9 @@ export default function AdvisoryMissingGrades({advisory}){
                             )}
                             {subjects.map((subject) => (
                                 <tr key={subject.id}>
-                                    <td className="fw-bolder text-uppercase">{subject.title}</td>
-                                    <td className="fw-bolder text-uppercase">{subject.subject_teacher?.last_name}, {subject.subject_teacher?.first_name}</td>
-                                    <td className="fw-bolder text-uppercase text-center">{handleGetStatus(subject.graded)}</td>
+                                    <td className="fw-bolder text-uppercase" style={{ verticalAlign: 'middle' }}>{subject.title}</td>
+                                    <td className="fw-bolder text-uppercase" style={{ verticalAlign: 'middle' }}>{subject.subject_teacher?.last_name}, {subject.subject_teacher?.first_name}</td>
+                                    <td className="fw-bolder text-uppercase text-center" style={{ verticalAlign: 'middle' }}>{handleGetStatus(subject.graded)}</td>
                                 </tr>
                             ))}
                         </tbody>

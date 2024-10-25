@@ -8,7 +8,9 @@ export default function ClassAdvisorySummary(){
     const { advisory_id } = useParams();
     const [femaleStudents, setFemaleStudents] = useState([]);
     const [maleStudents, setMaleStudents] = useState([]);
+    const [generalStudents, setGeneralStudents] = useState([]);
     const [advisory, setAdvisory] = useState(null);
+    const [conflictGrades, setConflictGrades] = useState([]);
     
     const handleFetchAdvisoryDetails = async () => {
         await axios.get(`institution_sections/${advisory_id}`)
@@ -16,12 +18,13 @@ export default function ClassAdvisorySummary(){
             let fetched_students = res.data.students || [];
             let male_students = fetched_students?.filter(student => student.gender === 'male');
             let female_students = fetched_students?.filter(student => student.gender === 'female');
+            setGeneralStudents(fetched_students);
             setMaleStudents(male_students.sort((a,b) => a.last_name.localeCompare(b.last_name)));
             setFemaleStudents(female_students.sort((a,b) => a.last_name.localeCompare(b.last_name)));
             setAdvisory(res.data);
         });
     };
-    
+
     const handleRating = (value) => {
         let numVal = Number(Number(value).toFixed());
         if(numVal >= 90 && numVal <= 94){
@@ -35,7 +38,7 @@ export default function ClassAdvisorySummary(){
         }
         return '';
     };
-    
+
     const handleStudentRanking = () => {
         let students = advisory?.students.map((student) => {
             return {
@@ -47,13 +50,47 @@ export default function ClassAdvisorySummary(){
         });
         return students?.sort((a,b) => b.gen_ave - a.gen_ave) || [];
     };
+
+    const handleCheckStudentsMultipleGrades = () => {
+        const students_with_duplicate_grades = [];
+        for(let i = 0; i < generalStudents.length; i++){
+            let student = generalStudents[i];
+            let duplicated_grades = [];
+            let graded_subjects = new Set();
+            let dupli_grades_title = new Set();
+            for(const grade of student.grades){
+                const grade_subject = String(grade.subject.title).toLowerCase();
+                if(graded_subjects.has(grade_subject)){
+                    dupli_grades_title.add(grade_subject);
+                }
+                graded_subjects.add(grade_subject);
+            }
+            dupli_grades_title.forEach((subject) => {
+                let subjects = student.grades?.filter(grade => String(grade.subject.title).toLowerCase() == subject);
+                if(subjects.length > 0){
+                    students_with_duplicate_grades.push({
+                        full_name: `${student.last_name}, ${student.first_name}`,
+                        subjects
+                    });
+                }
+            });
+        }
+        console.log(students_with_duplicate_grades);
+        setConflictGrades(students_with_duplicate_grades.sort((a,b) => b.full_name - a.full_name));
+    };
     
     const studentRankings = useMemo(handleStudentRanking, [advisory]);
-    
+
     useEffect(() => {
         handleFetchAdvisoryDetails();
     }, [advisory_id]);
     
+    useEffect(() => {
+        if(generalStudents.length != 0){
+            handleCheckStudentsMultipleGrades();
+        }
+    }, [generalStudents]);
+
     return(
         <div className="d-flex flex-row flex-wrap">
             <div className="col-12 p-2">
@@ -113,12 +150,30 @@ export default function ClassAdvisorySummary(){
                 </div>
             </div>
             <AdvisoryMissingGrades advisory={advisory}/>
-            <div className="col-4 p-2">
+            <div className="col-5 p-2">
                 <div className="card h-100">
                     <div className="card-body d-flex flex-column">
-                        <h5 className="m-0 fw-bolder">NOTIFICATIONS</h5>
-                        <p className="m-0" style={{ fontSize: '12px' }}>Important</p>
+                        <h5 className="m-0 fw-bolder">GRADE CONFLICT</h5>
+                        <p className="m-0" style={{ fontSize: '12px' }}>Students having multiple grades.</p>
                         <hr />
+                        <table className="table">
+                            <tbody>
+                                {conflictGrades.map((conflict, i) => (
+                                    <tr key={i}>
+                                        <td width={`50%`} className="fw-bolder text-uppercase" style={{ verticalAlign: 'middle' }}>{conflict.full_name}</td>
+                                        <td width={`50%`} style={{ verticalAlign: 'middle' }}>
+                                            <div className="d-flex flex-column">
+                                                {conflict.subjects.map((subject,i) => (
+                                                    <p className="m-0 text-uppercase" key={i} style={{ fontSize: '12px'}}>
+                                                        {`${subject.subject.title} - ${subject.subject.subject_teacher.last_name}`}
+                                                    </p>
+                                                ))}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -164,9 +219,9 @@ export default function ClassAdvisorySummary(){
                                 <tbody>
                                     {advisory?.subjects?.map((subject) => (
                                         <tr key={subject.id}>
-                                            <td className='text-capitalize fw-bold'>{subject.title}</td>
-                                            <td className='text-capitalize fw-bold'>{subject.subject_teacher?.first_name} {subject.subject_teacher?.last_name}</td>
-                                            <td className='text-capitalize fw-bold'>{subject.start_time} - {subject.end_time}</td>
+                                            <td className='text-uppercase fw-bold'>{subject.title}</td>
+                                            <td className='text-uppercase fw-bold'>{subject.subject_teacher?.first_name} {subject.subject_teacher?.last_name}</td>
+                                            <td className='text-uppercase fw-bold'>{subject.start_time} - {subject.end_time}</td>
                                         </tr>
                                     ))}
                                 </tbody>
