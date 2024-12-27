@@ -71,10 +71,9 @@ export default function StudentSubjectGrades(){
         let quarter_two = access[0]?.quarter_two;
         let quarter_three = access[0]?.quarter_three;
         let quarter_four = access[0]?.quarter_four;
-        
         if(quarter === 1){
-            let quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]?.grade || "";
-            let quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]?.is_locked || 0;
+            let quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter))?.[0]?.grade || "";
+            let quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter))?.[0]?.is_locked || 0;
             if(String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh'){
                 quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter) && grade.subject_id === mapehComponent)?.[0]?.grade || "";
                 quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter) && grade.subject_id === mapehComponent)?.[0]?.is_locked || 0;
@@ -120,8 +119,8 @@ export default function StudentSubjectGrades(){
         }
         
         if(quarter === 2){
-            let quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]?.grade || "";
-            let quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]?.is_locked || 0;
+            let quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter))?.[0]?.grade || "";
+            let quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter))?.[0]?.is_locked || 0;
             if(String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh'){
                 quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter) && grade.subject_id === mapehComponent)?.[0]?.grade || "";
                 quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter) && grade.subject_id === mapehComponent)?.[0]?.is_locked || 0;
@@ -169,8 +168,8 @@ export default function StudentSubjectGrades(){
         }
         
         if(quarter === 3){
-            let quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]?.grade || "";
-            let quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]?.is_locked || 0;
+            let quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter))?.[0]?.grade || "";
+            let quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter))?.[0]?.is_locked || 0;
             if(String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh'){
                 quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter) && grade.subject_id === mapehComponent)?.[0]?.grade || "";
                 quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter) && grade.subject_id === mapehComponent)?.[0]?.is_locked || 0;
@@ -218,8 +217,8 @@ export default function StudentSubjectGrades(){
         }
         
         if(quarter === 4){
-            let quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]?.grade || "";
-            let quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter))?.[student.grades.length - 1]?.is_locked || 0;
+            let quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter))?.[0]?.grade || "";
+            let quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter))?.[0]?.is_locked || 0;
             if(String(subject?.title).toLowerCase() === 'mapeh' && mapehComponent !== 'mapeh'){
                 quarter_grade = student.grades.filter(grade=>grade.quarter === String(quarter) && grade.subject_id === mapehComponent)?.[0]?.grade || "";
                 quarter_grade_access = student.grades.filter(grade=>grade.quarter === String(quarter) && grade.subject_id === mapehComponent)?.[0]?.is_locked || 0;
