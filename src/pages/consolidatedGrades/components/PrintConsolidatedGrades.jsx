@@ -149,7 +149,7 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
         };
     };
 
-    const handleGetGeneralAve = (student, subjectCat) => {
+    const handleGetGeneralAve = (student) => {
         let availableGrades = student?.grades?.filter(grade => {
             const lowerCaseSubject = String(grade.subject.title).toLowerCase();
             if(section.grade_level === '7'){
@@ -167,6 +167,18 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
         let mapehTotal = mapehGeneral.reduce((acc, grade) => acc + Number(grade.grade), 0) / mapehGeneral.length;
         let steTotal = availableGrades.reduce((acc, grade) => acc + Number(grade.grade), 0);
         return Number(Number(steTotal + mapehTotal)/(availableGrades.length + 1)).toFixed();
+    };
+    
+    const handleCheckIfHonor = (student) => {
+        let gen_ave = Number(handleGetGeneralAve(student));
+        if(gen_ave >= 90){
+            return 'with honors'
+        } else if (gen_ave >=97){
+            return 'with high honors'
+        } else if (gen_ave >=98){
+            return 'with highest honors'
+        }
+        return "";
     };
     
     const CheckIfSpecialProgram = () => {
@@ -315,7 +327,7 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
                                 <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '10px', textAlign: 'center'}}>{handleGetGeneralAve(student)}</Text>
                             </View>
                             <View style={{width: '10%', border: '0.5px solid black', borderTop: 0, borderBottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '8px', textAlign: 'center'}}></Text>
+                                <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '6px', textAlign: 'center'}}>{handleCheckIfHonor(student)}</Text>
                             </View>
                         </View>
                     ))}
@@ -382,7 +394,7 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
                                 <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '10px', textAlign: 'center'}}>{handleGetGeneralAve(student)}</Text>
                             </View>
                             <View style={{width: '10%', border: '0.5px solid black', borderTop: 0, borderBottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '8px', textAlign: 'center'}}></Text>
+                                <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '6px', textAlign: 'center'}}>{handleCheckIfHonor(student)}</Text>
                             </View>
                         </View>
                     ))}
