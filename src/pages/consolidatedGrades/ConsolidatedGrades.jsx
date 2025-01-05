@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import PrintConsolidatedGrades from './components/PrintConsolidatedGrades';
+import PrintableConsolidatedGrades from './components/PrintableConsolidatedGrades';
 export default function ConsolidatedGrades(){
     const { institutions } = useSelector(state => state.user);
     const [sections, setSections] = useState([]);
@@ -65,7 +67,7 @@ export default function ConsolidatedGrades(){
                             <tr key={section.id}>
                                 <td className='fw-bolder'>{section.grade_level} - {section.title}</td>
                                 <td>
-                                    <button className="btn btn-sm btn-primary">View</button>
+                                    <PrintableConsolidatedGrades section={section}/>
                                 </td>
                             </tr>
                         ))}
