@@ -13,6 +13,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import Account from "./components/Account";
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 
 export default function SideBar(){
     const user = useSelector(state => state.user);
@@ -94,6 +95,17 @@ export default function SideBar(){
                     </div>
                 )}
 
+                <div className="d-flex flex-column p-2">
+                    <MenuTitle>
+                        GRADES MANAGEMENT
+                    </MenuTitle>
+                    <Menu
+                        link={`/grades-consolidation`}
+                        icon={<AssessmentIcon fontSize="inherit"/>}
+                        title={`CONSOLIDATED GRADES`}
+                    />
+                </div>
+                    
                 {userHasRole(['principal', 'institution-app-admin']) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
@@ -104,10 +116,18 @@ export default function SideBar(){
                             icon={<KeyIcon fontSize="inherit"/>}
                             title={`ACCESS`}
                         />
+                    </div>
+                )}
+                
+                {userHasRole(['principal', 'institution-app-admin']) && (
+                    <div className="d-flex flex-column p-2">
+                        <MenuTitle>
+                            REPORTS
+                        </MenuTitle>
                         <Menu
-                            link={`/grades-consolidation`}
-                            icon={<AssessmentIcon fontSize="inherit"/>}
-                            title={`CONSOLIDATED GRADES`}
+                            link={`/gpa`}
+                            icon={<LeaderboardIcon fontSize="inherit"/>}
+                            title={`GPA`}
                         />
                     </div>
                 )}
