@@ -66,8 +66,11 @@ export default function ConsolidatedGrades(){
                         {!fetching && filteredSections.map((section, i) => (
                             <tr key={section.id}>
                                 <td className='fw-bolder'>{section.grade_level} - {section.title}</td>
-                                <td>
-                                    <PrintableConsolidatedGrades section={section}/>
+                                <td className='d-flex flex-row gap-2'>
+                                    <PrintableConsolidatedGrades section={section} quarter={1}/>
+                                    <PrintableConsolidatedGrades section={section} quarter={2}/>
+                                    <PrintableConsolidatedGrades section={section} quarter={3}/>
+                                    <PrintableConsolidatedGrades section={section} quarter={4}/>
                                 </td>
                             </tr>
                         ))}
