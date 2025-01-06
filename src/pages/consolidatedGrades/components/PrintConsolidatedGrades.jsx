@@ -169,11 +169,11 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
         return Number(Number(steTotal + mapehTotal)/(availableGrades.length + 1)).toFixed();
     };
     
-    const handleCheckIfHonor = (student) => {
+    const CheckIfHonor = (student) => {
         let gen_ave = Number(handleGetGeneralAve(student));
         if(gen_ave >= 90){
             return 'with honors'
-        } else if (gen_ave >=97){
+        } else if (gen_ave >=95){
             return 'with high honors'
         } else if (gen_ave >=98){
             return 'with highest honors'
@@ -327,7 +327,7 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
                                 <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '10px', textAlign: 'center'}}>{handleGetGeneralAve(student)}</Text>
                             </View>
                             <View style={{width: '10%', border: '0.5px solid black', borderTop: 0, borderBottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '6px', textAlign: 'center'}}>{handleCheckIfHonor(student)}</Text>
+                                <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '6px', textAlign: 'center'}}>{CheckIfHonor(student)}</Text>
                             </View>
                         </View>
                     ))}
@@ -394,7 +394,7 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
                                 <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '10px', textAlign: 'center'}}>{handleGetGeneralAve(student)}</Text>
                             </View>
                             <View style={{width: '10%', border: '0.5px solid black', borderTop: 0, borderBottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '6px', textAlign: 'center'}}>{handleCheckIfHonor(student)}</Text>
+                                <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '6px', textAlign: 'center'}}>{CheckIfHonor(student)}</Text>
                             </View>
                         </View>
                     ))}
