@@ -130,11 +130,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 2).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 2).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 2).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 2).failed}</p>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row w-100 gap-3 justify-content-center">
@@ -144,11 +144,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 3).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 3).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 3).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 3).failed}</p>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row w-100 gap-3 justify-content-center">
@@ -158,11 +158,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 4).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 4).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 4).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 4).failed}</p>
                                     </div>
                                 </div>
                             </div>
@@ -198,11 +198,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 2).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 2).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 2).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 2).failed}</p>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row w-100 gap-3 justify-content-center">
@@ -212,11 +212,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 3).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 3).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 3).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 3).failed}</p>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row w-100 gap-3 justify-content-center">
@@ -226,11 +226,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 4).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 4).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 4).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 4).failed}</p>
                                     </div>
                                 </div>
                             </div>
@@ -266,11 +266,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 2).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 2).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 2).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 2).failed}</p>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row w-100 gap-3 justify-content-center">
@@ -280,11 +280,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 3).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 3).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 3).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 3).failed}</p>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row w-100 gap-3 justify-content-center">
@@ -294,11 +294,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 4).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 4).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 4).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 4).failed}</p>
                                     </div>
                                 </div>
                             </div>
@@ -334,11 +334,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 2).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 2).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 2).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 2).failed}</p>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row w-100 gap-3 justify-content-center">
@@ -348,11 +348,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 3).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 3).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 3).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 3).failed}</p>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row w-100 gap-3 justify-content-center">
@@ -362,11 +362,11 @@ export default function Gpa(){
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-success">80 Above</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 4).passing}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 4).passing}</p>
                                     </div>
                                     <div className="d-flex flex-column gap-1">
                                         <p className="m-0 fw-bolder text-uppercase text-center text-danger">80 Below</p>
-                                        <p className="m-0 fw-bolder text-uppercase text-center">{handleGetAverage(subject, 4).failed}</p>
+                                        <p className="m-0 fw-bolder text-uppercase text-center">{handlePassingRate(subject, 4).failed}</p>
                                     </div>
                                 </div>
                             </div>
