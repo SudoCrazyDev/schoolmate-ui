@@ -139,6 +139,12 @@ export default function ViewGrades({student, subjects, advisory}){
     const handleModalState = () => {
         setOpen(!open);
     };
+    
+    const checkIfStudentHasSpecialSubject = (student, subject) => {
+        let filtered_subject = student?.grades?.filter(grade => String(grade.subject.title).toLowerCase() == String(subject).toLowerCase());
+        return filtered_subject.length > 0 ? true : false;
+    };
+    
     const handleFindStudentGrade = (student, subject, quarter) => {
         let grade_subject = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase())?.[0];
         let student_grade = student?.grades?.filter(grade => grade.subject_id === grade_subject?.id && grade.quarter === quarter)?.[0]?.grade || 0;
@@ -172,6 +178,9 @@ export default function ViewGrades({student, subjects, advisory}){
         let core_value = student?.values?.filter(value => value.core_value === coreValue && value.quarter === quarter)?.[0]?.remarks || "";
         return core_value;
     };
+    
+    console.log(student);
+    console.log(subjects);
     
     return(
         <>
@@ -377,7 +386,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <Text style={{fontSize: '6px', fontFamily:'Helvetica', marginLeft: 'auto'}}>School ID: {advisory?.institution?.gov_id}</Text>
                                                 </View>
                                                 <View style={{display: 'flex', flexDirection: 'row', marginBottom: '3px'}}>
-                                                    <Image source={`/${advisory?.institution?.abbr ? advisory?.institution?.abbr : 'deped'}-logo.png`} style={{height: 49, width: 49}}></Image>
+                                                    <Image source={`/${advisory?.institution?.abbr ? String(advisory?.institution?.abbr).toLowerCase(): 'deped'}-logo.png`} style={{height: 49, width: 49}}></Image>
                                                     <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '10px', marginHorizontal: '10px', gap: '1px'}}>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Republic of the Philippines</Text>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Department of Education</Text>
@@ -397,7 +406,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 <Text style={{fontFamily: 'Helvetica', fontSize: '8px', alignSelf:'flex-end'}}>LRN: {student.lrn}</Text>
                                                 
                                                 <View style={{marginTop: '2px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textTransform: 'uppercase'}}>Name:  {student.last_name}, {student.first_name}</Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textTransform: 'uppercase'}}>Name:  {student.last_name}, {student.first_name} {student.ext_name}</Text>
                                                 </View>
                                                 
                                                 <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '20px'}}>
@@ -964,7 +973,36 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 ))}
                                                 </>
                                             ))}
-
+                                            
+                                            {/* SPECIAL SUBJECT ENTREPRENEURSHIP */}
+                                            {checkIfStudentHasSpecialSubject(student, 'ENTREPRENEURSHIP') && (
+                                                <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
+                                                    <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'left'}}>Entreprenuership</Text>
+                                                    </View>
+                                                    <View style={{width: '40%', display: 'flex', flexDirection: 'row', borderRight: '1px solid black', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'ENTREPRENEURSHIP', "1")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'ENTREPRENEURSHIP', "2")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'ENTREPRENEURSHIP', "3")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'ENTREPRENEURSHIP', "4")}</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center', textAlign: 'center'}}></Text>
+                                                    </View>
+                                                    <View style={{width: '20%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}></Text>
+                                                    </View>
+                                                </View>
+                                            )}
+                                                
                                                 <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                     <View style={{width: '70%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica-Bold', alignSelf: 'center'}}>GENERAL AVERAGE</Text>
@@ -1080,7 +1118,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 <View style={{width: '42%', display: 'flex', flexDirection:'column', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
                                                     <View style={{height: '30px', borderBottom: '1px solid black'}}>
                                                         <Text style={{fontSize: '6px', fontFamily: 'Helvetica', alignSelf: 'center', padding: '4px'}}>
-                                                            Expresses one's spritals beliefs while respecting the spiritual beliefs of others
+                                                            Expresses one's spiritual beliefs while respecting the spiritual beliefs of others
                                                         </Text>
                                                     </View>
                                                     <View>
@@ -1323,7 +1361,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 </View>
                                                 <View style={{display: 'flex', flexDirection: 'row'}}>
                                                     <Text style={{width: '20%', fontFamily: 'Helvetica', fontSize: '8px'}}>SO</Text>
-                                                    <Text style={{fontFamily: 'Helvetica', fontSize: '8px'}}>Somtimes Observed</Text>
+                                                    <Text style={{fontFamily: 'Helvetica', fontSize: '8px'}}>Sometimes Observed</Text>
                                                 </View>
                                                 <View style={{display: 'flex', flexDirection: 'row'}}>
                                                     <Text style={{width: '20%', fontFamily: 'Helvetica', fontSize: '8px'}}>RO</Text>

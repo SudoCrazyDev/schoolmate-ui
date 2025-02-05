@@ -25,6 +25,11 @@ export default function StudentSubjectGrades(){
     };
     
     const handleAddSubject = (student, value, quarter) => {
+        let verified_value = value;
+        if(parseFloat(value) >= 100){
+            let conv_string = String(value).slice(0, -1);
+            verified_value = conv_string;
+        }
         let newGrades = [...gradeAdd];
         let existingIndex = '';
         if(String(subject?.title).toLowerCase() === 'mapeh'){
@@ -33,12 +38,12 @@ export default function StudentSubjectGrades(){
             existingIndex = newGrades.findIndex(grade => grade.student_id === student.id && grade.quarter === quarter);
         }
         if (existingIndex !== -1) {
-            newGrades[existingIndex].grade = parseFloat(value);
+            newGrades[existingIndex].grade = parseFloat(verified_value);
         } else {
             if(String(subject?.title).toLowerCase() === 'mapeh'){
-                newGrades.push({ student_id: student.id, grade: parseFloat(value), quarter,  subject_id: mapehComponent});
+                newGrades.push({ student_id: student.id, grade: parseFloat(verified_value), quarter,  subject_id: mapehComponent});
             }else{
-                newGrades.push({ student_id: student.id, grade: parseFloat(value), quarter,  subject_id});
+                newGrades.push({ student_id: student.id, grade: parseFloat(verified_value), quarter,  subject_id});
             }
         }
         setGradeAdd(newGrades);
