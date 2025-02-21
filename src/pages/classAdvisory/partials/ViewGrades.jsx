@@ -970,7 +970,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 ))}
                                                 </>
                                             ))}
-                                            
+
                                             {/* SPECIAL SUBJECT ENTREPRENEURSHIP */}
                                             {checkIfStudentHasSpecialSubject(student, 'ENTREPRENEURSHIP') && (
                                                 <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
@@ -999,7 +999,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     </View>
                                                 </View>
                                             )}
-                                            
+
                                             {checkIfStudentHasSpecialSubject(student, 'GEOMETRY') && (
                                                 <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                     <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
@@ -1027,7 +1027,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     </View>
                                                 </View>
                                             )}
-                                                
+
                                                 <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                     <View style={{width: '70%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica-Bold', alignSelf: 'center'}}>GENERAL AVERAGE</Text>
@@ -1039,7 +1039,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}></Text>
                                                     </View>
                                                 </View>
-                                                
+
                                                 <View style={{marginTop: 'auto', display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
                                                     <View style={{width: '40%'}}>
                                                         <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Descriptors</Text>
