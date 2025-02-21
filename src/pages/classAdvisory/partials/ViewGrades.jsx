@@ -139,12 +139,12 @@ export default function ViewGrades({student, subjects, advisory}){
     const handleModalState = () => {
         setOpen(!open);
     };
-    
+
     const checkIfStudentHasSpecialSubject = (student, subject) => {
         let filtered_subject = student?.grades?.filter(grade => String(grade.subject.title).toLowerCase() == String(subject).toLowerCase());
         return filtered_subject.length > 0 ? true : false;
     };
-    
+
     const handleFindStudentGrade = (student, subject, quarter) => {
         let grade_subject = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase())?.[0];
         let student_grade = student?.grades?.filter(grade => grade.subject_id === grade_subject?.id && grade.quarter === quarter)?.[0]?.grade || 0;
@@ -173,15 +173,12 @@ export default function ViewGrades({student, subjects, advisory}){
         }
         return Number(student_grade).toFixed() == 0 ? "" : Number(student_grade).toFixed();
     };
-    
+
     const handleFindStudentValue = (coreValue, quarter) => {
         let core_value = student?.values?.filter(value => value.core_value === coreValue && value.quarter === quarter)?.[0]?.remarks || "";
         return core_value;
     };
-    
-    console.log(student);
-    console.log(subjects);
-    
+
     return(
         <>
         <Tooltip title="Print Official Report Card">
@@ -992,6 +989,34 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         </View>
                                                         <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                                                             <Text>{handleFindStudentGrade(student,'ENTREPRENEURSHIP', "4")}</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center', textAlign: 'center'}}></Text>
+                                                    </View>
+                                                    <View style={{width: '20%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}></Text>
+                                                    </View>
+                                                </View>
+                                            )}
+                                            
+                                            {checkIfStudentHasSpecialSubject(student, 'GEOMETRY') && (
+                                                <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
+                                                    <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'left'}}>GEOMETRY</Text>
+                                                    </View>
+                                                    <View style={{width: '40%', display: 'flex', flexDirection: 'row', borderRight: '1px solid black', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'GEOMETRY', "1")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'GEOMETRY', "2")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'GEOMETRY', "3")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'GEOMETRY', "4")}</Text>
                                                         </View>
                                                     </View>
                                                     <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
