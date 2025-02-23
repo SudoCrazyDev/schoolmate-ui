@@ -78,7 +78,7 @@ const subjectsSTE = [
     {title: 'SCIENCE', matching: 'science'},
     {title: 'ArPan', matching: 'araling panlipunan'},
     {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
-    {title: 'MATHElec', matching: 'math electives'},
+    {title: 'GEOM', matching: 'geometry'},
     {title: 'RES', matching:'research'},
     {title: 'ICT', matching: 'ict / robotics'},
     {title: 'MAPEH'},
