@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Page, Text, View, Document, PDFViewer, Image  } from '@react-pdf/renderer';
 import PrintIcon from '@mui/icons-material/Print';
 import { IconButton, Tooltip } from '@mui/material';
-import { calculateAge, GetActiveInstitution } from '../../../global/Helpers';
+import { calculateAge, checkIfStudentHasSpecialSubject, GetActiveInstitution } from '../../../global/Helpers';
 
 const spa = [
     {title: "Filipino"},

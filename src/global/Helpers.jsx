@@ -68,3 +68,8 @@ export const calculateAge = (birthdate) => {
 
   return age;
 };
+
+export const checkIfStudentHasSpecialSubject = (student, subject) => {
+    let filtered_subject = student?.grades?.filter(grade => String(grade.subject.title).toLowerCase() == String(subject).toLowerCase());
+    return filtered_subject.length > 0 ? true : false;
+};
