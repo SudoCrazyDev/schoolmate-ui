@@ -891,7 +891,7 @@ export default function PrintTempReportCard({student, subjects, advisory}){
                                                 <View style={{width: '42%', display: 'flex', flexDirection:'column', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
                                                     <View style={{height: '30px', borderBottom: '1px solid black'}}>
                                                         <Text style={{fontSize: '6px', fontFamily: 'Helvetica', alignSelf: 'center', padding: '4px'}}>
-                                                            Expresses one's spritals beliefs while respecting the spiritual beliefs of others
+                                                            Expresses one's spiritual beliefs while respecting the spiritual beliefs of others
                                                         </Text>
                                                     </View>
                                                     <View>
@@ -1134,7 +1134,7 @@ export default function PrintTempReportCard({student, subjects, advisory}){
                                                 </View>
                                                 <View style={{display: 'flex', flexDirection: 'row'}}>
                                                     <Text style={{width: '20%', fontFamily: 'Helvetica', fontSize: '8px'}}>SO</Text>
-                                                    <Text style={{fontFamily: 'Helvetica', fontSize: '8px'}}>Somtimes Observed</Text>
+                                                    <Text style={{fontFamily: 'Helvetica', fontSize: '8px'}}>Sometimes Observed</Text>
                                                 </View>
                                                 <View style={{display: 'flex', flexDirection: 'row'}}>
                                                     <Text style={{width: '20%', fontFamily: 'Helvetica', fontSize: '8px'}}>RO</Text>
