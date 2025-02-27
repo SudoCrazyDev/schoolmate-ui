@@ -107,6 +107,7 @@ const subjectsMatching = [
     {title: 'ArPan', matching: 'araling panlipunan'},
     {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
     {title: 'TLE', matching: 'tle'},
+    {title: 'Entrep', matching: 'entreprenuership'},
     {title: 'MAPEH'},
     {title: 'Music', matching: 'music'},
     {title: 'Arts', matching: 'arts'},
@@ -129,7 +130,7 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
             setFemaleStudents(femaleStudents);
         });
     };
-    
+
     const handleGetGrades = (student, subject) => {
         let grade = Number(student?.grades?.filter(grade => String(grade.subject.title).toLowerCase() === subject.matching && grade.quarter === String(quarter))?.[0]?.grade).toFixed();
         if(subject.title == 'MAPEH'){
@@ -168,7 +169,7 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
         let steTotal = availableGrades.reduce((acc, grade) => acc + Number(grade.grade), 0);
         return Number(Number(steTotal + mapehTotal)/(availableGrades.length + 1)).toFixed();
     };
-    
+
     const CheckIfHonor = (student) => {
         let gen_ave = Number(handleGetGeneralAve(student));
         if(gen_ave >= 90){
@@ -180,21 +181,19 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
         }
         return "";
     };
-    
+
     const CheckIfSpecialProgram = () => {
         if(String(section.title).toLowerCase().includes('spj') || String(section.title).toLowerCase().includes('ste') || String(section.title).toLowerCase().includes('spa')){
             return true;
         }
     };
-    
+
     useEffect(() => {
         if(open){
             handleFetchSectionDetails();
         }
     }, [open]);
-    
-    console.log(['ste', 'spj', 'spa'].includes(String(section.title).toLowerCase()), String(section.title).toLowerCase());
-    
+
     return(
         <PDFViewer className='w-100 h-100'>
             <Document>
@@ -203,7 +202,7 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
                         <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '12px'}}>{user.institutions?.[0]?.title}</Text>
                         <Text style={{textTransform: 'capitalize', fontFamily: 'Helvetica', fontSize: '10px'}}>{user.institutions?.[0]?.address}</Text>
                         <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '10px'}}>Consolidated Grades</Text>
-                        <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica', fontSize: '10px'}}>Quarter</Text>
+                        <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica', fontSize: '10px'}}>Quarter {quarter}</Text>
                         <Text style={{textTransform: 'capitalize', fontFamily: 'Helvetica-Bold', fontSize: '10px'}}>{`${section.grade_level} - ${section.title}`}</Text>
                     </View>
                     <View style={{display: 'flex', flexDirection: 'row', marginTop: '5px'}}>
