@@ -126,7 +126,6 @@ const generalSubjects = [
     {title: "Araling Panlipunan"},
     {title: "Edukasyon Sa Pagpapakatao"},
     {title: "TLE"},
-    {title: "TVE"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music"},
         {title: "Arts"},
@@ -194,8 +193,8 @@ export default function PrintTempReportCard({student, subjects, advisory}){
                             <PDFViewer className='w-100' style={{height: '600px'}}>
                                 <Document>
                                     <Page size="A5" orientation="landscape" style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', fontFamily: 'Helvetica', flexWrap: 'wrap'}}>
-                                        <View style={{ width: '75%', alignContent: "center", display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: '10px' }}>
-                                            <Text style={{ textTransform: 'uppercase', textAlign: 'center' }}>{advisory?.institution?.title}</Text>
+                                        <View style={{ width: '95%', alignContent: "center", display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: '10px' }}>
+                                            <Text style={{ textTransform: 'uppercase', textAlign: 'center', fontSize: '13px' }}>{advisory?.institution?.title}</Text>
                                             <Text style={{ fontSize: '10px', textAlign: 'center' }}>{advisory?.institution?.address}</Text>
                                         </View>
                                         <View style={{ paddingHorizontal: '20px', width: '100%', display: 'flex', flexDirection: 'row', marginTop: '5px'}}>
@@ -636,7 +635,7 @@ export default function PrintTempReportCard({student, subjects, advisory}){
                                                 <>
                                                 <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                     <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
-                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'left'}}>{subject?.title}</Text>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'left'}}>{advisory?.grade_level === "10" && subject?.title === 'TLE' ? 'TVE' : subject?.title}</Text>
                                                     </View>
                                                     <View style={{width: '40%', display: 'flex', flexDirection: 'row', borderRight: '1px solid black', alignItems: 'center', justifyContent: 'center'}}>
                                                         <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
@@ -688,6 +687,34 @@ export default function PrintTempReportCard({student, subjects, advisory}){
                                                 ))}
                                                 </>
                                             ))}
+
+                                            {checkIfStudentHasSpecialSubject(student, 'ENTREPRENEURSHIP') && (
+                                                <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
+                                                    <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'left'}}>Entreprenuership</Text>
+                                                    </View>
+                                                    <View style={{width: '40%', display: 'flex', flexDirection: 'row', borderRight: '1px solid black', alignItems: 'center', justifyContent: 'center'}}>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'ENTREPRENEURSHIP', "1")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'ENTREPRENEURSHIP', "2")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', borderRight: '1px solid black', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'ENTREPRENEURSHIP', "3")}</Text>
+                                                        </View>
+                                                        <View style={{height:'100%' ,fontSize: '8px', fontFamily: 'Helvetica', width: '25%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                                            <Text>{handleFindStudentGrade(student,'ENTREPRENEURSHIP', "4")}</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center', textAlign: 'center'}}></Text>
+                                                    </View>
+                                                    <View style={{width: '20%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center'}}>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}></Text>
+                                                    </View>
+                                                </View>
+                                            )}
 
                                             {checkIfStudentHasSpecialSubject(student, 'ENTREPRENEURSHIP') && (
                                                 <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
