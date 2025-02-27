@@ -439,7 +439,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 <View style={{marginTop: '8px', width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                                                     <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                                         <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.institution?.principal?.[0]?.first_name} {String(advisory?.institution?.principal?.[0]?.middle_name).charAt(0)}. {advisory?.institution?.principal?.[0]?.last_name}</Text>
-                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Principal {advisory?.institution?.abbr == 'gscnssat' && 'II'}</Text>
+                                                        <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Principal {advisory?.institution?.abbr === 'GSCNSSAT' ? 'II' : ''}</Text>
                                                     </View>
                                                     <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                                         <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.class_adviser.first_name} {String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. {advisory?.class_adviser.last_name}</Text>
