@@ -14,7 +14,7 @@ const spa = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Values Education"},
+    {title: "Edukasyon sa Pagpapakatao"},
     {title: "Specialization"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music"},
@@ -30,7 +30,7 @@ const spaG7 = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Values Education"},
+    {title: "Edukasyon sa Pagpapakatao"},
     {title: "Specialization"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music & Arts"},
@@ -44,7 +44,7 @@ const spj = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Values Education"},
+    {title: "Edukasyon sa Pagpapakatao"},
     {title: "Fil. Journ"},
     {title: "Eng. Journ"},
     {title: "MAPEH", sub_subjects: [
@@ -61,7 +61,7 @@ const spjG7 = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Values Education"},
+    {title: "Edukasyon sa Pagpapakatao"},
     {title: "Fil. Journ"},
     {title: "Eng. Journ"},
     {title: "MAPEH", sub_subjects: [
@@ -76,7 +76,7 @@ const steG7 = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Values Education"},
+    {title: "Edukasyon sa Pagpapakatao"},
     {title: "Research"},
     {title: "Math Electives"},
     {title: "ICT/Robotics"},
@@ -92,7 +92,7 @@ const ste = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Values Education"},
+    {title: "Edukasyon sa Pagpapakatao"},
     {title: "Research"},
     {title: "Math Electives"},
     {title: "ICT/Robotics"},
@@ -110,7 +110,7 @@ const grade7Subjects = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Values Education"},
+    {title: "Edukasyon sa Pagpapakatao"},
     {title: "TLE"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music & Arts"},
@@ -124,7 +124,7 @@ const generalSubjects = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Values Education"},
+    {title: "Edukasyon sa Pagpapakatao"},
     {title: "TLE"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music"},
