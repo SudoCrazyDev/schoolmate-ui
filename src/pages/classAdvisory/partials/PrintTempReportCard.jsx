@@ -126,6 +126,7 @@ const generalSubjects = [
     {title: "Araling Panlipunan"},
     {title: "Edukasyon Sa Pagpapakatao"},
     {title: "TLE"},
+    {title: "TVE"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music"},
         {title: "Arts"},
