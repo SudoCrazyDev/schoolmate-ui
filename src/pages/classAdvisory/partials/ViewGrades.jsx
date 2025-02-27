@@ -14,7 +14,7 @@ const spa = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Edukasyon Sa Pagpapakatao"},
+    {title: "Values Education"},
     {title: "Specialization"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music"},
@@ -30,7 +30,7 @@ const spaG7 = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Edukasyon Sa Pagpapakatao"},
+    {title: "Values Education"},
     {title: "Specialization"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music & Arts"},
@@ -44,7 +44,7 @@ const spj = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Edukasyon Sa Pagpapakatao"},
+    {title: "Values Education"},
     {title: "Fil. Journ"},
     {title: "Eng. Journ"},
     {title: "MAPEH", sub_subjects: [
@@ -61,7 +61,7 @@ const spjG7 = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Edukasyon Sa Pagpapakatao"},
+    {title: "Values Education"},
     {title: "Fil. Journ"},
     {title: "Eng. Journ"},
     {title: "MAPEH", sub_subjects: [
@@ -76,7 +76,7 @@ const steG7 = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Edukasyon Sa Pagpapakatao"},
+    {title: "Values Education"},
     {title: "Research"},
     {title: "Math Electives"},
     {title: "ICT/Robotics"},
@@ -92,7 +92,7 @@ const ste = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Edukasyon Sa Pagpapakatao"},
+    {title: "Values Education"},
     {title: "Research"},
     {title: "Math Electives"},
     {title: "ICT/Robotics"},
@@ -110,7 +110,7 @@ const grade7Subjects = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Edukasyon Sa Pagpapakatao"},
+    {title: "Values Education"},
     {title: "TLE"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music & Arts"},
@@ -124,7 +124,7 @@ const generalSubjects = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Edukasyon Sa Pagpapakatao"},
+    {title: "Values Education"},
     {title: "TLE"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music"},
@@ -148,6 +148,16 @@ export default function ViewGrades({student, subjects, advisory}){
     const handleFindStudentGrade = (student, subject, quarter) => {
         let grade_subject = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase())?.[0];
         let student_grade = student?.grades?.filter(grade => grade.subject_id === grade_subject?.id && grade.quarter === quarter)?.[0]?.grade || 0;
+        
+        //For Multiple Same Subject with Different Teachers
+        if(subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase()).length > 1){
+            //Search Instead Student Grades by Subject
+            student_grade = student?.grades?.filter(grade => String(grade.subject?.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase() && grade.quarter === quarter)?.[0]?.grade;
+        }
+        
+        if(student.first_name == 'Ishmael' && subject == 'TLE' && quarter === "1"){
+            console.log(student?.grades?.filter(grade => String(grade.subject?.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase() && grade.quarter === quarter)?.[0]?.grade);
+        }
         if(String(subject).replaceAll(" ", "").toLowerCase() === 'specialization'){
             let test_grade_subjects = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase());
             for(let i = 0; i < test_grade_subjects.length; i++){
@@ -178,7 +188,6 @@ export default function ViewGrades({student, subjects, advisory}){
         let core_value = student?.values?.filter(value => value.core_value === coreValue && value.quarter === quarter)?.[0]?.remarks || "";
         return core_value;
     };
-
     return(
         <>
         <Tooltip title="Print Official Report Card">
@@ -999,7 +1008,6 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     </View>
                                                 </View>
                                             )}
-                                            
                                             {checkIfStudentHasSpecialSubject(student, 'ENTREPRENUERSHIP') && (
                                                 <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                     <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
@@ -1027,7 +1035,6 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     </View>
                                                 </View>
                                             )}
-
                                             {checkIfStudentHasSpecialSubject(student, 'GEOMETRY') && (
                                                 <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                     <View style={{paddingLeft: '2px', paddingVertical: '2px', width: '30%', display: 'flex', flexDirection:'row', alignContent: 'left', justifyContent: 'flex-start', borderRight: '1px solid black'}}>
