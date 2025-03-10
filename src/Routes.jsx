@@ -41,6 +41,7 @@ import ClassAdvisoryStudents from "./pages/classAdvisory/ClassAdvisoryStudents";
 import ConsolidatedGrades from "./pages/consolidatedGrades/ConsolidatedGrades";
 import CertificateBuilder from "./pages/certificateBuilder/CertificateBuilder";
 import Gpa from "./pages/reports/gpa/Gpa";
+import CardTemplates from "./pages/cardTemplates/CardTemplates";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -68,6 +69,7 @@ export const router = createBrowserRouter(
             <Route element={<ViewLoads />} path="/grades-access-management/:teacher_id" exact/>
             <Route element={<ConsolidatedGrades />} path="/grades-consolidation" exact/>
             <Route element={<Gpa />} path="/gpa" exact/>
+            <Route element={<CardTemplates />} path="/card-templates" exact />
             {/* ADMIN ONLY ROUTES */}
             <Route element={<Institutions />} path="/institutions"/>
             <Route element={<Users />} path="/users"/>

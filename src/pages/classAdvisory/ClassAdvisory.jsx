@@ -8,6 +8,7 @@ import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, Tooltip } from '@mui/material';
 import PrintTempReportCard from './partials/PrintTempReportCard';
+import CardTemplateSelector from './partials/CardTemplateSelector';
 
 export default function ClassAdvisory(){
     const { advisory_id } = useParams();
@@ -20,17 +21,28 @@ export default function ClassAdvisory(){
     const handleFetchAdvisoryDetails = async () => {
         setFetching(true);
         await axios.get(`institution_sections/${advisory_id}`)
-        .then((res) => {
-            let fetched_students = res.data.students || [];
-            let male_students = fetched_students?.filter(student => student.gender === 'male');
-            let female_students = fetched_students?.filter(student => student.gender === 'female');
-            setMaleStudents(male_students.sort((a,b) => a.last_name.localeCompare(b.last_name)));
-            setFemaleStudents(female_students.sort((a,b) => a.last_name.localeCompare(b.last_name)));
-            setAdvisory(res.data);
-        })
-        .finally(() => {
-            setFetching(false);
-        });
+            .then((res) => {
+                let fetched_students = res.data.students || [];
+                let male_students = fetched_students?.filter(student => student.gender === 'male');
+                let female_students = fetched_students?.filter(student => student.gender === 'female');
+    
+                const sortStudents = (students) => {
+                    return students.sort((a, b) => {
+                        const lastNameComparison = a.last_name.localeCompare(b.last_name);
+                        if (lastNameComparison !== 0) {
+                            return lastNameComparison;
+                        }
+                        return a.first_name.localeCompare(b.first_name);
+                    });
+                };
+    
+                setMaleStudents(sortStudents(male_students));
+                setFemaleStudents(sortStudents(female_students));
+                setAdvisory(res.data);
+            })
+            .finally(() => {
+                setFetching(false);
+            });
     };
     
     const handleFilterStudentGrade = (student, quarter) => {
@@ -55,6 +67,7 @@ export default function ClassAdvisory(){
                     </div>
                     <div className="ms-auto">
                         {!fetching && <ViewClassSchedule section={advisory} refresh={handleFetchAdvisoryDetails}/>}
+                        {!fetching && <CardTemplateSelector sectionId={advisory_id}/>}
                     </div>
                 </div>
             </div>

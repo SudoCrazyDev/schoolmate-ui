@@ -105,6 +105,17 @@ export default function SideBar(){
                         title={`CONSOLIDATED GRADES`}
                     />
                 </div>
+                
+                <div className="d-flex flex-column p-2">
+                    <MenuTitle>
+                        CARD TEMPLATES
+                    </MenuTitle>
+                    <Menu
+                        link={`/card-templates`}
+                        icon={<AssessmentIcon fontSize="inherit"/>}
+                        title={`CARD TEMPLATES`}
+                    />
+                </div>
                     
                 {userHasRole(['principal', 'institution-app-admin']) && (
                     <div className="d-flex flex-column p-2">
