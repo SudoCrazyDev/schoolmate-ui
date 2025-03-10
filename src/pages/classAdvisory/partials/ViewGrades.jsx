@@ -154,10 +154,6 @@ export default function ViewGrades({student, subjects, advisory}){
             //Search Instead Student Grades by Subject
             student_grade = student?.grades?.filter(grade => String(grade.subject?.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase() && grade.quarter === quarter)?.[0]?.grade;
         }
-        
-        if(student.first_name == 'Ishmael' && subject == 'TLE' && quarter === "1"){
-            console.log(student?.grades?.filter(grade => String(grade.subject?.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase() && grade.quarter === quarter)?.[0]?.grade);
-        }
         if(String(subject).replaceAll(" ", "").toLowerCase() === 'specialization'){
             let test_grade_subjects = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase());
             for(let i = 0; i < test_grade_subjects.length; i++){

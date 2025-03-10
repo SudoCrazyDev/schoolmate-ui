@@ -143,6 +143,12 @@ export default function PrintTempReportCard({student, subjects, advisory}){
     const handleFindStudentGrade = (student, subject, quarter) => {
         let grade_subject = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase())?.[0];
         let student_grade = student?.grades?.filter(grade => grade.subject_id === grade_subject?.id && grade.quarter === quarter)?.[0]?.grade || 0;
+        
+        //For Multiple Same Subject with Different Teachers
+        if(subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase()).length > 1){
+            //Search Instead Student Grades by Subject
+            student_grade = student?.grades?.filter(grade => String(grade.subject?.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase() && grade.quarter === quarter)?.[0]?.grade;
+        }
         if(String(subject).replaceAll(" ", "").toLowerCase() === 'specialization'){
             let test_grade_subjects = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase());
             for(let i = 0; i < test_grade_subjects.length; i++){

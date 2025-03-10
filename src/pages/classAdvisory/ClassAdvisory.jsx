@@ -67,7 +67,7 @@ export default function ClassAdvisory(){
                     </div>
                     <div className="ms-auto">
                         {!fetching && <ViewClassSchedule section={advisory} refresh={handleFetchAdvisoryDetails}/>}
-                        {!fetching && <CardTemplateSelector sectionId={advisory_id}/>}
+                        {/* {!fetching && <CardTemplateSelector sectionId={advisory_id}/>} */}
                     </div>
                 </div>
             </div>
