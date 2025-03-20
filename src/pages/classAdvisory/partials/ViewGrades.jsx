@@ -440,17 +440,17 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 <Text style={{fontFamily: 'Helvetica', fontSize: '8px', alignSelf:'flex-end'}}>LRN: {student.lrn}</Text>
                                                 
                                                 <View style={{marginTop: '2px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textTransform: 'uppercase'}}>Name:  <span style={{textDecoration: 'underline'}}>{student.last_name}, {student.first_name} {String(student.middle_name).charAt(0).toUpperCase()}. {student.ext_name}</span></Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textTransform: 'uppercase'}}>Name:  <Text style={{textDecoration: 'underline'}}>{student.last_name}, {student.first_name} {String(student.middle_name).charAt(0).toUpperCase()}. {student.ext_name}</Text></Text>
                                                 </View>
                                                 
                                                 <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '20px'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Age: <span style={{textDecoration: 'underline'}}>{calculateAge(student.birthdate)}</span></Text>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Sex: <span style={{textDecoration: 'underline'}}>{String(student.gender).charAt(0).toUpperCase()}</span></Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Age: <Text style={{textDecoration: 'underline'}}>{calculateAge(student.birthdate)}</Text></Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Sex: <Text style={{textDecoration: 'underline'}}>{String(student.gender).charAt(0).toUpperCase()}</Text></Text>
                                                 </View>
                                                 
                                                 <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '8px'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Grade: <span style={{textDecoration: 'underline'}}>{advisory?.grade_level}</span></Text>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textDecoration: 'underline'}}>Section: <span style={{textDecoration: 'underline'}}>{advisory?.title}</span></Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Grade: <Text style={{textDecoration: 'underline'}}>{advisory?.grade_level}</Text></Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Section: <Text style={{textDecoration: 'underline'}}>{advisory?.title}</Text></Text>
                                                 </View>
                                                 
                                                 <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '5px'}}>
