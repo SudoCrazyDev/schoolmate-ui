@@ -107,7 +107,7 @@ const subjectsMatching = [
     {title: 'ArPan', matching: 'araling panlipunan'},
     {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
     {title: 'TLE', matching: 'tle'},
-    {title: 'Entrep', matching: 'entreprenuership'},
+    {title: 'Entrep', matching: 'entrepreneurship'},
     {title: 'MAPEH'},
     {title: 'Music', matching: 'music'},
     {title: 'Arts', matching: 'arts'},
@@ -214,7 +214,7 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
                             <View style={{display: 'flex', flexDirection: 'row', borderTop: '0.5px solid black', borderBottom: '0.5px solid black', width: '100%'}}>
                                 {String(String(section.title).toLowerCase()).includes('ste') && section.grade_level !== '7' && subjectsSTE.map((subject, i) => (
                                     <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject.title}</Text>
+                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject?.title}</Text>
                                     </View>
                                 ))}
                                 {String(String(section.title).toLowerCase()).includes('spa') && section.grade_level !== '7' && subjectsSPA.map((subject, i) => (
@@ -229,7 +229,7 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
                                 ))}
                                 {!CheckIfSpecialProgram() && section.grade_level !== '7' && subjectsMatching.map((subject, i) => (
                                     <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject.title}</Text>
+                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{section?.grade_level === "10" && subject?.title === 'TLE' ? 'TVE' : subject?.title}</Text>
                                     </View>
                                 ))}
                                 {/* ============================= GRADE 7 ========================================== */}

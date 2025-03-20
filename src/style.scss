@@ -1,6 +1,9 @@
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
 @import "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap";
 
+.v-center{
+    vertical-align: middle;
+}
 .class-section{
     transition: all 0.3s ease-in-out;
     &:hover{

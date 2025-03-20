@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Page, Text, View, Document, PDFViewer, Image  } from '@react-pdf/renderer';
 import PrintIcon from '@mui/icons-material/Print';
 import { IconButton, Tooltip } from '@mui/material';
-import { calculateAge, GetActiveInstitution } from '../../../global/Helpers';
+import { calculateAge } from '../../../global/Helpers';
 
 const spa = [
     {title: "Filipino"},
@@ -110,8 +110,10 @@ const grade7Subjects = [
     {title: "Mathematics"},
     {title: "Science"},
     {title: "Araling Panlipunan"},
-    {title: "Edukasyon sa Pagpapakatao"},
+    {title: "Values Education"},
     {title: "TLE"},
+    {title: "TVE"},
+    {title: "Technical Drawing"},
     {title: "MAPEH", sub_subjects: [
         {title: "Music & Arts"},
         {title: "PE & Health"}
@@ -136,8 +138,32 @@ const generalSubjects = [
 
 export default function ViewGrades({student, subjects, advisory}){
     const [open ,setOpen] = useState(false);
+    const default_academic_year = "2024-2025";
     const handleModalState = () => {
         setOpen(!open);
+    };
+    const handleGetStudentAttendance = (month) => {
+        let attendance_records = student?.attendance?.filter(record => record.academic_year === default_academic_year)?.[0] || [];
+        let default_school_days = advisory?.institution?.school_days.filter(schoolDay => schoolDay.academic_year === default_academic_year)?.[0] || [];
+        let month_days = month !== "" ? default_school_days[month] : "";
+        const months = ["jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+        let total_school_days = 0;
+        let total_present = 0;
+        for (const school_month of months) {
+            total_school_days += parseInt(default_school_days[school_month]);
+        }
+        for (const attendance_month of months) {
+            total_present += parseInt(attendance_records[attendance_month]);
+        }
+        return {
+            school_days: month_days,
+            present: parseInt(attendance_records[month]),
+            absent:  parseInt(default_school_days[month]) - parseInt(attendance_records[month]),
+            total_school_days: total_school_days,
+            total_present: total_present,
+            total_absent: total_school_days - total_present
+        };
+        
     };
 
     const checkIfStudentHasSpecialSubject = (student, subject) => {
@@ -252,123 +278,123 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
                                                             <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of School Days</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jun").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jul").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("aug").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("sep").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("oct").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("nov").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("dec").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jan").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("feb").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("mar").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("apr").school_days}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center",}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("").total_school_days}</Text>
                                                         </View>
                                                     </View>
                                                     <View style={{width: '100%', display: 'flex', flexDirection: 'row', borderBottom: '1px solid black'}}>
                                                         <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
                                                             <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of days present</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jun").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jul").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("aug").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("sep").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("oct").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("nov").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("dec").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jan").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("feb").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("mar").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("apr").present}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center",}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("").total_present}</Text>
                                                         </View>
                                                     </View>
                                                     <View style={{width: '100%', display: 'flex', flexDirection: 'row'}}>
                                                         <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
                                                             <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of days absent</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jun").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jul").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("aug").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("sep").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("oct").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("nov").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("dec").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jan").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("feb").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("mar").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center', borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("apr").absent}</Text>
                                                         </View>
-                                                        <View style={{width: '7%', textAlign: 'center'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}></Text>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center",}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("").total_absent}</Text>
                                                         </View>
                                                     </View>
                                                 </View>
@@ -429,7 +455,8 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginBottom: '5px'}}>Dear Parent:</Text>
                                                     <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginLeft: '10px'}}>This report card shows the ability and progress your child has made</Text>
                                                     <Text style={{fontSize: '8px', fontFamily: 'Helvetica'}}>in different learning areas as well as his/her core values.</Text>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginLeft: '10px'}}>{" "}The school welcomes you should you desire to know more about your {" "}child's progress.</Text>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginLeft: '10px'}}>{" "}The school welcomes you should you desire to know more about your</Text>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica'}}>child's progress.</Text>
                                                 </View>
                                                 
                                                 <View style={{marginTop: '8px', width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>

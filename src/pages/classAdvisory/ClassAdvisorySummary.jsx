@@ -75,7 +75,6 @@ export default function ClassAdvisorySummary(){
                 }
             });
         }
-        console.log(students_with_duplicate_grades);
         setConflictGrades(students_with_duplicate_grades.sort((a,b) => b.full_name - a.full_name));
     };
     
@@ -106,6 +105,11 @@ export default function ClassAdvisorySummary(){
                             <NavLink to={`/advisory/core-values/${advisory_id}`}>
                                 <Button variant="contained" className='fw-bold'>
                                     Core Values
+                                </Button>
+                            </NavLink>
+                            <NavLink to={`/advisory/attendance/${advisory_id}`}>
+                                <Button variant="contained" className='fw-bold'>
+                                    Attendance
                                 </Button>
                             </NavLink>
                             <NavLink to={`/advisory-grades/${advisory_id}`}>

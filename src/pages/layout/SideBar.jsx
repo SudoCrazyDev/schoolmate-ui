@@ -78,6 +78,7 @@ export default function SideBar(){
                 )}
                 {/* END ADMIN ROUTES */}
                 {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads']) && (
+                    <>
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             CLASS MANAGEMENT
@@ -93,6 +94,18 @@ export default function SideBar(){
                             title={`TEACHER LOADS`}
                         />
                     </div>
+                    <div className="d-flex flex-column p-2">
+                        <MenuTitle>
+                            ATTENDANCE MANAGEMENT
+                        </MenuTitle>
+                        <Menu
+                            link={`/institution-school-days`}
+                            icon={<AssessmentIcon fontSize="inherit"/>}
+                            title={`SCHOOL DAYS`}
+                        />
+                    </div>
+                    </>
+                    
                 )}
 
                 <div className="d-flex flex-column p-2">
