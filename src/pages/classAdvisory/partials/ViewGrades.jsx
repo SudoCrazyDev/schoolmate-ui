@@ -471,7 +471,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Principal {advisory?.institution?.abbr === 'GSCNSSAT' ? 'II' : ''}</Text>
                                                     </View>
                                                     <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                        <Text style={{fontSize: isNameTooLong(`${advisory?.class_adviser.first_name} ${String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. ${advisory?.class_adviser.last_name}`) ? '5px': '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.class_adviser.first_name} {String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. {advisory?.class_adviser.last_name}</Text>
+                                                        <Text style={{fontSize: isNameTooLong(`${advisory?.class_adviser.first_name} ${String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. ${advisory?.class_adviser.last_name}`) ? '6px': '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.class_adviser.first_name} {String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. {advisory?.class_adviser.last_name}</Text>
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Teacher</Text>
                                                     </View>
                                                 </View>
@@ -493,7 +493,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                             <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Principal {advisory?.institution?.abbr === 'GSCNSSAT' ? 'II' : ''}</Text>
                                                         </View>
                                                         <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                            <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.class_adviser.first_name} {String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. {advisory?.class_adviser.last_name}</Text>
+                                                            <Text style={{fontSize: isNameTooLong(`${advisory?.class_adviser.first_name} ${String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. ${advisory?.class_adviser.last_name}`) ? '6px' : '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.class_adviser.first_name} {String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. {advisory?.class_adviser.last_name}</Text>
                                                             <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Teacher</Text>
                                                         </View>
                                                     </View>
