@@ -213,6 +213,24 @@ export default function AdvisoryAttendance(){
                                     </td>
                                 </tr>
                             )}
+                            {!fetching && femaleStudents.map(maleStudent => (
+                                <tr key={maleStudent.id}>
+                                    <th width={'18%'} className="v-center text-dark fw-bolder text-uppercase">{maleStudent.last_name}, {maleStudent.first_name}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'jan', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'feb', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'mar', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'apr', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'may', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'jun', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'jul', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'aug', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'sep', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'oct', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'nov', academic_year)}</th>
+                                    <th width={'6%'} className="text-secondary text-center">{getStudentAttendance(maleStudent, 'dec', academic_year)}</th>
+                                    <th width={'10%'} className="text-secondary"></th>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

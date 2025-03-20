@@ -165,7 +165,13 @@ export default function ViewGrades({student, subjects, advisory}){
         };
         
     };
-
+    const isNameTooLong = (Tname) => {
+        if(String(Tname).length >= 25){
+            return true;
+        }
+        return false;
+    };
+    
     const checkIfStudentHasSpecialSubject = (student, subject) => {
         let filtered_subject = student?.grades?.filter(grade => String(grade.subject.title).toLowerCase() == String(subject).toLowerCase());
         return filtered_subject.length > 0 ? true : false;
@@ -434,17 +440,17 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 <Text style={{fontFamily: 'Helvetica', fontSize: '8px', alignSelf:'flex-end'}}>LRN: {student.lrn}</Text>
                                                 
                                                 <View style={{marginTop: '2px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textTransform: 'uppercase'}}>Name:  {student.last_name}, {student.first_name} {String(student.middle_name).charAt(0).toUpperCase()}. {student.ext_name}</Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textTransform: 'uppercase'}}>Name:  <span style={{textDecoration: 'underline'}}>{student.last_name}, {student.first_name} {String(student.middle_name).charAt(0).toUpperCase()}. {student.ext_name}</span></Text>
                                                 </View>
                                                 
                                                 <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '20px'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Age: {calculateAge(student.birthdate)}</Text>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Sex: {String(student.gender).charAt(0).toUpperCase()}</Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Age: <span style={{textDecoration: 'underline'}}>{calculateAge(student.birthdate)}</span></Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Sex: <span style={{textDecoration: 'underline'}}>{String(student.gender).charAt(0).toUpperCase()}</span></Text>
                                                 </View>
                                                 
                                                 <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '8px'}}>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Grade: {advisory?.grade_level}</Text>
-                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Section: {advisory?.title}</Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Grade: <span style={{textDecoration: 'underline'}}>{advisory?.grade_level}</span></Text>
+                                                    <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textDecoration: 'underline'}}>Section: <span style={{textDecoration: 'underline'}}>{advisory?.title}</span></Text>
                                                 </View>
                                                 
                                                 <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '5px'}}>
@@ -465,7 +471,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Principal {advisory?.institution?.abbr === 'GSCNSSAT' ? 'II' : ''}</Text>
                                                     </View>
                                                     <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                        <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.class_adviser.first_name} {String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. {advisory?.class_adviser.last_name}</Text>
+                                                        <Text style={{fontSize: isNameTooLong(`${advisory?.class_adviser.first_name} ${String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. ${advisory?.class_adviser.last_name}`) ? '5px': '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.class_adviser.first_name} {String(advisory?.class_adviser.middle_name).charAt(0).toUpperCase()}. {advisory?.class_adviser.last_name}</Text>
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Teacher</Text>
                                                     </View>
                                                 </View>
