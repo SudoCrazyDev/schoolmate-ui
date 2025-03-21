@@ -73,3 +73,14 @@ export const checkIfStudentHasSpecialSubject = (student, subject) => {
     let filtered_subject = student?.grades?.filter(grade => String(grade.subject.title).toLowerCase() == String(subject).toLowerCase());
     return filtered_subject.length > 0 ? true : false;
 };
+
+export const axiosErrorCodeHandler = (error) => {
+    switch(error.code){
+        case 'ERR_NETWORK':
+            return 'Network error. Please try again later.';
+        case 'ERR_CONNECTION_REFUSED':
+            return 'Connection refused. Please try again later.';
+        default:
+            return error.response.data.message;
+    }
+};

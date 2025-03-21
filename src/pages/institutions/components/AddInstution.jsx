@@ -36,6 +36,8 @@ export default function AddInstitution({setInstitutions}){
         initialValues: {
             title: '',
             abbr: '',
+            division: '',
+            region: '',
             address: '',
             gov_id: ''
         },
@@ -54,6 +56,8 @@ export default function AddInstitution({setInstitutions}){
                         <TextField variant='outlined' label="Abbrevation (Eg. ILSNHMD, GSCNSSAT)" {...formik.getFieldProps('abbr')} disabled={formik.isSubmitting}/>
                         <TextField variant='outlined' label="Address" {...formik.getFieldProps('address')} disabled={formik.isSubmitting}/>
                         <TextField variant='outlined' label="School ID" {...formik.getFieldProps('gov_id')} disabled={formik.isSubmitting}/>
+                        <TextField variant='outlined' label="Region" {...formik.getFieldProps('region')} disabled={formik.isSubmitting}/>
+                        <TextField variant='outlined' label="Division" {...formik.getFieldProps('division')} disabled={formik.isSubmitting}/>
                         {/* <TextField variant='outlined' label="School ID" {...formik.getFieldProps('gov_id')} disabled={formik.isSubmitting}/> */}
                     </div>
                 </DialogContent>

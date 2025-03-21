@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { actions } from "../../redux/slices/UserSlice";
 import pb from '../../global/pb';
 import { useNavigate } from "react-router-dom";
+import { axiosErrorCodeHandler } from "../../global/Helpers";
 
 const validationSchema = yup.object().shape({
     email: yup.string().email('Must be a valid email'),
@@ -32,7 +33,7 @@ export default function Login(){
             }
         })
         .catch(err => {
-            alert.setAlert('error', err.response.data.message);
+            alert.setAlert('error', axiosErrorCodeHandler(err));
             formik.setSubmitting(false);
         });
     };

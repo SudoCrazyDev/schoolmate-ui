@@ -59,7 +59,9 @@ export default function EditInstitution({institution, refresh}){
             abbr: institution.abbr,
             gov_id: institution.gov_id,
             address: institution.address,
-            logo: institution.logo
+            logo: institution.logo,
+            division: institution.division,
+            region: institution.region,
         },
         onSubmit: handleSubmit
     });
@@ -80,6 +82,8 @@ export default function EditInstitution({institution, refresh}){
                         <TextField variant='outlined' label="Abbrevation (Eg. ILSNHMD, GSCNSSAT)" {...formik.getFieldProps('abbr')} disabled={formik.isSubmitting}/>
                         <TextField variant='outlined' label="School ID" {...formik.getFieldProps('gov_id')} disabled={formik.isSubmitting}/>
                         <TextField variant='outlined' label="Address" {...formik.getFieldProps('address')} disabled={formik.isSubmitting}/>
+                        <TextField variant='outlined' label="Region" {...formik.getFieldProps('region')} disabled={formik.isSubmitting}/>
+                        <TextField variant='outlined' label="Division" {...formik.getFieldProps('division')} disabled={formik.isSubmitting}/>
                         <div className="col-4 d-flex flex-column gap-2">
                             {!uploadedFile && formik.values.logo && (
                                 <img src={formik.values.logo} className='border rounded shadow'/>
