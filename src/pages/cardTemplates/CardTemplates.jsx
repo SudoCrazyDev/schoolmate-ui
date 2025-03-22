@@ -1,21 +1,25 @@
 import axios from "axios";
-import { GetActiveInstitution } from "../../global/Helpers";
+import { axiosErrorCodeHandler, GetActiveInstitution } from "../../global/Helpers";
 import CreateCardTemplate from "./components/CreateCardTemplate";
 import { useEffect, useState } from "react";
 import { IconButton } from "@mui/material";
 import CreateIcon from '@mui/icons-material/Create';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useAlert } from "../../hooks/CustomHooks";
 export default function CardTemplates(){
     const institution = GetActiveInstitution();
     const [cardTemplates, setCardTemplates] = useState([]);
     const [fetching, setFetching] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
+    const [selectedTemplateSubjects, setSelectedTemplateSubjects] = useState([]);
+    const [newSubjectMatch, setNewSubjectMatch] = useState("");
     const [newSubject, setNewSubject] = useState("");
     const [isEmpty, setIsEmpty] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+    const alert = useAlert();
     
     const handleFetchCardTemplates = async () => {
         setFetching(true);
@@ -29,23 +33,34 @@ export default function CardTemplates(){
     };
     
     const handleAddSubject = () => {
-        let mutableTemplate = {...selectedTemplate};
-        let subjects = JSON.parse(mutableTemplate.subjects);
-        if(subjects.filter(subject => String(subject.title).replaceAll(" ", "-").toLowerCase() === String(newSubject).replaceAll(" ", "-").toLowerCase()).length === 0){
-            subjects.push({title: newSubject, slug: String(newSubject).replaceAll(" ", "-").toLowerCase()});
-            delete mutableTemplate['subjects'];
-            Object.assign(mutableTemplate, {subjects: JSON.stringify(subjects)});
-            setSelectedTemplate(mutableTemplate);
-            setNewSubject("");
-        }
+        setSelectedTemplateSubjects(prevSubjects => {
+            return [...prevSubjects, {card_subject: newSubject, subject_to_match: newSubjectMatch, slug: String(newSubject).replaceAll(" ", "-").toLowerCase()}]
+        });
+        setNewSubject("");
+        setNewSubjectMatch("");
     };
     
     const handleRemoveSubject = (slug) => {
-        let mutableTemplate = {...selectedTemplate};
-        let subjects = JSON.parse(mutableTemplate.subjects);
-        let filteredSubjects = subjects.filter(subject => subject.slug !== slug);
-        Object.assign(mutableTemplate, {subjects: JSON.stringify(filteredSubjects)});
-        setSelectedTemplate(mutableTemplate);
+        setSelectedTemplateSubjects(prevSubjects => {
+            const newSubjects = [...prevSubjects];
+            const filteredSubjects = newSubjects.filter(subject => subject.slug !== slug);
+        return filteredSubjects;
+        });
+    };
+    
+    const handleAdjustSubjectPosition = (currentIndex, direction) => {
+        setSelectedTemplateSubjects(prevSubjects => {
+            const newIndex = currentIndex + direction;
+            const newSubjects = [...prevSubjects];
+            const elementToMove = newSubjects.splice(currentIndex, 1)[0];
+            newSubjects.splice(newIndex, 0, elementToMove);
+        return newSubjects;
+        });
+    };
+    
+    const handleSetSelectedTemplate = (cardTemplate) => {
+        setSelectedTemplateSubjects(JSON.parse(cardTemplate.subjects));
+        setSelectedTemplate(cardTemplate);
     };
     
     const handleUpdateTemplate = async () => {
@@ -53,11 +68,14 @@ export default function CardTemplates(){
         const data = {
             card_template_id: selectedTemplate.id,
             title: selectedTemplate.title,
-            subjects: selectedTemplate.subjects
+            subjects: selectedTemplateSubjects
         }
         await axios.post('card_templates/update', data)
         .then(() => {
-            setSuccess(true);
+            alert.setAlert('success', 'Card Template Updated');
+        })
+        .catch(err => {
+            alert.setAlert('error', axiosErrorCodeHandler(err));
         })
         .finally(() => {
             setSubmitting(false);
@@ -97,7 +115,7 @@ export default function CardTemplates(){
                                 <div key={cardTemplate.id} className="d-flex flex-row p-2 shadw-lg border rounded align-items-center">
                                     <p className="m-0 fw-bolder">{String(cardTemplate.title).toUpperCase()}</p>
                                     <div className="ms-auto">
-                                        <IconButton size="small" color="primary" onClick={() => setSelectedTemplate(cardTemplate)}>
+                                        <IconButton size="small" color="primary" onClick={() => handleSetSelectedTemplate(cardTemplate)}>
                                             <CreateIcon fontSize="inherit"/>
                                         </IconButton>
                                     </div>
@@ -114,21 +132,27 @@ export default function CardTemplates(){
                                     <div className="d-flex flex-row gap-2">
                                         <input type="text" className="form-control bg-white" value={selectedTemplate.title} disabled/>
                                     </div>
-                                    <div className="d-flex flex-row gap-2 align-items-start">
-                                        <div className="d-flex flex-column w-100">
-                                            <input type="text" className={`form-control ${isEmpty ? 'border border-danger' : ''}`} placeholder="Subject Title" value={newSubject} onChange={(e) => setNewSubject(e.target.value)}/>
-                                            <p className="fw-light fst-italic text-secondary" style={{fontSize: '12px'}}>Note: always check the spelling.</p>
-                                        </div>
-                                        <button className="btn btn-sm btn-primary" onClick={() => handleAddSubject()}>Add</button>
+                                    <div className="d-flex flex-column gap-2 align-items-start">
+                                    <input type="text" className={`form-control ${isEmpty ? 'border border-danger' : ''}`} placeholder="Subject that will show on card" value={newSubject} onChange={(e) => setNewSubject(e.target.value)}/>
+                                    <input type="text" className={`form-control ${isEmpty ? 'border border-danger' : ''}`} placeholder="Subject that will match the teacher subject" value={newSubjectMatch} onChange={(e) => setNewSubjectMatch(e.target.value)}/>
+                                    <button className="btn btn-sm btn-primary w-100" onClick={() => handleAddSubject()}>Add</button>
                                     </div>
                                     <div className="mt-3 d-flex flex-column align-items-center">
-                                        {JSON.parse(selectedTemplate.subjects).length == 0 && (
+                                        {selectedTemplateSubjects.length == 0 && (
                                             <p className="fw-bolder">ADD SOME SUBJECTS</p>
                                         )}
-                                        {JSON.parse(selectedTemplate.subjects).map((subject, i) => (
-                                            <div key={i} className="py-1 d-flex flex-row gap-2 w-100">
-                                                <input type="text" className="form-control" value={subject.title} disabled/>
-                                                <button className="btn btn-sm btn-danger" onClick={() => handleRemoveSubject(subject.slug)}>X</button>
+                                        {selectedTemplateSubjects.map((subject, i) => (
+                                            <div key={crypto.randomUUID()} className="py-1 d-flex flex-row gap-2 w-100">
+                                                <input type="text" className="form-control" defaultValue={`${subject.card_subject} (${subject.subject_to_match})`} disabled/>
+                                                <IconButton color="primary" size="small" onClick={() => handleAdjustSubjectPosition(i, -1)} disabled={i == 0}>
+                                                    <KeyboardArrowUpIcon fontSize="inherit"/>
+                                                </IconButton>
+                                                <IconButton color="primary" size="small" onClick={() => handleAdjustSubjectPosition(i, +1)} disabled={i == selectedTemplateSubjects.length - 1}>
+                                                    <KeyboardArrowDownIcon fontSize="inherit"/>
+                                                </IconButton>
+                                                <IconButton color="error" size="small" onClick={() => handleRemoveSubject(subject.slug)}>
+                                                    <DeleteIcon fontSize="inherit"/>
+                                                </IconButton>
                                             </div>
                                         ))}
                                         <button className={`btn btn-sm ${success ? 'btn-success' : 'btn-primary'} align-self-start mt-3`} onClick={() => handleUpdateTemplate()} disabled={submitting}>

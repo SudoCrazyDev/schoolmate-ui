@@ -114,11 +114,11 @@ const subjectsMatching = [
     {title: 'PE', matching: 'pe'},
     {title: 'Health', matching: 'health'}
 ];
-export default function PrintConsolidatedGrades({section, open, quarter = 1}){
+export default function PrintConsolidatedGrades({template, section, open, quarter = 1, quarterTitle}){
     const user = useSelector(state => state.user);
     const [maleStudents, setMaleStudents] = useState([]);
     const [femaleStudents, setFemaleStudents] = useState([]);
-
+    
     const handleFetchSectionDetails = async () => {
         await axios.get(`institution_sections/${section.id}`)
         .then((res) => {
@@ -132,42 +132,42 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
     };
 
     const handleGetGrades = (student, subject) => {
-        let grade = Number(student?.grades?.filter(grade => String(grade.subject.title).toLowerCase() === subject.matching && grade.quarter === String(quarter))?.[0]?.grade).toFixed();
-        if(subject.title == 'MAPEH'){
-            let grades = student?.grades?.filter(grade => ['music', 'arts', 'pe', 'health'].includes(String(grade.subject.title).toLowerCase()) && grade.quarter === String(quarter)) || [];
-            let total = grades.reduce((acc, grade) => acc + Number(grade.grade), 0);
-            if(section.grade_level === '7'){
-                grades = student?.grades?.filter(grade => ['music & arts', 'pe & health'].includes(String(grade.subject.title).toLowerCase()) && grade.quarter === String(quarter)) || [];
-                total = grades.reduce((acc, grade) => acc + Number(grade.grade), 0);
-                return Number(total/2).toFixed();
-            }
-            return Number(total/4).toFixed();
+        let grade = Number(student?.grades?.filter(grade => String(grade.subject.title).toLowerCase() === String(subject.subject_to_match).toLowerCase() && grade.quarter === String(quarter))?.[0]?.grade).toFixed();
+        if(String(subject.subject_to_match).toLowerCase() === 'mapeh'){
+            let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
+            let mapeh_grades = student?.grades?.filter(grade => mapeh_subjects.includes(String(grade.subject.title).toLowerCase()) && grade.quarter === String(quarter));
+            let mapeh_grade = mapeh_grades.reduce((accumulator, currentValue) => {
+                return accumulator + Number(Number(currentValue.grade).toFixed());
+            }, 0);
+            grade = mapeh_grade / mapeh_grades.length;
         }
         if(isNaN(grade) || ""){
             return "";
         } else {
-            return grade;
+            return Number(Number(grade).toFixed());
         };
     };
 
     const handleGetGeneralAve = (student) => {
-        let availableGrades = student?.grades?.filter(grade => {
-            const lowerCaseSubject = String(grade.subject.title).toLowerCase();
-            if(section.grade_level === '7'){
-                return !['music & arts', 'pe & health'].includes(lowerCaseSubject) && grade.quarter === String(quarter);
-            }
-            return !['music', 'arts', 'pe', 'health'].includes(lowerCaseSubject) && grade.quarter === String(quarter);
-        });
-        let mapehGeneral = student?.grades?.filter(grade => {
-            const lowerCaseSubject = String(grade.subject.title).toLowerCase();
-            if(section.grade_level === '7'){
-                return ['music & arts', 'pe & health'].includes(lowerCaseSubject) && grade.quarter === String(quarter);
-            }
-            return ['music', 'arts', 'pe', 'health'].includes(String(grade.subject.title).toLowerCase()) && grade.quarter === String(quarter)
-        }) || [];
-        let mapehTotal = mapehGeneral.reduce((acc, grade) => acc + Number(grade.grade), 0) / mapehGeneral.length;
-        let steTotal = availableGrades.reduce((acc, grade) => acc + Number(grade.grade), 0);
-        return Number(Number(steTotal + mapehTotal)/(availableGrades.length + 1)).toFixed();
+        let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
+        let subject_grades = template.map(subject => {
+            return student?.grades?.filter(grade =>
+                !mapeh_subjects.includes(grade.subject.title)
+                && String(subject.subject_to_match).toLowerCase() === String(grade.subject.title).toLowerCase()
+                && grade.quarter === String(quarter)
+            );
+        }).filter(grade => grade.length > 0).flat();
+
+        let accu_grade = subject_grades.reduce((accumulator, currentValue) => {
+            return accumulator + Number(Number(currentValue.grade).toFixed());
+        }, 0);
+
+        let mapeh_grades = student?.grades?.filter(grade => mapeh_subjects.includes(String(grade.subject.title).toLowerCase()) && grade.quarter === String(quarter));
+        let mapeh_accu_grade = mapeh_grades.reduce((accumulator, currentValue) => {
+            return accumulator + Number(Number(currentValue.grade).toFixed());
+        }, 0);
+
+        return Number(Number(accu_grade + (mapeh_accu_grade / mapeh_grades.length))/(subject_grades.length + 1)).toFixed();
     };
 
     const CheckIfHonor = (student) => {
@@ -193,16 +193,16 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
             handleFetchSectionDetails();
         }
     }, [open]);
-
+    console.log(template);
     return(
         <PDFViewer className='w-100 h-100'>
             <Document>
-                <Page size="A4" style={{display: 'flex', flexDirection: 'column', width: '100%', padding: '20px', border: '1px solid black'}}>
+                <Page size="A4" orientation="landscape" style={{display: 'flex', flexDirection: 'column', width: '100%', padding: '20px', border: '1px solid black'}}>
                     <View style={{alignSelf: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '2px'}}>
                         <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '12px'}}>{user.institutions?.[0]?.title}</Text>
                         <Text style={{textTransform: 'capitalize', fontFamily: 'Helvetica', fontSize: '10px'}}>{user.institutions?.[0]?.address}</Text>
                         <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica-Bold', fontSize: '10px'}}>Consolidated Grades</Text>
-                        <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica', fontSize: '10px'}}>Quarter {quarter}</Text>
+                        <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica', fontSize: '10px'}}>{quarterTitle} Quarter</Text>
                         <Text style={{textTransform: 'capitalize', fontFamily: 'Helvetica-Bold', fontSize: '10px'}}>{`${section.grade_level} - ${section.title}`}</Text>
                     </View>
                     <View style={{display: 'flex', flexDirection: 'row', marginTop: '5px'}}>
@@ -212,48 +212,11 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
                         <View style={{width: '70%', display: 'flex', flexDirection: 'column', borderTop: '0.5px solid black'}}>
                             <Text style={{textTransform: 'uppercase', fontFamily: 'Helvetica', fontSize: '8px', textAlign: 'center'}}>SUBJECTS</Text>
                             <View style={{display: 'flex', flexDirection: 'row', borderTop: '0.5px solid black', borderBottom: '0.5px solid black', width: '100%'}}>
-                                {String(String(section.title).toLowerCase()).includes('ste') && section.grade_level !== '7' && subjectsSTE.map((subject, i) => (
-                                    <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject?.title}</Text>
+                                {template.length > 0 && template.map(subject => (
+                                    <View style={{padding: '3px', borderRight: '0.5px solid black', width: `${100/template.length}%`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject?.card_subject}</Text>
                                     </View>
                                 ))}
-                                {String(String(section.title).toLowerCase()).includes('spa') && section.grade_level !== '7' && subjectsSPA.map((subject, i) => (
-                                    <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject.title}</Text>
-                                    </View>
-                                ))}
-                                {String(String(section.title).toLowerCase()).includes('spj') && section.grade_level !== '7' && subjectsSPJ.map((subject, i) => (
-                                    <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject.title}</Text>
-                                    </View>
-                                ))}
-                                {!CheckIfSpecialProgram() && section.grade_level !== '7' && subjectsMatching.map((subject, i) => (
-                                    <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{section?.grade_level === "10" && subject?.title === 'TLE' ? 'TVE' : subject?.title}</Text>
-                                    </View>
-                                ))}
-                                {/* ============================= GRADE 7 ========================================== */}
-                                {String(String(section.title).toLowerCase()).includes('ste') && section.grade_level == '7' && subjectsSTEG7.map((subject, i) => (
-                                    <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject.title}</Text>
-                                    </View>
-                                ))}
-                                {String(String(section.title).toLowerCase()).includes('spa') && section.grade_level == '7' && subjectsSPAG7.map((subject, i) => (
-                                    <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject.title}</Text>
-                                    </View>
-                                ))}
-                                {String(String(section.title).toLowerCase()).includes('spj') && section.grade_level == '7' && subjectsSPJG7.map((subject, i) => (
-                                    <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject.title}</Text>
-                                    </View>
-                                ))}
-                                {!CheckIfSpecialProgram() && section.grade_level == '7' && subjectsMatchingG7.map((subject, i) => (
-                                    <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{subject.title}</Text>
-                                    </View>
-                                ))}
-                                {/* ============================= GRADE 7 ========================================== */}
                             </View>
                         </View>
                         <View style={{width: '5%', borderLeft: '0.5px solid black', borderTop: '0.5px solid black', borderBottom: '0.5px solid black', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
@@ -278,48 +241,11 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
                             </View>
                             <View style={{width: '70%', display: 'flex', flexDirection: 'row'}}>
                                 <View style={{display: 'flex', flexDirection: 'row', borderTop: 0, borderBottom: 0, width: '100%'}}>
-                                    {String(String(section.title).toLowerCase()).includes('ste') && section.grade_level !== '7' && subjectsSTE.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
+                                    {template.length > 0 && template.map(subject => (
+                                        <View style={{padding: '3px', borderRight: '0.5px solid black', width: `${100/template.length}%`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                                            <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{handleGetGrades(student, subject)}</Text>
                                         </View>
                                     ))}
-                                    {String(String(section.title).toLowerCase()).includes('spa') && section.grade_level !== '7' && subjectsSPA.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {String(String(section.title).toLowerCase()).includes('spj') && section.grade_level !== '7' && subjectsSPJ.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {!CheckIfSpecialProgram() && section.grade_level !== '7' && subjectsMatching.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {/* ============================= GRADE 7 ========================================== */}
-                                    {String(String(section.title).toLowerCase()).includes('ste') && section.grade_level == '7' && subjectsSTEG7.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {String(String(section.title).toLowerCase()).includes('spa') && section.grade_level == '7' && subjectsSPAG7.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {String(String(section.title).toLowerCase()).includes('spj') && section.grade_level == '7' && subjectsSPJG7.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {!CheckIfSpecialProgram() && section.grade_level == '7' && subjectsMatchingG7.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {/* ============================= GRADE 7 ========================================== */}
                                 </View>
                             </View>
                             <View style={{width: '5%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
@@ -345,48 +271,11 @@ export default function PrintConsolidatedGrades({section, open, quarter = 1}){
                             </View>
                             <View style={{width: '70%', display: 'flex', flexDirection: 'row'}}>
                                 <View style={{display: 'flex', flexDirection: 'row', borderBottom: 0, width: '100%'}}>
-                                    {String(String(section.title).toLowerCase()).includes('ste') && section.grade_level !== '7' && subjectsSTE.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
+                                    {template.length > 0 && template.map(subject => (
+                                        <View style={{padding: '3px', borderRight: '0.5px solid black', width: `${100/template.length}%`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                                            <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '7px'}}>{handleGetGrades(student, subject)}</Text>
                                         </View>
                                     ))}
-                                    {String(String(section.title).toLowerCase()).includes('spa') && section.grade_level !== '7' && subjectsSPA.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {String(String(section.title).toLowerCase()).includes('spj') && section.grade_level !== '7' && subjectsSPJ.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {!CheckIfSpecialProgram() && section.grade_level !== '7' && subjectsMatching.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {/* ============================= GRADE 7 ========================================== */}
-                                    {String(String(section.title).toLowerCase()).includes('ste') && section.grade_level == '7' && subjectsSTEG7.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {String(String(section.title).toLowerCase()).includes('spa') && section.grade_level == '7' && subjectsSPAG7.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {String(String(section.title).toLowerCase()).includes('spj') && section.grade_level == '7' && subjectsSPJG7.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', textOverflow: 'ellipsis', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {!CheckIfSpecialProgram() && section.grade_level == '7' && subjectsMatchingG7.map((subject, i) => (
-                                        <View style={{padding: '3px', borderRight: '0.5px solid black', width: '8.333%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '10px'}}>{handleGetGrades(student, subject)}</Text>
-                                        </View>
-                                    ))}
-                                    {/* ============================= GRADE 7 ========================================== */}
                                 </View>
                             </View>
                             <View style={{width: '5%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
