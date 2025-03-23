@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { useAlert } from "../../hooks/CustomHooks";
 import axios from "axios";
-import { GetActiveInstitution } from "../../global/Helpers";
+import { axiosErrorCodeHandler, GetActiveInstitution } from "../../global/Helpers";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@mui/material";
 
@@ -10,7 +10,8 @@ export default function SchoolDays(){
     const institution = GetActiveInstitution();
     const [schoolDays, setSchoolDays] = useState([]);
     const [fetching, setFetching] = useState(false);
-
+    const [updating, setUpdating] = useState(false);
+    
     const handleFetchInstitutionSchoolDays = async () => {
         setFetching(true);
         await axios.get(`school_days/${institution.id}`)
@@ -41,6 +42,31 @@ export default function SchoolDays(){
         .finally(() => {
             handleFetchInstitutionSchoolDays();
             formik.setSubmitting(false);
+        });
+    };
+    
+    const handleChangeForUpdate = (academic_year, month, value) => {
+        setSchoolDays(prevState => {
+            const index = prevState.findIndex(schoolDay => schoolDay.academic_year === academic_year);
+            const updatedSchoolDays = [...prevState];
+            updatedSchoolDays[index][month] = parseInt(value);
+            return updatedSchoolDays;
+        });
+    };
+    
+    const handleSubmitChangeUpdate = async (academic_year) => {
+        setUpdating(true);
+        const schoolDay = schoolDays.find(schoolDay => schoolDay.academic_year === academic_year);
+        await axios.post('school_days/update', schoolDay)
+        .then(() => {
+            alert.setAlert("success", "School Days Updated!");
+            handleFetchInstitutionSchoolDays();
+        })
+        .catch((err) => {
+            alert.setAlert("error", axiosErrorCodeHandler(err));
+        })
+        .finally(() => {
+            setUpdating(false);
         });
     };
 
@@ -110,20 +136,20 @@ export default function SchoolDays(){
                             {!fetching && schoolDays.map(schoolDay => (
                                 <tr key={schoolDay.id}>
                                     <td className="v-center"><input type="text" className="form-control" value={schoolDay.academic_year} disabled/></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.jan} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.feb} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.mar} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.apr} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.may} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.jun} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.jul} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.aug} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.sep} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.oct} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.nov} /></td>
-                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.dec} /></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.jan} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'jan', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.feb} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'feb', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.mar} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'mar', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.apr} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'apr', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.may} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'may', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.jun} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'jun', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.jul} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'jul', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.aug} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'aug', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.sep} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'sep', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.oct} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'oct', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.nov} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'nov', e.target.value)}/></td>
+                                    <td className="v-center"><input type="number" className="form-control" value={schoolDay.dec} onChange={(e) => handleChangeForUpdate(schoolDay.academic_year, 'dec', e.target.value)}/></td>
                                     <td className="v-center">
-                                        <button className="btn btn-sm btn-primary">Update</button>
+                                        <button disabled={updating} className="btn btn-sm btn-primary" onClick={() => handleSubmitChangeUpdate(schoolDay.academic_year)}>Update</button>
                                     </td>
                                 </tr>
                             ))}
@@ -143,7 +169,7 @@ export default function SchoolDays(){
                                     <td><input type="number" className="form-control" {...formik.getFieldProps('nov')}/></td>
                                     <td><input type="number" className="form-control" {...formik.getFieldProps('dec')}/></td>
                                     <td>
-                                        <button className="btn btn-sm btn-primary" onClick={() => formik.handleSubmit()} disabled={formik.isSubmitting}>
+                                        <button className="btn btn-sm btn-primary" onClick={() => formik.handleSubmit()} disabled={formik.isSubmitting || updating}>
                                             {formik.isSubmitting && <div className="spinner-border spinner-border-sm"></div>}
                                             Add
                                         </button>
