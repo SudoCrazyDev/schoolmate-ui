@@ -14,6 +14,8 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import Account from "./components/Account";
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import SchoolIcon from '@mui/icons-material/School';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 export default function SideBar(){
     const user = useSelector(state => state.user);
@@ -100,7 +102,7 @@ export default function SideBar(){
                         </MenuTitle>
                         <Menu
                             link={`/institution-school-days`}
-                            icon={<AssessmentIcon fontSize="inherit"/>}
+                            icon={<SchoolIcon fontSize="inherit"/>}
                             title={`SCHOOL DAYS`}
                         />
                     </div>
@@ -125,7 +127,7 @@ export default function SideBar(){
                     </MenuTitle>
                     <Menu
                         link={`/card-templates`}
-                        icon={<AssessmentIcon fontSize="inherit"/>}
+                        icon={<DescriptionIcon fontSize="inherit"/>}
                         title={`CARD TEMPLATES`}
                     />
                 </div>

@@ -8,12 +8,15 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAlert } from "../../hooks/CustomHooks";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+
 export default function CardTemplates(){
     const institution = GetActiveInstitution();
     const [cardTemplates, setCardTemplates] = useState([]);
     const [fetching, setFetching] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [selectedTemplateSubjects, setSelectedTemplateSubjects] = useState([]);
+    const [selectedTemplateTitle, setSelectedTemplateTitle] = useState("");
     const [newSubjectMatch, setNewSubjectMatch] = useState("");
     const [newSubject, setNewSubject] = useState("");
     const [isEmpty, setIsEmpty] = useState(false);
@@ -61,18 +64,43 @@ export default function CardTemplates(){
     const handleSetSelectedTemplate = (cardTemplate) => {
         setSelectedTemplateSubjects(JSON.parse(cardTemplate.subjects));
         setSelectedTemplate(cardTemplate);
+        setSelectedTemplateTitle(cardTemplate.title);
     };
     
     const handleUpdateTemplate = async () => {
         setSubmitting(true);
         const data = {
             card_template_id: selectedTemplate.id,
-            title: selectedTemplate.title,
+            title: selectedTemplateTitle,
             subjects: selectedTemplateSubjects
         }
         await axios.post('card_templates/update', data)
         .then(() => {
             alert.setAlert('success', 'Card Template Updated');
+            handleFetchCardTemplates();
+            setSelectedTemplateSubjects([]);
+            setSelectedTemplate(null);
+            setSelectedTemplateTitle("");
+        })
+        .catch(err => {
+            alert.setAlert('error', axiosErrorCodeHandler(err));
+        })
+        .finally(() => {
+            setSubmitting(false);
+        });
+    };
+    
+    const handleDuplicateTemplate = async (template) => {
+        delete template.id;
+        setSubmitting(true);
+        const data = {
+            ...template,
+            title: template.title + " (Copy)"
+        }
+        await axios.post('card_templates/add', data)
+        .then(() => {
+            alert.setAlert('success', 'Card Template Duplicated!');
+            handleFetchCardTemplates();
         })
         .catch(err => {
             alert.setAlert('error', axiosErrorCodeHandler(err));
@@ -114,7 +142,10 @@ export default function CardTemplates(){
                             {cardTemplates.map(cardTemplate => (
                                 <div key={cardTemplate.id} className="d-flex flex-row p-2 shadw-lg border rounded align-items-center">
                                     <p className="m-0 fw-bolder">{String(cardTemplate.title).toUpperCase()}</p>
-                                    <div className="ms-auto">
+                                    <div className="ms-auto d-flex flex-row">
+                                        <IconButton size="small" color="primary" onClick={() => handleDuplicateTemplate(cardTemplate)}>
+                                            <ContentCopyIcon fontSize="inherit"/>
+                                        </IconButton>
                                         <IconButton size="small" color="primary" onClick={() => handleSetSelectedTemplate(cardTemplate)}>
                                             <CreateIcon fontSize="inherit"/>
                                         </IconButton>
@@ -130,7 +161,7 @@ export default function CardTemplates(){
                             {selectedTemplate && (
                                 <div className="d-flex flex-column gap-3">
                                     <div className="d-flex flex-row gap-2">
-                                        <input type="text" className="form-control bg-white" value={selectedTemplate.title} disabled/>
+                                        <input type="text" className="form-control bg-white" value={selectedTemplateTitle} onChange={(e) => setSelectedTemplateTitle(e.target.value)}/>
                                     </div>
                                     <div className="d-flex flex-column gap-2 align-items-start">
                                     <input type="text" className={`form-control ${isEmpty ? 'border border-danger' : ''}`} placeholder="Subject that will show on card" value={newSubject} onChange={(e) => setNewSubject(e.target.value)}/>

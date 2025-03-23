@@ -156,16 +156,15 @@ export default function Sections(){
                                         <td colSpan={5}><Skeleton variant="text" sx={{ fontSize: '1rem' }} /></td>
                                     </tr>
                                 )}
-                                {!fetchingSubjects && subjects.map((subject, index) => (
-                                    <>
-                                    {!subject.parent_subject && (
+                                {!fetchingSubjects && subjects.map((subject, index) =>
+                                    { return !subject.parent_subject && (
                                         <tr key={index}>
                                             <td className='text-uppercase fw-bold'>{subject.title}</td>
                                             <td>{subject.start_time} - {subject.end_time}</td>
                                             <td className='fw-bolder'>
                                                 {subject.subject_teacher === "" || subject.subject_teacher === null ?
-                                                    <Tooltip title="NO ASSIGNED TEACHER "><ReportGmailerrorredIcon color='error' /></Tooltip> 
-                                                    : 
+                                                    <Tooltip title="NO ASSIGNED TEACHER "><ReportGmailerrorredIcon color='error' /></Tooltip>
+                                                    :
                                                     `${String(subject.subject_teacher?.last_name).toUpperCase()}, ${String(subject.subject_teacher?.first_name).toUpperCase()}`
                                                 }
                                             </td>
@@ -175,8 +174,7 @@ export default function Sections(){
                                             </td>
                                         </tr>
                                     )}
-                                    </>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </div>

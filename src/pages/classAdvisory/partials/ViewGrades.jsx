@@ -467,15 +467,15 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <Text style={{fontSize: '6px', fontFamily:'Helvetica', marginLeft: 'auto'}}>School ID: {advisory?.institution?.gov_id}</Text>
                                                 </View>
                                                 <View style={{display: 'flex', flexDirection: 'row', marginBottom: '3px'}}>
-                                                    <Image source={`/${advisory?.institution?.abbr ? String(advisory?.institution?.abbr).toLowerCase(): 'deped'}-logo.png`} style={{height: 49, width: 49}}></Image>
+                                                    <Image source={`/deped-logo.png`} style={{height: 49, width: 49}}></Image>
                                                     <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '10px', marginHorizontal: '10px', gap: '1px'}}>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Republic of the Philippines</Text>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Department of Education</Text>
-                                                        {/* <Text style={{fontSize: '8px', fontFamily:'Helvetica-Bold'}}>Region XII</Text> */}
+                                                        <Text style={{fontSize: '8px', fontFamily:'Helvetica-Bold'}}>Region XII</Text>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Division of General Santos City</Text>
-                                                        <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>General Santos City</Text>
+                                                        <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>{advisory?.institution?.division}</Text>
                                                     </View>
-                                                    <Image source={`/deped-logo.png`} style={{height: 49, width: 49}}></Image>
+                                                    <Image source={`/${advisory?.institution?.abbr ? String(advisory?.institution?.abbr).toLowerCase(): 'deped'}-logo.png`} style={{height: 49, width: 49}}></Image>
                                                 </View>
                                                 <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>{advisory?.institution?.title}</Text>
                                                 <Text style={{fontSize: '6px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>{advisory?.institution?.address}</Text>
@@ -529,7 +529,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 
                                                 <View style={{marginTop: '0px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px'}}>
                                                     <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '10px'}}></Text>
-                                                    <View style={{display: 'flex', flexDirection: 'row', marginTop: '2px', maringBottom: '5px', alignSelf: 'flex-start'}}>
+                                                    <View style={{display: 'flex', flexDirection: 'row', marginTop: '2px', maringBottom: '8px', alignSelf: 'flex-start'}}>
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica'}}>Admitted to Grade:______________</Text>
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica'}}>Section:______________</Text>
                                                     </View>
@@ -781,7 +781,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{width: '18%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
-                                                    <Text style={{fontSize: '7px', fontFamily: 'Helvetica', alignSelf: 'center', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>Maka Tao</Text>
+                                                    <Text style={{fontSize: '7px', fontFamily: 'Helvetica', alignSelf: 'center', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>Makatao</Text>
                                                 </View>
                                                 <View style={{width: '42%', display: 'flex', flexDirection:'column', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
                                                     <View style={{height: '25px', width: '100%',  borderBottom: '1px solid black', display: 'flex', flexDirection: 'column', justifyContent:'center'}}>
@@ -884,7 +884,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{width: '18%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
-                                                    <Text style={{fontSize: '7px', fontFamily: 'Helvetica', alignSelf: 'center', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>Maka Bansa</Text>
+                                                    <Text style={{fontSize: '7px', fontFamily: 'Helvetica', alignSelf: 'center', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>Makabansa</Text>
                                                 </View>
                                                 <View style={{width: '42%', display: 'flex', flexDirection:'column', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
                                                     <View style={{height: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid black'}}>
