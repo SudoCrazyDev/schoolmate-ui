@@ -84,3 +84,15 @@ export const axiosErrorCodeHandler = (error) => {
             return error.response.data.message;
     }
 };
+
+export const CheckIfHonor = (grade) => {
+    if(grade >=98){
+        return 'PROMOTED with highest honors'
+    }else if (grade >= 95){
+        return 'PROMOTED with high honors'
+    }else if (grade >= 90){
+        return 'PROMOTED with honors'
+    } else {
+        return 'PROMOTED';
+    }
+};

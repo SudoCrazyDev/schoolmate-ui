@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Page, Text, View, Document, PDFViewer, Image, StyleSheet   } from '@react-pdf/renderer';
 import PrintIcon from '@mui/icons-material/Print';
 import { IconButton, Tooltip } from '@mui/material';
-import { calculateAge, GetActiveInstitution } from '../../../global/Helpers';
+import { calculateAge, CheckIfHonor, GetActiveInstitution } from '../../../global/Helpers';
 import axios from 'axios';
 import Subjects from '../components/ViewGrades.Subjects';
 
@@ -197,50 +197,74 @@ export default function ViewGrades({student, subjects, advisory}){
         }
         return false;
     };
-    
-    const checkIfStudentHasSpecialSubject = (student, subject) => {
-        let filtered_subject = student?.grades?.filter(grade => String(grade.subject.title).toLowerCase() == String(subject).toLowerCase());
-        return filtered_subject.length > 0 ? true : false;
-    };
-
-    const handleFindStudentGrade = (student, subject, quarter) => {
-        let grade_subject = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase())?.[0];
-        let student_grade = student?.grades?.filter(grade => grade.subject_id === grade_subject?.id && grade.quarter === quarter)?.[0]?.grade || 0;
-        
-        //For Multiple Same Subject with Different Teachers
-        if(subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase()).length > 1){
-            //Search Instead Student Grades by Subject
-            student_grade = student?.grades?.filter(grade => String(grade.subject?.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase() && grade.quarter === quarter)?.[0]?.grade;
-        }
-        if(String(subject).replaceAll(" ", "").toLowerCase() === 'specialization'){
-            let test_grade_subjects = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase());
-            for(let i = 0; i < test_grade_subjects.length; i++){
-                if(student?.grades?.filter(grade => grade.subject_id === test_grade_subjects[i]?.id && grade.quarter === quarter)?.[0]?.grade){
-                    student_grade = student?.grades?.filter(grade => grade.subject_id === test_grade_subjects[i]?.id && grade.quarter === quarter)?.[0]?.grade;
-                }
-            }
-        }
-        if(String(subject).toLowerCase() === 'mapeh'){
-            let mapeh = subjects?.filter(advSubject => String(advSubject.title).replaceAll(" ", '').toLowerCase() === 'mapeh')?.[0] || null;
-            let mapeh_subjects = subjects?.filter(mapehSub => mapehSub.parent_subject === mapeh?.id) || [];
-            let mapeh_grade = student?.grades?.reduce((accumulator, currentValue) => {
-                if(currentValue.quarter === String(quarter) && mapeh_subjects.filter(mapehSub => mapehSub.id === currentValue.subject_id).length > 0){
-                    return accumulator + Number(Number(currentValue.grade).toFixed());
-                }else{
-                    return accumulator;
-                }
-            }, 0);
-            student_grade = mapeh_grade / mapeh_subjects.length;
-        }
-        if(Number(student_grade).toFixed() == 0 || Number(student_grade).toFixed() == 'NaN'){
-            return "";
-        }
-        return Number(student_grade).toFixed() == 0 ? "" : Number(student_grade).toFixed();
-    };
 
     const handleFindStudentValue = (coreValue, quarter) => {
         let core_value = student?.values?.filter(value => value.core_value === coreValue && value.quarter === quarter)?.[0]?.remarks || "";
         return core_value;
+    };
+    
+    const handleGeneralAverage = () => {
+        let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
+        let final_subject_grades = JSON.parse(selectedTemplate)?.map(subject => {
+            return student?.grades?.filter(grade =>
+                !mapeh_subjects.includes(grade.subject.title)
+                && String(subject.subject_to_match).toLowerCase() === String(grade.subject.title).toLowerCase()
+            );
+        }).filter(grade => grade.length > 0).flat();
+        
+        const groupedGrades = {};
+
+        final_subject_grades.forEach((gradeObj) => {
+            const subjectTitle = gradeObj.subject.title;
+            const gradeValue = parseInt(gradeObj.grade);
+
+            if (!groupedGrades[subjectTitle]) {
+              groupedGrades[subjectTitle] = {
+                totalGrade: 0,
+                count: 0,
+              };
+            }
+
+            groupedGrades[subjectTitle].totalGrade += gradeValue;
+            groupedGrades[subjectTitle].count += 1;
+        });
+
+        const averagedGrades = {};
+        for (const subjectTitle in groupedGrades) {
+            averagedGrades[subjectTitle] = {
+            totalGrade: groupedGrades[subjectTitle].totalGrade,
+            count: groupedGrades[subjectTitle].count,
+            averageGrade: Number(Number(groupedGrades[subjectTitle].totalGrade / groupedGrades[subjectTitle].count).toFixed()),
+            };
+        }
+        
+        if(JSON.parse(selectedTemplate)?.some(templateSubject => templateSubject.subject_to_match === 'mapeh')){
+            let final_mapeh_grades = student?.grades?.filter(grade => mapeh_subjects.includes(String(grade.subject.title).toLowerCase()));
+            let final_mapeh_accu_grade = final_mapeh_grades.reduce((accumulator, currentValue) => {
+                return accumulator + Number(Number(currentValue.grade).toFixed());
+            }, 0);
+
+            averagedGrades['Mapeh'] = {
+                averageGrade: Number(Number(final_mapeh_accu_grade / final_mapeh_grades.length).toFixed()),
+            };
+        }
+        let totalAverage = 0;
+        let subjectCount = 0;
+        for(const subjectTitle in averagedGrades){
+            totalAverage += averagedGrades[subjectTitle].averageGrade;
+            subjectCount++;
+        }
+        if(isNaN(totalAverage/subjectCount) || ""){
+            return {
+                ave: "",
+                remarks: ""
+            };
+        } else {
+            return {
+                ave: Number(Number(totalAverage/subjectCount).toFixed()),
+                remarks: CheckIfHonor(Number(Number(totalAverage/subjectCount).toFixed()))
+            };
+        };
     };
     
     useEffect(() => {
@@ -248,6 +272,7 @@ export default function ViewGrades({student, subjects, advisory}){
             handleFetchCardTemplates();
         }
     }, [open]);
+    
     return(
         <>
         <Tooltip title="Print Official Report Card">
@@ -607,10 +632,14 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <Text style={{fontSize: '8px', fontFamily: 'Helvetica-Bold', alignSelf: 'center'}}>GENERAL AVERAGE</Text>
                                                 </View>
                                                 <View style={{width: '10%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center', textAlign: 'center'}}></Text>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center', textAlign: 'center'}}>
+                                                        {handleGeneralAverage().ave}
+                                                    </Text>
                                                 </View>
                                                 <View style={{width: '20%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center'}}>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}></Text>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center', textAlign: 'center'}}>
+                                                        {handleGeneralAverage().remarks}
+                                                    </Text>
                                                 </View>
                                             </View>
 
@@ -949,7 +978,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 </View>
                                             </View>
                                             
-                                            <View style={{marginTop: 'auto', display: 'flex', flexDirection: 'column'}}>
+                                            <View style={{marginTop: '20px', display: 'flex', flexDirection: 'column'}}>
                                                 <View style={{display: 'flex', flexDirection: 'row', paddingBottom: '5px'}}>
                                                     <Text style={{width: '20%', fontFamily: 'Helvetica-Bold', fontSize: '8px'}}>Marking</Text>
                                                     <Text style={{fontFamily: 'Helvetica', fontSize: '8px'}}>Non-numerical Rating</Text>

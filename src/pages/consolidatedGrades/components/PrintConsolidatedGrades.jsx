@@ -183,9 +183,8 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
             return 'PROMOTED with high honors'
         }else if (gen_ave >= 90){
             return 'PROMOTED with honors'
-        } else {
-            return 'PROMOTED';
         }
+        return "";
     };
 
     useEffect(() => {

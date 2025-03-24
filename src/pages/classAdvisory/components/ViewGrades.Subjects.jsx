@@ -25,8 +25,10 @@ export default function Subjects({subjects, student}){
         }
         return Number(student_grade).toFixed() == 0 ? "" : Number(student_grade).toFixed();
     };
-    
+
     const handleFinalGrade = (subject) => {
+        let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
+        if(mapeh_subjects.includes(String(subject).toLowerCase())) return "";
         let grade_subjects = student_grades.filter(advSubject =>
             String(advSubject.subject.title).replaceAll(" ", '').toLowerCase() === String(subject).replaceAll(" ", "").toLowerCase()
         );
@@ -34,7 +36,7 @@ export default function Subjects({subjects, student}){
             return accumulator + Number(Number(currentValue.grade).toFixed());
         }, 0);
         final_grade = final_grade / grade_subjects.length;
-        
+
         if(String(subject).toLowerCase() === 'mapeh'){
             let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
             let mapeh_grades = student_grades.filter(grade => mapeh_subjects.includes(String(grade.subject.title).toLowerCase()));
@@ -43,13 +45,13 @@ export default function Subjects({subjects, student}){
             }, 0);
             final_grade = mapeh_grade / mapeh_grades.length;
         }
-        
+
         if(Number(final_grade).toFixed() == 0 || Number(final_grade).toFixed() == 'NaN'){
             return "";
         }
         return Number(final_grade).toFixed() == 0 ? "" : Number(final_grade).toFixed();
     };
-    
+
     const handleRemarks = (subject) => {
         let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
         if(mapeh_subjects.includes(String(subject).toLowerCase())) return "";
@@ -60,7 +62,7 @@ export default function Subjects({subjects, student}){
             return 'FAILED';
         }
     };
-    
+
     return(
         <>
         {subjects.length > 0 && subjects.map(subject =>(
