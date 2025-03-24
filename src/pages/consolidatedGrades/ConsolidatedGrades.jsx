@@ -71,6 +71,7 @@ export default function ConsolidatedGrades(){
                                     <PrintableConsolidatedGrades section={section} quarter={2}/>
                                     <PrintableConsolidatedGrades section={section} quarter={3}/>
                                     <PrintableConsolidatedGrades section={section} quarter={4}/>
+                                    <PrintableConsolidatedGrades section={section} quarter={'Final'}/>
                                 </td>
                             </tr>
                         ))}

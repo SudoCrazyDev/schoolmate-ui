@@ -30,14 +30,36 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
             }, 0);
             grade = mapeh_grade / mapeh_grades.length;
         }
+        if(quarter === 'Final'){
+            grade = handleGetSubjectGeneralAve(student, subject);
+        }
         if(isNaN(grade) || ""){
             return "";
         } else {
             return Number(Number(grade).toFixed());
         };
     };
+    
+    const handleGetSubjectGeneralAve = (student, subject) => {
+        let subject_grades = student?.grades?.filter(grade => String(grade.subject.title).toLowerCase() === String(subject.subject_to_match).toLowerCase());
+        let grades = subject_grades.reduce((accumulator, currentValue) => {
+            return accumulator + Number(Number(currentValue.grade).toFixed());
+        }, 0);
+        let avg_grades = grades / subject_grades.length;
+        if(String(subject.subject_to_match).toLowerCase() === 'mapeh'){
+            let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
+            let mapeh_grades = student?.grades?.filter(grade => mapeh_subjects.includes(String(grade.subject.title).toLowerCase()));
+            let mapeh_grade = mapeh_grades.reduce((accumulator, currentValue) => {
+                return accumulator + Number(Number(currentValue.grade).toFixed());
+            }, 0);
+            avg_grades = mapeh_grade / mapeh_grades.length;
+            return Number(Number(avg_grades).toFixed());
+        }
+        return avg_grades;
+    };
 
     const handleGetGeneralAve = (student) => {
+
         let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
         let subject_grades = template.map(subject => {
             return student?.grades?.filter(grade =>
@@ -47,16 +69,110 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
             );
         }).filter(grade => grade.length > 0).flat();
 
-        let accu_grade = subject_grades.reduce((accumulator, currentValue) => {
-            return accumulator + Number(Number(currentValue.grade).toFixed());
-        }, 0);
+        const groupedGrades = {};
+
+        subject_grades.forEach((gradeObj) => {
+            const subjectTitle = gradeObj.subject.title;
+            const gradeValue = parseInt(gradeObj.grade);
+
+            if (!groupedGrades[subjectTitle]) {
+                groupedGrades[subjectTitle] = {
+                totalGrade: 0,
+                count: 0,
+                };
+            }
+
+            groupedGrades[subjectTitle].totalGrade += gradeValue;
+            groupedGrades[subjectTitle].count += 1;
+        });
+
+        const averagedGrades = {};
+        for (const subjectTitle in groupedGrades) {
+            averagedGrades[subjectTitle] = {
+            totalGrade: groupedGrades[subjectTitle].totalGrade,
+            count: groupedGrades[subjectTitle].count,
+            averageGrade: Number(Number(groupedGrades[subjectTitle].totalGrade / groupedGrades[subjectTitle].count).toFixed()),
+            };
+        }
 
         let mapeh_grades = student?.grades?.filter(grade => mapeh_subjects.includes(String(grade.subject.title).toLowerCase()) && grade.quarter === String(quarter));
         let mapeh_accu_grade = mapeh_grades.reduce((accumulator, currentValue) => {
             return accumulator + Number(Number(currentValue.grade).toFixed());
         }, 0);
+        
+        averagedGrades['Mapeh'] = {
+            averageGrade: Number(Number(mapeh_accu_grade / mapeh_grades.length).toFixed()),
+        };
 
-        return Number(Number(accu_grade + (mapeh_accu_grade / mapeh_grades.length))/(subject_grades.length + 1)).toFixed();
+        let totalAverage = 0;
+        let subjectCount = 0;
+        for(const subjectTitle in averagedGrades){
+            totalAverage += averagedGrades[subjectTitle].averageGrade;
+            subjectCount++;
+        }
+        
+            
+        if(quarter === "Final"){
+            let final_subject_grades = template.map(subject => {
+                return student?.grades?.filter(grade =>
+                    !mapeh_subjects.includes(grade.subject.title)
+                    && String(subject.subject_to_match).toLowerCase() === String(grade.subject.title).toLowerCase()
+                );
+            }).filter(grade => grade.length > 0).flat();
+            
+            const groupedGrades = {};
+
+            final_subject_grades.forEach((gradeObj) => {
+                const subjectTitle = gradeObj.subject.title;
+                const gradeValue = parseInt(gradeObj.grade);
+
+                if (!groupedGrades[subjectTitle]) {
+                  groupedGrades[subjectTitle] = {
+                    totalGrade: 0,
+                    count: 0,
+                  };
+                }
+
+                groupedGrades[subjectTitle].totalGrade += gradeValue;
+                groupedGrades[subjectTitle].count += 1;
+            });
+
+            const averagedGrades = {};
+            for (const subjectTitle in groupedGrades) {
+                averagedGrades[subjectTitle] = {
+                totalGrade: groupedGrades[subjectTitle].totalGrade,
+                count: groupedGrades[subjectTitle].count,
+                averageGrade: Number(Number(groupedGrades[subjectTitle].totalGrade / groupedGrades[subjectTitle].count).toFixed()),
+                };
+            }
+            
+            if(template.some(templateSubject => templateSubject.subject_to_match === 'mapeh')){
+                let final_mapeh_grades = student?.grades?.filter(grade => mapeh_subjects.includes(String(grade.subject.title).toLowerCase()));
+                let final_mapeh_accu_grade = final_mapeh_grades.reduce((accumulator, currentValue) => {
+                    return accumulator + Number(Number(currentValue.grade).toFixed());
+                }, 0);
+
+                averagedGrades['Mapeh'] = {
+                    averageGrade: Number(Number(final_mapeh_accu_grade / final_mapeh_grades.length).toFixed()),
+                };
+            }
+            let totalAverage = 0;
+            let subjectCount = 0;
+            for(const subjectTitle in averagedGrades){
+                totalAverage += averagedGrades[subjectTitle].averageGrade;
+                subjectCount++;
+            }
+            if(isNaN(totalAverage/subjectCount) || ""){
+                return "";
+            } else {
+                return Number(Number(totalAverage/subjectCount).toFixed());
+            };
+        }
+        if(isNaN(totalAverage/subjectCount) || ""){
+            return "";
+        } else {
+            return Number(Number(totalAverage/subjectCount).toFixed());
+        };
     };
 
     const CheckIfHonor = (student) => {
@@ -69,12 +185,6 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
             return 'with honors'
         }
         return "";
-    };
-
-    const CheckIfSpecialProgram = () => {
-        if(String(section.title).toLowerCase().includes('spj') || String(section.title).toLowerCase().includes('ste') || String(section.title).toLowerCase().includes('spa')){
-            return true;
-        }
     };
 
     useEffect(() => {
