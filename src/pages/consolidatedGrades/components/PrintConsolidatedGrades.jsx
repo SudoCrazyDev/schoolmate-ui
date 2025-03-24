@@ -178,13 +178,14 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
     const CheckIfHonor = (student) => {
         let gen_ave = Number(handleGetGeneralAve(student));
         if(gen_ave >=98){
-            return 'with highest honors'
+            return 'PROMOTED with highest honors'
         }else if (gen_ave >= 95){
-            return 'with high honors'
+            return 'PROMOTED with high honors'
         }else if (gen_ave >= 90){
-            return 'with honors'
+            return 'PROMOTED with honors'
+        } else {
+            return 'PROMOTED';
         }
-        return "";
     };
 
     useEffect(() => {

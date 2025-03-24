@@ -50,6 +50,17 @@ export default function Subjects({subjects, student}){
         return Number(final_grade).toFixed() == 0 ? "" : Number(final_grade).toFixed();
     };
     
+    const handleRemarks = (subject) => {
+        let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
+        if(mapeh_subjects.includes(String(subject).toLowerCase())) return "";
+        let finalGrade = handleFinalGrade(subject);
+        if(parseInt(finalGrade) >= 75){
+            return 'PASSED';
+        } else{
+            return 'FAILED';
+        }
+    };
+    
     return(
         <>
         {subjects.length > 0 && subjects.map(subject =>(
@@ -77,7 +88,9 @@ export default function Subjects({subjects, student}){
                     </Text>
                 </View>
                 <View style={{width: '20%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center'}}>
-                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}></Text>
+                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center'}}>
+                        {handleRemarks(subject.subject_to_match)}
+                    </Text>
                 </View>
             </View>
         ))}
