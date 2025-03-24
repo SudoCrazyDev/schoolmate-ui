@@ -3,117 +3,6 @@ import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const subjectsSPAG7 = [
-    {title: 'FILIPINO', matching: 'filipino'},
-    {title: 'ENGLISH', matching: 'english'},
-    {title: 'MATH', matching: 'mathematics'},
-    {title: 'SCIENCE', matching: 'science'},
-    {title: 'ArPan', matching: 'araling panlipunan'},
-    {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
-    {title: 'Specialization', matching: 'specialization'},
-    {title: 'MAPEH'},
-    {title: 'Music & Arts', matching: 'music & arts'},
-    {title: 'PE & Health', matching: 'pe & health'},
-];
-const subjectsSPA = [
-    {title: 'FILIPINO', matching: 'filipino'},
-    {title: 'ENGLISH', matching: 'english'},
-    {title: 'MATH', matching: 'mathematics'},
-    {title: 'SCIENCE', matching: 'science'},
-    {title: 'ArPan', matching: 'araling panlipunan'},
-    {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
-    {title: 'Specialization', matching: 'specialization'},
-    {title: 'MAPEH'},
-    {title: 'Music', matching: 'music'},
-    {title: 'Arts', matching: 'arts'},
-    {title: 'PE', matching: 'pe'},
-    {title: 'Health', matching: 'health'}
-];
-const subjectsSPJG7 = [
-    {title: 'FILIPINO', matching: 'filipino'},
-    {title: 'ENGLISH', matching: 'english'},
-    {title: 'MATH', matching: 'mathematics'},
-    {title: 'SCIENCE', matching: 'science'},
-    {title: 'ArPan', matching: 'araling panlipunan'},
-    {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
-    {title: 'Fil. Journ', matching: 'fil. journ'},
-    {title: 'Eng. Journ', matching: 'eng. journ'},
-    {title: 'MAPEH'},
-    {title: 'Music & Arts', matching: 'music & arts'},
-    {title: 'PE & Health', matching: 'pe & health'},
-];
-const subjectsSPJ = [
-    {title: 'FILIPINO', matching: 'filipino'},
-    {title: 'ENGLISH', matching: 'english'},
-    {title: 'MATH', matching: 'mathematics'},
-    {title: 'SCIENCE', matching: 'science'},
-    {title: 'ArPan', matching: 'araling panlipunan'},
-    {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
-    {title: 'Fil. Journ', matching: 'fil. journ'},
-    {title: 'Eng. Journ', matching: 'eng. journ'},
-    {title: 'MAPEH'},
-    {title: 'Music', matching: 'music'},
-    {title: 'Arts', matching: 'arts'},
-    {title: 'PE', matching: 'pe'},
-    {title: 'Health', matching: 'health'}
-];
-const subjectsSTEG7 = [
-    {title: 'FILIPINO', matching: 'filipino'},
-    {title: 'ENGLISH', matching: 'english'},
-    {title: 'MATH', matching: 'mathematics'},
-    {title: 'SCIENCE', matching: 'science'},
-    {title: 'ArPan', matching: 'araling panlipunan'},
-    {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
-    {title: 'MATHElec', matching: 'math electives'},
-    {title: 'RES', matching:'research'},
-    {title: 'ICT', matching: 'ict / robotics'},
-    {title: 'MAPEH'},
-    {title: 'Music & Arts', matching: 'music & arts'},
-    {title: 'PE & Health', matching: 'pe & health'},
-];
-const subjectsSTE = [
-    {title: 'FILIPINO', matching: 'filipino'},
-    {title: 'ENGLISH', matching: 'english'},
-    {title: 'MATH', matching: 'mathematics'},
-    {title: 'SCIENCE', matching: 'science'},
-    {title: 'ArPan', matching: 'araling panlipunan'},
-    {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
-    {title: 'GEOM', matching: 'geometry'},
-    {title: 'RES', matching:'research'},
-    {title: 'ICT', matching: 'ict / robotics'},
-    {title: 'MAPEH'},
-    {title: 'Music', matching: 'music'},
-    {title: 'Arts', matching: 'arts'},
-    {title: 'PE', matching: 'pe'},
-    {title: 'Health', matching: 'health'}
-];
-const subjectsMatchingG7 = [
-    {title: 'FILIPINO', matching: 'filipino'},
-    {title: 'ENGLISH', matching: 'english'},
-    {title: 'MATH', matching: 'mathematics'},
-    {title: 'SCIENCE', matching: 'science'},
-    {title: 'ArPan', matching: 'araling panlipunan'},
-    {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
-    {title: 'TLE', matching: 'tle'},
-    {title: 'MAPEH'},
-    {title: 'Music & Arts', matching: 'music & arts'},
-    {title: 'PE & Health', matching: 'pe & health'},
-];
-const subjectsMatching = [
-    {title: 'FILIPINO', matching: 'filipino'},
-    {title: 'ENGLISH', matching: 'english'},
-    {title: 'MATH', matching: 'mathematics'},
-    {title: 'SCIENCE', matching: 'science'},
-    {title: 'ArPan', matching: 'araling panlipunan'},
-    {title: 'EsP', matching: 'edukasyon sa pagpapakatao'},
-    {title: 'TLE', matching: 'tle'},
-    {title: 'Entrep', matching: 'entrepreneurship'},
-    {title: 'MAPEH'},
-    {title: 'Music', matching: 'music'},
-    {title: 'Arts', matching: 'arts'},
-    {title: 'PE', matching: 'pe'},
-    {title: 'Health', matching: 'health'}
-];
 export default function PrintConsolidatedGrades({template, section, open, quarter = 1, quarterTitle}){
     const user = useSelector(state => state.user);
     const [maleStudents, setMaleStudents] = useState([]);
@@ -172,12 +61,12 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
 
     const CheckIfHonor = (student) => {
         let gen_ave = Number(handleGetGeneralAve(student));
-        if(gen_ave >= 90){
-            return 'with honors'
-        } else if (gen_ave >=95){
-            return 'with high honors'
-        } else if (gen_ave >=98){
+        if(gen_ave >=98){
             return 'with highest honors'
+        }else if (gen_ave >= 95){
+            return 'with high honors'
+        }else if (gen_ave >= 90){
+            return 'with honors'
         }
         return "";
     };
@@ -193,7 +82,7 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
             handleFetchSectionDetails();
         }
     }, [open]);
-    console.log(template);
+    
     return(
         <PDFViewer className='w-100 h-100'>
             <Document>
