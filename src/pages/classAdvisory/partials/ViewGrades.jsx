@@ -329,7 +329,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     </View>
                                                     <View style={{width: '100%', display: 'flex', flexDirection: 'row', borderBottom: '1px solid black'}}>
                                                         <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
-                                                            <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of School Days</Text>
+                                                            <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of school days</Text>
                                                         </View>
                                                         <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
                                                             <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jun").school_days}</Text>
@@ -459,7 +459,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             </View>
                                         </View>
                                         
-                                        <View style={{width: '50%', padding: '20px'}}>
+                                        <View style={{width: '50%', padding: '20px', paddingTop: '8px'}}>
                                             
                                             <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                                 <View style={{display: 'flex', flexDirection: 'row', marginBottom: '3px', width: '90%'}}>
@@ -534,7 +534,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         <Text style={{fontSize: '8px', fontFamily: 'Helvetica'}}>Section:______________</Text>
                                                     </View>
                                                     <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'flex-start'}}>Eligibility for Admission to Grade:_______________________</Text>
-                                                    <View style={{display: 'flex', flexDirection: 'row', marginTop: '1px'}}>
+                                                    <View style={{display: 'flex', flexDirection: 'row', marginTop: '5px'}}>
                                                         <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                                             <Text style={{fontSize: '8px', textTransform: 'uppercase', textDecoration: 'underline'}}>{advisory?.institution?.principal?.[0]?.first_name} {String(advisory?.institution?.principal?.[0]?.middle_name).charAt(0)}. {advisory?.institution?.principal?.[0]?.last_name}</Text>
                                                             <Text style={{fontSize: '8px', fontFamily: 'Helvetica', marginTop: '2px'}}>Principal {advisory?.institution?.abbr === 'GSCNSSAT' ? 'II' : ''}</Text>
@@ -546,16 +546,15 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     </View>
                                                 </View>
                                                 
-                                                <View style={{backgroundColor: 'black', marginTop: '5px', width: '100%', paddingVertical: '4px'}}>
+                                                <View style={{backgroundColor: 'black', marginTop: '2px', width: '100%', paddingVertical: '4px'}}>
                                                     <Text style={{color: 'white', fontSize: '8px', fontFamily:'Helvetica-Bold', alignSelf:'center'}}>CANCELLATION OF ELIGIBILITY TO TRANSFER </Text>
                                                 </View>
                                                 
-                                                <View style={{marginTop: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'flex-start'}}>Admitted To:_______________________</Text>
-                                                    <View style={{display: 'flex', flexDirection: 'row'}}>
-                                                        <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                        </View>
-                                                        <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                                <View style={{marginTop:"2px", display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: "100%"}}>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'flex-start'}}>Admitted in:_______________________</Text>
+                                                    <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'flex-start'}}>Date: _____________________________</Text>
+                                                    <View style={{width:"100%",display: 'flex', flexDirection: 'row', justifyContent: "flex-end"}}>
+                                                        <View style={{width: '50%', display: 'flex', flexDirection: 'column', alignItems: "center"}}>
                                                             <Text>___________</Text>
                                                             <Text style={{fontSize: '8px', fontFamily: 'Helvetica'}}>Principal</Text>
                                                         </View>
