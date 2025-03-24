@@ -284,7 +284,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                     <Page size="A5" orientation="landscape" style={{display: 'flex', flexDirection: 'row'}}>
                                         <View style={{width: '50%', padding: '20px'}}>
                                             <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                <Text style={{fontSize: '8px', fontFamily: 'Helvetica-Bold', marginBottom: '10px'}}>REPORT OF ATTENDANCE</Text>
+                                                <Text style={{fontSize: '8px', fontFamily: 'Helvetica-Bold', marginBottom: '10px'}}>REPORT ON ATTENDANCE</Text>
                                                 <View style={{width: '100%', display: 'flex', flexDirection: 'column', border: '1px solid black'}}>
                                                     <View style={{width: '100%', display: 'flex', flexDirection: 'row', borderBottom: '1px solid black'}}>
                                                         <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
