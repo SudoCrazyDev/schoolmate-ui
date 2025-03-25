@@ -751,7 +751,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     </View>
                                                     <View>
                                                         <Text style={{height: '25px', fontSize: '6px', fontFamily: 'Helvetica', alignSelf: 'center', padding: '4px'}}>
-                                                            Show adherence to ethical principles by upholding truth
+                                                            Shows adherence to ethical principles by upholding truth
                                                         </Text>
                                                     </View>
                                                 </View>
@@ -877,7 +877,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{width: '18%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
-                                                    <Text style={{fontSize: '7px', fontFamily: 'Helvetica', alignSelf: 'center'}}>Maka Kalikasan</Text>
+                                                    <Text style={{fontSize: '7px', fontFamily: 'Helvetica', alignSelf: 'center'}}>MakaKalikasan</Text>
                                                 </View>
                                                 <View style={{width: '42%', display: 'flex', flexDirection:'column', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
                                                     <View>
