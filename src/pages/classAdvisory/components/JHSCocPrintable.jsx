@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     studentName:{
         marginTop: "5px",
         fontSize: "18px",
-        textTransform: "capitalize",
+        textTransform: "uppercase",
         fontWeight: "bold",
     },
     studentlrn:{
@@ -56,8 +56,6 @@ const styles = StyleSheet.create({
     }
 })
 export default function JHSCocPrintable({advisory, student}){
-    console.log(advisory);
-    console.log(student);
     return(
         <PDFViewer className='w-100' style={{height: '90vh'}}>
             <Document>
