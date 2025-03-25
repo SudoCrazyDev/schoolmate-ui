@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
 import DisableStudent from "./partials/DisableStudent";
+import JHSCoc from "./components/JHSCoc";
 
 export default function ClassAdvisoryStudents(){
     const { advisory_id } = useParams();
@@ -129,6 +130,7 @@ export default function ClassAdvisoryStudents(){
                                                     </IconButton>
                                                 </NavLink>
                                             </Tooltip>
+                                            <JHSCoc advisory={advisory} student={student}/>
                                             <DisableStudent student={student} refresh={handleFetchAdvisoryDetails}/>
                                         </td>
                                     </tr>
@@ -157,6 +159,7 @@ export default function ClassAdvisoryStudents(){
                                                     </IconButton>
                                                 </NavLink>
                                             </Tooltip>
+                                            <JHSCoc advisory={advisory} student={student}/>
                                             <DisableStudent student={student} refresh={handleFetchAdvisoryDetails}/>
                                         </td>
                                     </tr>
