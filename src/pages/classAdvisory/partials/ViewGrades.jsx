@@ -243,9 +243,42 @@ export default function ViewGrades({student, subjects, advisory}){
             let final_mapeh_accu_grade = final_mapeh_grades.reduce((accumulator, currentValue) => {
                 return accumulator + Number(Number(currentValue.grade).toFixed());
             }, 0);
-
+            
+            const groupedMapehGrades = {};
+            
+            final_mapeh_grades.forEach((gradeObj) => {
+                const subjectTitle = gradeObj.subject.title;
+                const gradeValue = parseInt(gradeObj.grade);
+    
+                if (!groupedMapehGrades[subjectTitle]) {
+                    groupedMapehGrades[subjectTitle] = {
+                    totalGrade: 0,
+                    count: 0,
+                  };
+                }
+    
+                groupedMapehGrades[subjectTitle].totalGrade += gradeValue;
+                groupedMapehGrades[subjectTitle].count += 1;
+            });
+    
+            const averagedMapehGrades = {};
+            for (const subjectTitle in groupedMapehGrades) {
+                averagedMapehGrades[subjectTitle] = {
+                totalGrade: groupedMapehGrades[subjectTitle].totalGrade,
+                count: groupedMapehGrades[subjectTitle].count,
+                averageGrade: Number(Number(groupedMapehGrades[subjectTitle].totalGrade / groupedMapehGrades[subjectTitle].count).toFixed()),
+                };
+            }
+            
+            let totalAverage = 0;
+            let subjectCount = 0;
+            for(const subjectTitle in averagedMapehGrades){
+                totalAverage += averagedMapehGrades[subjectTitle].averageGrade;
+                subjectCount++;
+            }
+        
             averagedGrades['Mapeh'] = {
-                averageGrade: Number(Number(final_mapeh_accu_grade / final_mapeh_grades.length).toFixed()),
+                averageGrade: Number(Number(totalAverage / subjectCount).toFixed()),
             };
         }
         let totalAverage = 0;
@@ -254,6 +287,7 @@ export default function ViewGrades({student, subjects, advisory}){
             totalAverage += averagedGrades[subjectTitle].averageGrade;
             subjectCount++;
         }
+        console.log(averagedGrades);
         if(isNaN(totalAverage/subjectCount) || ""){
             return {
                 ave: "",

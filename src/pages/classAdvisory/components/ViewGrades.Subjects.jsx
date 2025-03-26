@@ -18,7 +18,41 @@ export default function Subjects({subjects, student}){
             let mapeh_grade = mapeh_grades.reduce((accumulator, currentValue) => {
                 return accumulator + Number(Number(currentValue.grade).toFixed());
             }, 0);
-            student_grade = mapeh_grade / mapeh_grades.length;
+            
+            const groupedGrades = {};
+
+            mapeh_grades.forEach((gradeObj) => {
+                const subjectTitle = gradeObj.subject.title;
+                const gradeValue = parseInt(gradeObj.grade);
+
+                if (!groupedGrades[subjectTitle]) {
+                    groupedGrades[subjectTitle] = {
+                    totalGrade: 0,
+                    count: 0,
+                    };
+                }
+
+                groupedGrades[subjectTitle].totalGrade += gradeValue;
+                groupedGrades[subjectTitle].count += 1;
+            });
+            
+            const averagedGrades = {};
+            for (const subjectTitle in groupedGrades) {
+                averagedGrades[subjectTitle] = {
+                totalGrade: groupedGrades[subjectTitle].totalGrade,
+                count: groupedGrades[subjectTitle].count,
+                averageGrade: Number(Number(groupedGrades[subjectTitle].totalGrade / groupedGrades[subjectTitle].count).toFixed()),
+                };
+            }
+        
+            let totalAverage = 0;
+            let subjectCount = 0;
+            for(const subjectTitle in averagedGrades){
+                totalAverage += averagedGrades[subjectTitle].averageGrade;
+                subjectCount++;
+            }
+            
+            student_grade = totalAverage / subjectCount;
         }
         if(Number(student_grade).toFixed() == 0 || Number(student_grade).toFixed() == 'NaN'){
             return "";
@@ -43,7 +77,41 @@ export default function Subjects({subjects, student}){
             let mapeh_grade = mapeh_grades.reduce((accumulator, currentValue) => {
                 return accumulator + Number(Number(currentValue.grade).toFixed());
             }, 0);
-            final_grade = mapeh_grade / mapeh_grades.length;
+            
+            const groupedGrades = {};
+
+            mapeh_grades.forEach((gradeObj) => {
+                const subjectTitle = gradeObj.subject.title;
+                const gradeValue = parseInt(gradeObj.grade);
+
+                if (!groupedGrades[subjectTitle]) {
+                    groupedGrades[subjectTitle] = {
+                    totalGrade: 0,
+                    count: 0,
+                    };
+                }
+
+                groupedGrades[subjectTitle].totalGrade += gradeValue;
+                groupedGrades[subjectTitle].count += 1;
+            });
+            
+            const averagedGrades = {};
+            for (const subjectTitle in groupedGrades) {
+                averagedGrades[subjectTitle] = {
+                totalGrade: groupedGrades[subjectTitle].totalGrade,
+                count: groupedGrades[subjectTitle].count,
+                averageGrade: Number(Number(groupedGrades[subjectTitle].totalGrade / groupedGrades[subjectTitle].count).toFixed()),
+                };
+            }
+        
+            let totalAverage = 0;
+            let subjectCount = 0;
+            for(const subjectTitle in averagedGrades){
+                totalAverage += averagedGrades[subjectTitle].averageGrade;
+                subjectCount++;
+            }
+            final_grade = totalAverage / subjectCount;
+            // final_grade = mapeh_grade / mapeh_grades.length;
         }
 
         if(Number(final_grade).toFixed() == 0 || Number(final_grade).toFixed() == 'NaN'){
