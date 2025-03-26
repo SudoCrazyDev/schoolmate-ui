@@ -238,7 +238,7 @@ export default function ViewGrades({student, subjects, advisory}){
             };
         }
         
-        if(JSON.parse(selectedTemplate)?.some(templateSubject => templateSubject.subject_to_match === 'mapeh')){
+        if(JSON.parse(selectedTemplate)?.some(templateSubject => String(templateSubject.subject_to_match).toLowerCase() === 'mapeh')){
             let final_mapeh_grades = student?.grades?.filter(grade => mapeh_subjects.includes(String(grade.subject.title).toLowerCase()));
             let final_mapeh_accu_grade = final_mapeh_grades.reduce((accumulator, currentValue) => {
                 return accumulator + Number(Number(currentValue.grade).toFixed());
@@ -691,7 +691,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                             <Text style={{fontFamily: 'Helvetica', fontSize: '8px'}}>Fairly Satisfactory</Text>
                                                         </View>
                                                         <View style={{width: '30%'}}>
-                                                            <Text style={{fontFamily: 'Helvetica', fontSize: '8px'}}>75-84</Text>
+                                                            <Text style={{fontFamily: 'Helvetica', fontSize: '8px'}}>75-79</Text>
                                                         </View>
                                                         <View style={{width: '30%'}}>
                                                             <Text style={{fontFamily: 'Helvetica', fontSize: '8px'}}>Passed</Text>

@@ -92,8 +92,8 @@ export default function JHSCocPrintable({advisory, student}){
                                 <Text style={styles.smallFont}>Secondary Schools of the Department of Education and is therefore awarded this</Text>
                                 <Text style={styles.katunayan}>KATUNAYAN</Text>
                                 <Text style={styles.certificate}>CERTIFICATE</Text>
-                                <Text style={{marginTop: "10px"}}>Nilagdaan sa Lungsod ng Heneral Santos, Pilipinas nitong ika-19 ng Hulyo 2023.</Text>
-                                <Text style={styles.smallFont}>Signed in the City of General Santos, Philippines on the 19th day of July 2023.</Text>
+                                <Text style={{marginTop: "10px"}}>Nilagdaan sa Lungsod ng Heneral Santos, Pilipinas nitong ika-15 ng Abril 2025.</Text>
+                                <Text style={styles.smallFont}>Signed in the City of General Santos, Philippines on the 15th day of April 2025.</Text>
                             </View>
                         </View>
                         {/* ======== CONTENT ======== */}

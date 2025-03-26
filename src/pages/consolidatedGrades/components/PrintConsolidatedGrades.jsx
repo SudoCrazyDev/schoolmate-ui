@@ -133,7 +133,7 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
                   };
                 }
 
-                groupedGrades[subjectTitle].totalGrade += gradeValue;
+                groupedGrades[subjectTitle].totalGrade += Number(Number(gradeValue).toFixed());
                 groupedGrades[subjectTitle].count += 1;
             });
 
@@ -146,7 +146,7 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
                 };
             }
             
-            if(template.some(templateSubject => templateSubject.subject_to_match === 'mapeh')){
+            if(template.some(templateSubject => String(templateSubject.subject_to_match).toLowerCase() === 'mapeh')){
                 let final_mapeh_grades = student?.grades?.filter(grade => mapeh_subjects.includes(String(grade.subject.title).toLowerCase()));
                 let final_mapeh_accu_grade = final_mapeh_grades.reduce((accumulator, currentValue) => {
                     return accumulator + Number(Number(currentValue.grade).toFixed());
@@ -162,6 +162,7 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
                 totalAverage += averagedGrades[subjectTitle].averageGrade;
                 subjectCount++;
             }
+            console.log(student.last_name, averagedGrades);
             if(isNaN(totalAverage/subjectCount) || ""){
                 return "";
             } else {
