@@ -508,7 +508,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <View style={{display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '10px', marginHorizontal: '10px', gap: '1px'}}>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Republic of the Philippines</Text>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Department of Education</Text>
-                                                        <Text style={{fontSize: '8px', fontFamily:'Helvetica-Bold'}}>Region XII</Text>
+                                                        <Text style={{fontSize: '8px', fontFamily:'Helvetica-Bold'}}>Region XII-SOCCSKSARGEN</Text>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>Division of General Santos City</Text>
                                                         <Text style={{fontSize: '8px', fontFamily:'Helvetica'}}>{advisory?.institution?.division}</Text>
                                                     </View>
@@ -889,7 +889,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                             
                                             <View style={{display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', borderRight: '1px solid black', borderBottom: '1px solid black'}}>
                                                 <View style={{width: '18%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
-                                                    <Text style={{fontSize: '7px', fontFamily: 'Helvetica', alignSelf: 'center'}}>MakaKalikasan</Text>
+                                                    <Text style={{fontSize: '7px', fontFamily: 'Helvetica', alignSelf: 'center'}}>Makakalikasan</Text>
                                                 </View>
                                                 <View style={{width: '42%', display: 'flex', flexDirection:'column', alignContent: 'center', justifyContent: 'center', borderRight: '1px solid black'}}>
                                                     <View>
