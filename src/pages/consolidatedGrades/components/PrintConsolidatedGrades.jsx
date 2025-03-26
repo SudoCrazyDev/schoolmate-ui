@@ -99,7 +99,7 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
         let mapeh_accu_grade = mapeh_grades.reduce((accumulator, currentValue) => {
             return accumulator + Number(Number(currentValue.grade).toFixed());
         }, 0);
-        
+
         averagedGrades['Mapeh'] = {
             averageGrade: Number(Number(mapeh_accu_grade / mapeh_grades.length).toFixed()),
         };
@@ -111,7 +111,6 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
             subjectCount++;
         }
         
-            
         if(quarter === "Final"){
             let final_subject_grades = template.map(subject => {
                 return student?.grades?.filter(grade =>
@@ -151,9 +150,42 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
                 let final_mapeh_accu_grade = final_mapeh_grades.reduce((accumulator, currentValue) => {
                     return accumulator + Number(Number(currentValue.grade).toFixed());
                 }, 0);
-
+                    
+                const groupedMapehGrades = {};
+            
+                final_mapeh_grades.forEach((gradeObj) => {
+                    const subjectTitle = gradeObj.subject.title;
+                    const gradeValue = parseInt(gradeObj.grade);
+        
+                    if (!groupedMapehGrades[subjectTitle]) {
+                        groupedMapehGrades[subjectTitle] = {
+                        totalGrade: 0,
+                        count: 0,
+                        };
+                    }
+        
+                    groupedMapehGrades[subjectTitle].totalGrade += gradeValue;
+                    groupedMapehGrades[subjectTitle].count += 1;
+                });
+        
+                const averagedMapehGrades = {};
+                for (const subjectTitle in groupedMapehGrades) {
+                    averagedMapehGrades[subjectTitle] = {
+                    totalGrade: groupedMapehGrades[subjectTitle].totalGrade,
+                    count: groupedMapehGrades[subjectTitle].count,
+                    averageGrade: Number(Number(groupedMapehGrades[subjectTitle].totalGrade / groupedMapehGrades[subjectTitle].count).toFixed()),
+                    };
+                }
+                
+                let totalMapehAverage = 0;
+                let subjectMapehCount = 0;
+                for(const subjectTitle in averagedMapehGrades){
+                    totalMapehAverage += averagedMapehGrades[subjectTitle].averageGrade;
+                    subjectMapehCount++;
+                }
+                
                 averagedGrades['Mapeh'] = {
-                    averageGrade: Number(Number(final_mapeh_accu_grade / final_mapeh_grades.length).toFixed()),
+                    averageGrade: Number(Number(totalMapehAverage / subjectMapehCount).toFixed()),
                 };
             }
             let totalAverage = 0;
