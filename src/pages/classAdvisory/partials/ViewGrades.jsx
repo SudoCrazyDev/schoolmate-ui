@@ -316,9 +316,6 @@ export default function ViewGrades({student, subjects, advisory}){
                                                             <Text style={{fontSize: '5px', textAlign: 'center'}}></Text>
                                                         </View>
                                                         <View style={styles.attendanceMonthContainer}>
-                                                            <Text style={styles.attendanceMonthText}>Jun</Text>
-                                                        </View>
-                                                        <View style={styles.attendanceMonthContainer}>
                                                             <Text style={styles.attendanceMonthText}>Jul</Text>
                                                         </View>
                                                         <View style={styles.attendanceMonthContainer}>
@@ -349,15 +346,18 @@ export default function ViewGrades({student, subjects, advisory}){
                                                             <Text style={styles.attendanceMonthText}>Apr</Text>
                                                         </View>
                                                         <View style={styles.attendanceMonthContainer}>
+                                                            <Text style={styles.attendanceMonthText}>May</Text>
+                                                        </View>
+                                                        <View style={styles.attendanceMonthContainer}>
+                                                            <Text style={styles.attendanceMonthText}>Jun</Text>
+                                                        </View>
+                                                        <View style={styles.attendanceMonthContainer}>
                                                             <Text style={styles.attendanceMonthText}>Total</Text>
                                                         </View>
                                                     </View>
                                                     <View style={{width: '100%', display: 'flex', flexDirection: 'row', borderBottom: '1px solid black'}}>
                                                         <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
                                                             <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of school days</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jun").school_days}</Text>
                                                         </View>
                                                         <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
                                                             <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jul").school_days}</Text>
@@ -389,6 +389,12 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
                                                             <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("apr").school_days}</Text>
                                                         </View>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("may").school_days}</Text>
+                                                        </View>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jun").school_days}</Text>
+                                                        </View>
                                                         <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center",}}>
                                                             <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("").total_school_days}</Text>
                                                         </View>
@@ -396,9 +402,6 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <View style={{width: '100%', display: 'flex', flexDirection: 'row', borderBottom: '1px solid black'}}>
                                                         <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
                                                             <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of days present</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jun").present}</Text>
                                                         </View>
                                                         <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
                                                             <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jul").present}</Text>
@@ -430,6 +433,12 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
                                                             <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("apr").present}</Text>
                                                         </View>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("may").present}</Text>
+                                                        </View>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jun").present}</Text>
+                                                        </View>
                                                         <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center",}}>
                                                             <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("").total_present}</Text>
                                                         </View>
@@ -437,9 +446,6 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <View style={{width: '100%', display: 'flex', flexDirection: 'row'}}>
                                                         <View style={{width: '15%', borderRight: '1px solid black', padding: '2px'}}>
                                                             <Text style={{fontSize: '5px', textAlign: 'center'}}>No. of days absent</Text>
-                                                        </View>
-                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
-                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jun").absent}</Text>
                                                         </View>
                                                         <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
                                                             <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jul").absent}</Text>
@@ -470,6 +476,12 @@ export default function ViewGrades({student, subjects, advisory}){
                                                         </View>
                                                         <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
                                                             <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("apr").absent}</Text>
+                                                        </View>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("may").absent}</Text>
+                                                        </View>
+                                                        <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center", borderRight: '1px solid black'}}>
+                                                            <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("jun").absent}</Text>
                                                         </View>
                                                         <View style={{width: '7%', textAlign: 'center', display: 'flex', flexDirection: "column", justifyContent: "center",}}>
                                                             <Text style={{fontSize: '7px', fontFamily: 'Helvetica'}}>{handleGetStudentAttendance("").total_absent}</Text>
