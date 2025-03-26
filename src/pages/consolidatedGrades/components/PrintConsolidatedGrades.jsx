@@ -52,7 +52,39 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
             let mapeh_grade = mapeh_grades.reduce((accumulator, currentValue) => {
                 return accumulator + Number(Number(currentValue.grade).toFixed());
             }, 0);
-            avg_grades = mapeh_grade / mapeh_grades.length;
+            const groupedByQuarter = {};
+            
+            mapeh_grades.forEach((gradeObj) => {
+                const quarter = gradeObj.quarter;
+                const gradeValue = parseInt(gradeObj.grade);
+
+                if (!groupedByQuarter[quarter]) {
+                    groupedByQuarter[quarter] = {
+                    totalGrade: 0,
+                    count: 0,
+                    };
+                }
+
+                groupedByQuarter[quarter].totalGrade += gradeValue;
+                groupedByQuarter[quarter].count += 1;
+            });
+            
+            const groupedWithAverage = {};
+            for (const subjectQuarter in groupedByQuarter) {
+                groupedWithAverage[subjectQuarter] = {
+                totalGrade: groupedByQuarter[subjectQuarter].totalGrade,
+                count: groupedByQuarter[subjectQuarter].count,
+                averageGrade: Number(Number(groupedByQuarter[subjectQuarter].totalGrade / groupedByQuarter[subjectQuarter].count).toFixed()),
+                };
+            }
+            
+            let totalAverage = 0;
+            let subjectCount = 0;
+            for(const subjectQuarter in groupedWithAverage){
+                totalAverage += groupedWithAverage[subjectQuarter].averageGrade;
+                subjectCount++;
+            }
+            avg_grades = totalAverage / subjectCount;
             return Number(Number(avg_grades).toFixed());
         }
         return avg_grades;
@@ -151,41 +183,41 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
                     return accumulator + Number(Number(currentValue.grade).toFixed());
                 }, 0);
                     
-                const groupedMapehGrades = {};
+                const groupedByQuarter = {};
             
                 final_mapeh_grades.forEach((gradeObj) => {
-                    const subjectTitle = gradeObj.subject.title;
+                    const quarter = gradeObj.quarter;
                     const gradeValue = parseInt(gradeObj.grade);
-        
-                    if (!groupedMapehGrades[subjectTitle]) {
-                        groupedMapehGrades[subjectTitle] = {
+
+                    if (!groupedByQuarter[quarter]) {
+                        groupedByQuarter[quarter] = {
                         totalGrade: 0,
                         count: 0,
                         };
                     }
-        
-                    groupedMapehGrades[subjectTitle].totalGrade += gradeValue;
-                    groupedMapehGrades[subjectTitle].count += 1;
+
+                    groupedByQuarter[quarter].totalGrade += gradeValue;
+                    groupedByQuarter[quarter].count += 1;
                 });
-        
-                const averagedMapehGrades = {};
-                for (const subjectTitle in groupedMapehGrades) {
-                    averagedMapehGrades[subjectTitle] = {
-                    totalGrade: groupedMapehGrades[subjectTitle].totalGrade,
-                    count: groupedMapehGrades[subjectTitle].count,
-                    averageGrade: Number(Number(groupedMapehGrades[subjectTitle].totalGrade / groupedMapehGrades[subjectTitle].count).toFixed()),
+                
+                const groupedWithAverage = {};
+                for (const subjectQuarter in groupedByQuarter) {
+                    groupedWithAverage[subjectQuarter] = {
+                    totalGrade: groupedByQuarter[subjectQuarter].totalGrade,
+                    count: groupedByQuarter[subjectQuarter].count,
+                    averageGrade: Number(Number(groupedByQuarter[subjectQuarter].totalGrade / groupedByQuarter[subjectQuarter].count).toFixed()),
                     };
                 }
                 
-                let totalMapehAverage = 0;
-                let subjectMapehCount = 0;
-                for(const subjectTitle in averagedMapehGrades){
-                    totalMapehAverage += averagedMapehGrades[subjectTitle].averageGrade;
-                    subjectMapehCount++;
+                let totalAverage = 0;
+                let subjectCount = 0;
+                for(const subjectQuarter in groupedWithAverage){
+                    totalAverage += groupedWithAverage[subjectQuarter].averageGrade;
+                    subjectCount++;
                 }
-                
+                console.log(totalAverage);
                 averagedGrades['Mapeh'] = {
-                    averageGrade: Number(Number(totalMapehAverage / subjectMapehCount).toFixed()),
+                    averageGrade: Number(Number(totalAverage / subjectCount).toFixed()),
                 };
             }
             let totalAverage = 0;
@@ -194,7 +226,7 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
                 totalAverage += averagedGrades[subjectTitle].averageGrade;
                 subjectCount++;
             }
-            console.log(student.last_name, averagedGrades);
+            
             if(isNaN(totalAverage/subjectCount) || ""){
                 return "";
             } else {

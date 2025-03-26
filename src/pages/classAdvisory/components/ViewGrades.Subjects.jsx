@@ -78,36 +78,36 @@ export default function Subjects({subjects, student}){
                 return accumulator + Number(Number(currentValue.grade).toFixed());
             }, 0);
             
-            const groupedGrades = {};
-
+            const groupedByQuarter = {};
+            
             mapeh_grades.forEach((gradeObj) => {
-                const subjectTitle = gradeObj.subject.title;
+                const quarter = gradeObj.quarter;
                 const gradeValue = parseInt(gradeObj.grade);
 
-                if (!groupedGrades[subjectTitle]) {
-                    groupedGrades[subjectTitle] = {
+                if (!groupedByQuarter[quarter]) {
+                    groupedByQuarter[quarter] = {
                     totalGrade: 0,
                     count: 0,
                     };
                 }
 
-                groupedGrades[subjectTitle].totalGrade += gradeValue;
-                groupedGrades[subjectTitle].count += 1;
+                groupedByQuarter[quarter].totalGrade += gradeValue;
+                groupedByQuarter[quarter].count += 1;
             });
             
-            const averagedGrades = {};
-            for (const subjectTitle in groupedGrades) {
-                averagedGrades[subjectTitle] = {
-                totalGrade: groupedGrades[subjectTitle].totalGrade,
-                count: groupedGrades[subjectTitle].count,
-                averageGrade: Number(Number(groupedGrades[subjectTitle].totalGrade / groupedGrades[subjectTitle].count).toFixed()),
+            const groupedWithAverage = {};
+            for (const subjectQuarter in groupedByQuarter) {
+                groupedWithAverage[subjectQuarter] = {
+                totalGrade: groupedByQuarter[subjectQuarter].totalGrade,
+                count: groupedByQuarter[subjectQuarter].count,
+                averageGrade: Number(Number(groupedByQuarter[subjectQuarter].totalGrade / groupedByQuarter[subjectQuarter].count).toFixed()),
                 };
             }
-        
+            
             let totalAverage = 0;
             let subjectCount = 0;
-            for(const subjectTitle in averagedGrades){
-                totalAverage += averagedGrades[subjectTitle].averageGrade;
+            for(const subjectQuarter in groupedWithAverage){
+                totalAverage += groupedWithAverage[subjectQuarter].averageGrade;
                 subjectCount++;
             }
             final_grade = totalAverage / subjectCount;
