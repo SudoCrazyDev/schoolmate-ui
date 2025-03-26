@@ -638,7 +638,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                 </View>
                                                 <View style={{width: '20%', display: 'flex', flexDirection:'row', alignContent: 'center', justifyContent: 'center'}}>
                                                     <Text style={{fontSize: '8px', fontFamily: 'Helvetica', alignSelf: 'center', textAlign: 'center'}}>
-                                                        {handleGeneralAverage().remarks}
+                                                        {advisory?.institution?.abbr === 'GSCNSSAT' ? '' : handleGeneralAverage().remarks}
                                                     </Text>
                                                 </View>
                                             </View>
