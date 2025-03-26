@@ -87,11 +87,11 @@ export const axiosErrorCodeHandler = (error) => {
 
 export const CheckIfHonor = (grade) => {
     if(grade >=98){
-        return 'PROMOTED with highest honors'
+        return 'PROMOTED with Highest Honors'
     }else if (grade >= 95){
-        return 'PROMOTED with high honors'
+        return 'PROMOTED with High Honors'
     }else if (grade >= 90){
-        return 'PROMOTED with honors'
+        return 'PROMOTED with Honors'
     } else {
         return 'PROMOTED';
     }
