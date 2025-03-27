@@ -19,7 +19,11 @@ h1,h2,h3,h4,h5,h6,p{
 *{
     font-family: 'Work Sans';
 }
-
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 :root{
     --heading: #3a3a3a;
     --sub-heading: #171717;

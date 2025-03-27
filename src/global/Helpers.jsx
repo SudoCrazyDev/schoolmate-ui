@@ -96,3 +96,7 @@ export const CheckIfHonor = (grade) => {
         return 'PROMOTED';
     }
 };
+
+export const IsNegative = (value) => {
+    return typeof value === 'number' && value < 0;
+};

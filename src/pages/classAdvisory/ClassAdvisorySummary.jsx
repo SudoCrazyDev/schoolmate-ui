@@ -162,7 +162,7 @@ export default function ClassAdvisorySummary(){
                         <hr />
                         <table className="table">
                             <tbody>
-                                {conflictGrades.map((conflict, i) => (
+                                {/* {conflictGrades.map((conflict, i) => (
                                     <tr key={i}>
                                         <td width={`50%`} className="fw-bolder text-uppercase" style={{ verticalAlign: 'middle' }}>{conflict.full_name}</td>
                                         <td width={`50%`} style={{ verticalAlign: 'middle' }}>
@@ -175,7 +175,7 @@ export default function ClassAdvisorySummary(){
                                             </div>
                                         </td>
                                     </tr>
-                                ))}
+                                ))} */}
                             </tbody>
                         </table>
                     </div>

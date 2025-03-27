@@ -57,6 +57,8 @@ export const router = createBrowserRouter(
             <Route element={<StudentsGrading />} path="/sections/grading" />
             <Route element={<Teachers />} path="/staffs" />
             <Route element={<CurriculumHeads />} path="/curriculum-heads" />
+            
+            {/* ====== ALL ABOUT ADVISORY ====== */}
             <Route element={<ClassAdvisorySummary />} path="/advisory-summary/:advisory_id" />
             <Route element={<ClassAdvisory />} path="/advisory-grades/:advisory_id" />
             <Route element={<NewStudent />} path="/advisory/new-student/:section_id" exact/>
@@ -64,6 +66,9 @@ export const router = createBrowserRouter(
             <Route element={<BulkStudent />} path="/advisory/bulk-new-student" exact/>
             <Route element={<CoreValues />} path="/advisory/core-values/:advisory_id" exact/>
             <Route element={<ClassAdvisoryStudents />} path="/advisory/students/:advisory_id" exact/>
+            <Route element={<AdvisoryAttendance />} path="/advisory/attendance/:advisory_id" exact />
+            {/* ====== ALL ABOUT ADVISORY ====== */}
+            
             <Route element={<Assignatory />} path="/assignatory/:subject_id" exact/>
             <Route element={<TeacherLoads />} path="/teacher-loads" exact/>
             <Route element={<StudentSubjectGrades />} path="/grading/:subject_id" exact/>
@@ -73,7 +78,6 @@ export const router = createBrowserRouter(
             <Route element={<Gpa />} path="/gpa" exact/>
             <Route element={<CardTemplates />} path="/card-templates" exact />
             <Route element={<SchoolDays />} path="/institution-school-days" exact />
-            <Route element={<AdvisoryAttendance />} path="/advisory/attendance/:advisory_id" exact />
             {/* ADMIN ONLY ROUTES */}
             <Route element={<Institutions />} path="/institutions"/>
             <Route element={<Users />} path="/users"/>
