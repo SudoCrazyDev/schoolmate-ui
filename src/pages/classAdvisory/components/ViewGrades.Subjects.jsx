@@ -51,7 +51,6 @@ export default function Subjects({subjects, student}){
                 totalAverage += averagedGrades[subjectTitle].averageGrade;
                 subjectCount++;
             }
-            
             student_grade = totalAverage / subjectCount;
         }
         if(Number(student_grade).toFixed() == 0 || Number(student_grade).toFixed() == 'NaN'){
@@ -94,7 +93,6 @@ export default function Subjects({subjects, student}){
                 groupedByQuarter[quarter].totalGrade += gradeValue;
                 groupedByQuarter[quarter].count += 1;
             });
-            
             const groupedWithAverage = {};
             for (const subjectQuarter in groupedByQuarter) {
                 groupedWithAverage[subjectQuarter] = {
@@ -110,6 +108,7 @@ export default function Subjects({subjects, student}){
                 totalAverage += groupedWithAverage[subjectQuarter].averageGrade;
                 subjectCount++;
             }
+            
             final_grade = totalAverage / subjectCount;
             // final_grade = mapeh_grade / mapeh_grades.length;
         }
