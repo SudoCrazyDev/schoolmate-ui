@@ -126,7 +126,7 @@ export default function Subjects({subjects, student}){
         if(parseInt(finalGrade) >= 75){
             return 'PASSED';
         } else{
-            return 'FAILED';
+            return 'RETAINED';
         }
     };
 

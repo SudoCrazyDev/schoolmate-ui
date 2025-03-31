@@ -347,7 +347,7 @@ export default function ViewGrades({student, subjects, advisory}){
         >
                 <DialogContent dividers>
                     <div className="d-flex flex-row gap-2 h-100">
-                        <div className="col-6 d-flex flex-column p-5">
+                        <div className="col-4 d-flex flex-column p-5">
                             <h2 className='fw-bolder'>Card Settings</h2>
                             <hr />
                             <p className="text-black m-0">Card Template</p>
@@ -375,7 +375,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                 </div>
                             </div>
                         </div>
-                        <div className="col-6">
+                        <div className="col-8">
                             {fetching && (
                                 <div className='d-flex flex-column h-100 align-items-center justify-content-center gap-2'>
                                     <div className='spinner-border spinner-border-lg'></div>

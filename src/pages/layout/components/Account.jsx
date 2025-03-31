@@ -3,7 +3,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import LogoutIcon from '@mui/icons-material/Logout';
 export default function Account(){
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -28,8 +29,13 @@ export default function Account(){
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem>
+                    <NavLink to={`/profile`} style={{textDecoration: 'none'}}>
+                        <AccountBoxIcon /> Profile
+                    </NavLink>
+                </MenuItem>
+                <MenuItem>
                     <NavLink to={`/logout`} style={{textDecoration: 'none'}}>
-                        Logout
+                        <LogoutIcon /> Logout
                     </NavLink>
                 </MenuItem>
             </Menu>

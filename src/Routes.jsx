@@ -44,6 +44,7 @@ import Gpa from "./pages/reports/gpa/Gpa";
 import CardTemplates from "./pages/cardTemplates/CardTemplates";
 import AdvisoryAttendance from "./pages/classAdvisory/AdvisoryAttendance";
 import SchoolDays from "./pages/institutionSchoolDays/SchoolDays";
+import TeacherProfile from "./pages/teacherProfile/TeacherProfile";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -68,6 +69,10 @@ export const router = createBrowserRouter(
             <Route element={<ClassAdvisoryStudents />} path="/advisory/students/:advisory_id" exact/>
             <Route element={<AdvisoryAttendance />} path="/advisory/attendance/:advisory_id" exact />
             {/* ====== ALL ABOUT ADVISORY ====== */}
+            
+            {/* ====== TEACHER PROFILE ====== */}
+            <Route element={<TeacherProfile />} path="/profile" exact/>
+            {/* ====== TEACHER PROFILE ====== */}
             
             <Route element={<Assignatory />} path="/assignatory/:subject_id" exact/>
             <Route element={<TeacherLoads />} path="/teacher-loads" exact/>
