@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         fontSize: "12px",
     }
 })
-export default function JHSCocPrintable({advisory, student}){
+export default function JHSCocPrintable({advisory, student, overrides}){
     return(
         <PDFViewer className='w-100' style={{height: '90vh'}}>
             <Document>
@@ -79,8 +79,8 @@ export default function JHSCocPrintable({advisory, student}){
                                 <Text style={styles.smallFont}>Region XII</Text>
                                 <Text style={{marginTop: "10px", fontWeight: "bold"}}>SANGAY NG LUNGSOD NG HENERAL SANTOS</Text>
                                 <Text style={styles.smallFont}>Division of General Santos City</Text>
-                                <Text style={{marginTop: "10px", fontWeight: "bold"}}>HILAGANG DISTRITO NG LUNGSOD NG HENERAL SANTOS</Text>
-                                <Text style={styles.smallFont}>GSC North District</Text>
+                                <Text style={{marginTop: "10px", fontWeight: "bold"}}>{overrides?.districtEng ? overrides?.districtAlt : "HILAGANG DISTRITO NG LUNGSOD NG HENERAL SANTOS" }</Text>
+                                <Text style={styles.smallFont}>{overrides?.districtEng ? overrides?.districtEng : advisory?.institution?.division}</Text>
                             </View>
                             <Image source={`/deped-division-gsc.png`} style={styles.logo}></Image>
                         </View>
@@ -100,8 +100,8 @@ export default function JHSCocPrintable({advisory, student}){
                                 <Text style={styles.smallFont2}>Secondary Schools of the Department of Education and is therefore awarded this</Text>
                                 <Text style={styles.katunayan}>KATUNAYAN</Text>
                                 <Text style={styles.certificate}>CERTIFICATE</Text>
-                                <Text style={{marginTop: "10px"}}>Nilagdaan sa Lungsod ng Heneral Santos, Pilipinas nitong ika-15 ng Abril 2025.</Text>
-                                <Text style={styles.smallFont2}>Signed in the City of General Santos, Philippines on the 15th day of April 2025.</Text>
+                                <Text style={{marginTop: "10px"}}>Nilagdaan sa Lungsod ng Heneral Santos, Pilipinas nitong {overrides?.dateAlt}</Text>
+                                <Text style={styles.smallFont2}>Signed in the City of General Santos, Philippines on the {overrides?.dateEng}</Text>
                             </View>
                         </View>
                         {/* ======== CONTENT ======== */}
