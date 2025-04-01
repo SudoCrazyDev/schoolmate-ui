@@ -91,10 +91,13 @@ export const CheckIfHonor = (grade) => {
         return 'PROMOTED with High Honors'
     }else if (grade >= 90){
         return 'PROMOTED with Honors'
+    } else if (grade < 75){
+        return 'RETAINED';
     } else {
-        return 'PROMOTED';
+        return 'PROMOTED'
     }
 };
+
 
 export const IsNegative = (value) => {
     return typeof value === 'number' && value < 0;
