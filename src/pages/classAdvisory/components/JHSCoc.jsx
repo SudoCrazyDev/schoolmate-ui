@@ -4,8 +4,9 @@ import { useEffect, useReducer, useState } from 'react';
 import JHSCocPrintable from './JHSCocPrintable';
 import ArticleIcon from '@mui/icons-material/Article';
 import SaveIcon from '@mui/icons-material/Save';
-import { getCookie, setCookie } from '../../../global/Helpers';
+import { GetActiveInstitution, getCookie, setCookie } from '../../../global/Helpers';
 import { useAlert } from '../../../hooks/CustomHooks';
+import axios from 'axios';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -29,6 +30,16 @@ const reducer = (state, action) => {
                 ...state,
                 dateAlt: action.payload
             };
+        case "set_show_remarks":
+            return {
+                ...state,
+                showRemarks: action.payload
+            };
+        case "set_selected_template":
+            return {
+                ...state,
+                selectedTemplate: action.payload
+            };
         default:
             return state;
     }
@@ -40,10 +51,14 @@ export default function JHSCoc({advisory, student}){
         districtEng: "",
         districtAlt: "",
         dateEng: "",
-        dateAlt: ""
+        dateAlt: "",
+        showRemarks: false,
+        selectedTemplate: []
     });
     const [overrides, setOverrides] = useState(null);
     const alert = useAlert();
+    const institution = GetActiveInstitution();
+    const [cardTemplates, setCardTemplates] = useState([]);
     
     const handleModalState = () => {
         setOpen(!open);
@@ -55,6 +70,13 @@ export default function JHSCoc({advisory, student}){
     
     const handleApplyOverrides = () => {
         setOverrides(state);
+    };
+    
+    const handleFetchCardTemplates = async () => {
+        await axios.get(`card_templates/institutions/${institution.id}`)
+        .then((res) => {
+            setCardTemplates(res.data);
+        });
     };
     
     useEffect(() => {
@@ -71,6 +93,7 @@ export default function JHSCoc({advisory, student}){
             if(getCookie("COC-OVERIDE-DATE-ALT")){
                 dispatch({type: "set_date_alt", payload: getCookie("COC-OVERIDE-DATE-ALT")})
             }
+            handleFetchCardTemplates();
         }
     }, [open]);
     
@@ -81,6 +104,8 @@ export default function JHSCoc({advisory, student}){
         setCookie("COC-OVERIDE-DATE-ALT", state.dateAlt);
         alert.setAlert("success", "Overrides Save");
     };
+    
+    
     return(
         <>
         <Tooltip title="Print COC">
@@ -122,6 +147,18 @@ export default function JHSCoc({advisory, student}){
                             <input type="text" className="form-control" value={state.dateAlt}onChange={(e) => handleInputChange(e.target.value, "set_date_alt")} />
                         </div>
                     </div>
+                    <div className="form-check form-switch mt-2">
+                        <input className="form-check-input" type="checkbox" role="switch" checked={state.showRemarks} onChange={(e) => handleInputChange(e.target.checked, "set_show_remarks")}/>
+                        <label className="form-check-label">Show Remarks</label>
+                    </div>
+                    <p className="text-dark m-0 mt-2">Please Select a Card Template</p>
+                    <select className="form-select" defaultValue={cardTemplates?.[0]?.subjects} onChange={(e) => handleInputChange(e.target.value, "set_selected_template")}>
+                        {cardTemplates.map(cardTemplate => (
+                            <option key={cardTemplate.id} value={cardTemplate.subjects}>
+                                {cardTemplate.title}
+                            </option>
+                        ))}
+                    </select>
                     <button className="mt-3 btn btn-sm btn-primary" onClick={() => handleApplyOverrides()}>Apply Overrides</button>
                 </div>
                 <div className="col-8 d-flex flex-column p-2">

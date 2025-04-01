@@ -1,4 +1,5 @@
 import { Page, PDFViewer, View, Image, Font, StyleSheet, Document, Text  } from "@react-pdf/renderer";
+import { cocHonors, getStudentRemarks } from "../../../global/Helpers";
 
 Font.register({ family: 'Old English Text MT', src: '/assets/fonts/oldenglishtextmt.ttf' });
 Font.register({ family: 'Bookman Old Style', fonts: [
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
     }
 })
 export default function JHSCocPrintable({advisory, student, overrides}){
+    console.log();
     return(
         <PDFViewer className='w-100' style={{height: '90vh'}}>
             <Document>
@@ -93,6 +95,9 @@ export default function JHSCocPrintable({advisory, student, overrides}){
                                 <Text style={{marginTop: "15px",}}>Pinatutunayan nito na si</Text>
                                 <Text style={styles.smallFont2}>This certifies that</Text>
                                 <Text style={styles.studentName}>{student?.first_name} {String(student?.middle_name).charAt(0)}. {student?.last_name}</Text>
+                                {overrides?.showRemarks && (
+                                    <Text style={styles.studentlrn}>{cocHonors(getStudentRemarks(student, overrides ? JSON.parse(overrides?.selectedTemplate) : null))}</Text>
+                                )}
                                 <Text style={styles.studentlrn}>Learner Reference Number {'(LRN)'}: {student?.lrn}</Text>
                                 <Text style={{marginTop: "10px"}}>ay kasiya-siyang nakatupad sa mga kinakailangan sa Kurikulum ng Junior High School na itinakda para sa</Text>
                                 <Text style={styles.smallFont2}>has satisfactorily completed the requirements of the Junior High School Curriculum prescribed for</Text>
@@ -114,6 +119,7 @@ export default function JHSCocPrintable({advisory, student, overrides}){
                                 <Text style={styles.smallFont2}>Principal {advisory?.institution?.abbr === 'GSCNSSAT' ? 'II' : ''}</Text>
                             </View>
                             <View style={{marginLeft:"auto", display: "flex", flexDirection:"column", alignItems: "center", gap: "3px"}}>
+                                <Image source={`/division-superintendent-e-sig.png`} style={{height: "180px", width:"180px", position: "absolute", bottom: "-50px", left: "60px"}}></Image>
                                 <Text style={styles.footerNames}>ISAGANI S. DELA CRUZ, CESO V</Text>
                                 <Text>Pansangay na Tagapamanihala ng mga Paaralan</Text>
                                 <Text style={styles.smallFont2}>Schools Division Superintendent</Text>

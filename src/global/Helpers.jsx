@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import pb from './pb';
 /**
  * Check if the user has certain role.
  * @param {array} accessRole Array of Roles.
@@ -124,3 +123,103 @@ export const getCookie = (name) => {
     return "";
 };
 
+export const getStudentRemarks = (student, template) => {
+    if(!template) return ;
+    let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
+    let final_subject_grades = template.map(subject => {
+        return student?.grades?.filter(grade =>
+            !mapeh_subjects.includes(grade.subject.title)
+            && String(subject.subject_to_match).toLowerCase() === String(grade.subject.title).toLowerCase()
+        );
+    }).filter(grade => grade.length > 0).flat();
+    
+    const groupedGrades = {};
+
+    final_subject_grades.forEach((gradeObj) => {
+        const subjectTitle = gradeObj.subject.title;
+        const gradeValue = parseInt(gradeObj.grade);
+
+        if (!groupedGrades[subjectTitle]) {
+          groupedGrades[subjectTitle] = {
+            totalGrade: 0,
+            count: 0,
+          };
+        }
+
+        groupedGrades[subjectTitle].totalGrade += Number(Number(gradeValue).toFixed());
+        groupedGrades[subjectTitle].count += 1;
+    });
+
+    const averagedGrades = {};
+    for (const subjectTitle in groupedGrades) {
+        averagedGrades[subjectTitle] = {
+        totalGrade: groupedGrades[subjectTitle].totalGrade,
+        count: groupedGrades[subjectTitle].count,
+        averageGrade: Number(Number(groupedGrades[subjectTitle].totalGrade / groupedGrades[subjectTitle].count).toFixed()),
+        };
+    }
+    
+    if(template.some(templateSubject => String(templateSubject.subject_to_match).toLowerCase() === 'mapeh')){
+        let final_mapeh_grades = student?.grades?.filter(grade => mapeh_subjects.includes(String(grade.subject.title).toLowerCase()));
+            
+        const groupedByQuarter = {};
+    
+        final_mapeh_grades.forEach((gradeObj) => {
+            const quarter = gradeObj.quarter;
+            const gradeValue = parseInt(gradeObj.grade);
+
+            if (!groupedByQuarter[quarter]) {
+                groupedByQuarter[quarter] = {
+                totalGrade: 0,
+                count: 0,
+                };
+            }
+
+            groupedByQuarter[quarter].totalGrade += gradeValue;
+            groupedByQuarter[quarter].count += 1;
+        });
+        
+        const groupedWithAverage = {};
+        for (const subjectQuarter in groupedByQuarter) {
+            groupedWithAverage[subjectQuarter] = {
+            totalGrade: groupedByQuarter[subjectQuarter].totalGrade,
+            count: groupedByQuarter[subjectQuarter].count,
+            averageGrade: Number(Number(groupedByQuarter[subjectQuarter].totalGrade / groupedByQuarter[subjectQuarter].count).toFixed()),
+            };
+        }
+        
+        let totalAverage = 0;
+        let subjectCount = 0;
+        for(const subjectQuarter in groupedWithAverage){
+            totalAverage += groupedWithAverage[subjectQuarter].averageGrade;
+            subjectCount++;
+        }
+        averagedGrades['Mapeh'] = {
+            averageGrade: Number(Number(totalAverage / subjectCount).toFixed()),
+        };
+    }
+    let totalAverage = 0;
+    let subjectCount = 0;
+    for(const subjectTitle in averagedGrades){
+        totalAverage += averagedGrades[subjectTitle].averageGrade;
+        subjectCount++;
+    }
+    
+    if(isNaN(totalAverage/subjectCount) || ""){
+        return "";
+    } else {
+        return Number(Number(totalAverage/subjectCount).toFixed());
+    };
+};
+
+export const cocHonors = (grade) => {
+    let gen_ave = Number(grade);
+    if(gen_ave >=98){
+        return 'with highest honors'
+    }else if (gen_ave >= 95){
+        return 'with high honors'
+    }else if (gen_ave >= 90){
+        return 'with honors'
+    }
+    return "";
+};

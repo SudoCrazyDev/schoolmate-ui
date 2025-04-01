@@ -215,7 +215,6 @@ export default function PrintConsolidatedGrades({template, section, open, quarte
                     totalAverage += groupedWithAverage[subjectQuarter].averageGrade;
                     subjectCount++;
                 }
-                console.log(totalAverage);
                 averagedGrades['Mapeh'] = {
                     averageGrade: Number(Number(totalAverage / subjectCount).toFixed()),
                 };

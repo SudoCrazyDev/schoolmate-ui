@@ -301,6 +301,7 @@ export default function ViewGrades({student, subjects, advisory}){
             totalAverage += averagedGrades[subjectTitle].averageGrade;
             subjectCount++;
         }
+        
         if(isNaN(totalAverage/subjectCount) || ""){
             return {
                 ave: "",
