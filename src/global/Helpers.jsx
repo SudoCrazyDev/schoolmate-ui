@@ -218,11 +218,11 @@ export const getStudentRemarks = (student, template) => {
 export const cocHonors = (grade) => {
     let gen_ave = Number(grade);
     if(gen_ave >=98){
-        return 'with highest honors'
+        return 'with Highest Honors'
     }else if (gen_ave >= 95){
-        return 'with high honors'
+        return 'with High Honors'
     }else if (gen_ave >= 90){
-        return 'with honors'
+        return 'with Honors'
     }
     return "";
 };
