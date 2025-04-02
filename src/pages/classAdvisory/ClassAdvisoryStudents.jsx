@@ -5,6 +5,7 @@ import { NavLink, useParams } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
 import DisableStudent from "./partials/DisableStudent";
 import JHSCoc from "./components/JHSCoc";
+import SHSDiploma from "./components/SHSDiploma";
 
 export default function ClassAdvisoryStudents(){
     const { advisory_id } = useParams();
@@ -131,6 +132,7 @@ export default function ClassAdvisoryStudents(){
                                                 </NavLink>
                                             </Tooltip>
                                             <JHSCoc advisory={advisory} student={student}/>
+                                            <SHSDiploma advisory={advisory} student={student}/>
                                             <DisableStudent student={student} refresh={handleFetchAdvisoryDetails}/>
                                         </td>
                                     </tr>
