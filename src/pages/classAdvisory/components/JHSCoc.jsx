@@ -7,6 +7,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { GetActiveInstitution, getCookie, setCookie } from '../../../global/Helpers';
 import { useAlert } from '../../../hooks/CustomHooks';
 import axios from 'axios';
+import { QRCodeCanvas } from '../../../global/Components';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -40,6 +41,11 @@ const reducer = (state, action) => {
                 ...state,
                 selectedTemplate: action.payload
             };
+        case "set_qr_code_url":
+            return {
+                ...state,
+                qrCode: action.payload
+            };
         default:
             return state;
     }
@@ -53,7 +59,8 @@ export default function JHSCoc({advisory, student}){
         dateEng: "",
         dateAlt: "",
         showRemarks: false,
-        selectedTemplate: []
+        selectedTemplate: [],
+        qrCode: null
     });
     const [overrides, setOverrides] = useState(null);
     const alert = useAlert();
@@ -159,6 +166,9 @@ export default function JHSCoc({advisory, student}){
                             </option>
                         ))}
                     </select>
+                    <div className="mt-2 d-flex flex-row">
+                        <QRCodeCanvas value={student.id} setUrl={handleInputChange}/>
+                    </div>
                     <button className="mt-3 btn btn-sm btn-primary" onClick={() => handleApplyOverrides()}>Apply Overrides</button>
                 </div>
                 <div className="col-8 d-flex flex-column p-2">

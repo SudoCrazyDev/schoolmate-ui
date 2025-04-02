@@ -162,6 +162,7 @@ export default function ClassAdvisoryStudents(){
                                                 </NavLink>
                                             </Tooltip>
                                             <JHSCoc advisory={advisory} student={student}/>
+                                            <SHSDiploma advisory={advisory} student={student}/>
                                             <DisableStudent student={student} refresh={handleFetchAdvisoryDetails}/>
                                         </td>
                                     </tr>

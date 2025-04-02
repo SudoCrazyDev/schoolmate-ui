@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     }
 })
 export default function JHSCocPrintable({advisory, student, overrides}){
-    console.log();
     return(
         <PDFViewer className='w-100' style={{height: '90vh'}}>
             <Document>
@@ -119,7 +118,7 @@ export default function JHSCocPrintable({advisory, student, overrides}){
                                 <Text style={styles.smallFont2}>Principal {advisory?.institution?.abbr === 'GSCNSSAT' ? 'II' : ''}</Text>
                             </View>
                             <View style={{marginLeft:"auto", display: "flex", flexDirection:"column", alignItems: "center", gap: "3px"}}>
-                                <Image source={`/division-superintendent-e-sig.png`} style={{height: "180px", width:"180px", position: "absolute", bottom: "-50px", left: "60px"}}></Image>
+                                <Image source={`/division-superintendent-e-sig.png`} style={{height: "80px", width:"80px", position: "absolute", bottom: "0px", left: "110px"}}></Image>
                                 <Text style={styles.footerNames}>ISAGANI S. DELA CRUZ, CESO V</Text>
                                 <Text>Pansangay na Tagapamanihala ng mga Paaralan</Text>
                                 <Text style={styles.smallFont2}>Schools Division Superintendent</Text>
@@ -127,6 +126,9 @@ export default function JHSCocPrintable({advisory, student, overrides}){
                         </View>
                         {/* ======== FOOTER ======== */}
                         
+                        {overrides?.qrCode && (
+                            <Image source={overrides?.qrCode} style={{height: "40px", width:"40px", position: "absolute", bottom: "23px", left: "34%"}}></Image>
+                        )}
                     </View>
                 </Page>
             </Document>
