@@ -1,13 +1,12 @@
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import { Dialog, DialogActions, DialogContent, IconButton, Tooltip } from '@mui/material';
 import { useEffect, useReducer, useState } from 'react';
-import ArticleIcon from '@mui/icons-material/Article';
 import SaveIcon from '@mui/icons-material/Save';
 import { GetActiveInstitution, getCookie, setCookie } from '../../../global/Helpers';
 import { useAlert } from '../../../hooks/CustomHooks';
 import axios from 'axios';
 import SHSDiplomaPrintable from './SHSDiplomaPrintable';
 import DescriptionIcon from '@mui/icons-material/Description';
+import { QRCodeCanvas } from '../../../global/Components';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -51,6 +50,16 @@ const reducer = (state, action) => {
                 ...state,
                 strand: action.payload
             };
+        case "set_qr_code_url":
+            return {
+                ...state,
+                qrCode: action.payload
+            };
+        case "set_student_remarks":
+            return {
+                ...state,
+                studentRemarks: action.payload
+            };
         default:
             return state;
     }
@@ -66,12 +75,15 @@ export default function SHSDiploma({advisory, student}){
         showRemarks: false,
         selectedTemplate: [],
         track: "",
-        strand: ""
+        strand: "",
+        qrCode: null,
+        studentRemarks: ""
     });
     const [overrides, setOverrides] = useState(null);
     const alert = useAlert();
     const institution = GetActiveInstitution();
     const [cardTemplates, setCardTemplates] = useState([]);
+    
     
     const handleModalState = () => {
         setOpen(!open);
@@ -117,8 +129,7 @@ export default function SHSDiploma({advisory, student}){
         setCookie("COC-OVERIDE-DATE-ALT", state.dateAlt);
         alert.setAlert("success", "Overrides Save");
     };
-    
-    
+      
     return(
         <>
         <Tooltip title="Print Diploma">
@@ -170,10 +181,6 @@ export default function SHSDiploma({advisory, student}){
                             <input type="text" className="form-control" value={state.strand}onChange={(e) => handleInputChange(e.target.value, "set_strand")} />
                         </div>
                     </div>
-                    <div className="form-check form-switch mt-2">
-                        <input className="form-check-input" type="checkbox" role="switch" checked={state.showRemarks} onChange={(e) => handleInputChange(e.target.checked, "set_show_remarks")}/>
-                        <label className="form-check-label">Show Remarks</label>
-                    </div>
                     <p className="text-dark m-0 mt-2">Please Select a Card Template</p>
                     <select className="form-select" defaultValue={cardTemplates?.[0]?.subjects} onChange={(e) => handleInputChange(e.target.value, "set_selected_template")}>
                         {cardTemplates.map(cardTemplate => (
@@ -182,6 +189,19 @@ export default function SHSDiploma({advisory, student}){
                             </option>
                         ))}
                     </select>
+                    <div className="form-check form-switch mt-2">
+                        <input className="form-check-input" type="checkbox" role="switch" checked={state.showRemarks} onChange={(e) => handleInputChange(e.target.checked, "set_show_remarks")}/>
+                        <label className="form-check-label">Show Remarks</label>
+                    </div>
+                    <div className="mt-2 d-flex flex-row gap-2 w-100">
+                        <div className="d-flex flex-column col-12">
+                            <label>Student Remarks {`FOR (SHS)`}</label>
+                            <input type="text" className="form-control" value={state.studentRemarks} onChange={(e) => handleInputChange(e.target.value, "set_student_remarks")} />
+                        </div>
+                    </div>
+                    <div className="mt-2 d-flex flex-row">
+                        <QRCodeCanvas value={student.id} setUrl={handleInputChange}/>
+                    </div>
                     <button className="mt-3 btn btn-sm btn-primary" onClick={() => handleApplyOverrides()}>Apply Overrides</button>
                 </div>
                 <div className="col-8 d-flex flex-column p-2">

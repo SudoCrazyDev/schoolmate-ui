@@ -1,5 +1,6 @@
 import { Page, PDFViewer, View, Image, Font, StyleSheet, Document, Text  } from "@react-pdf/renderer";
 import { cocHonors, getStudentRemarks } from "../../../global/Helpers";
+import { QRCodeCanvas } from "../../../global/Components";
 
 Font.register({ family: 'Old English Text MT', src: '/assets/fonts/oldenglishtextmt.ttf' });
 Font.register({ family: 'Bookman Old Style', fonts: [
@@ -67,7 +68,6 @@ const styles = StyleSheet.create({
     }
 })
 export default function SHSDiplomaPrintable({advisory, student, overrides}){
-    console.log();
     return(
         <PDFViewer className='w-100' style={{height: '90vh'}}>
             <Document>
@@ -75,7 +75,7 @@ export default function SHSDiplomaPrintable({advisory, student, overrides}){
                     <View style={{display: "flex", flexDirection: "column", height: "100%"}}>
                         {/* ======== HEADER ======== */}
                         <View style={{marginLeft:"15%", marginTop:"2%", marginRight:"15%", display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                            <Image source={`/deped-logo.png`} style={styles.logo}></Image>
+                            <Image source={`/deped-logo.png`} style={styles.logo} />
                             <View style={{flexGrow:"1",display: "flex", flexDirection:"column", alignItems: "center", gap: "3px"}}>
                                 <Text style={styles.oldEnglish}>Republika of the Philippines</Text>
                                 <Text style={styles.oldEnglishSmall}>Republic of the Philippines</Text>
@@ -102,6 +102,9 @@ export default function SHSDiplomaPrintable({advisory, student, overrides}){
                                 {overrides?.showRemarks && (
                                     <Text style={styles.studentlrn}>{cocHonors(getStudentRemarks(student, overrides ? JSON.parse(overrides?.selectedTemplate) : null))}</Text>
                                 )}
+                                {overrides?.showRemarks && overrides?.studentRemarks && (
+                                    <Text style={styles.studentlrn}>{overrides?.studentRemarks}</Text>
+                                )}
                                 <Text style={styles.studentlrn}>Learner Reference Number {'(LRN)'}: {student?.lrn}</Text>
                                 <Text style={{marginTop: "10px"}}>ay kasiya-siyang nakatupad sa mga kinakailangan sa pagtatapos ng Senior High School</Text>
                                 <Text style={styles.smallFont2}>has satisfactorily completed the requirements for graduation in Senior High School</Text>
@@ -125,7 +128,7 @@ export default function SHSDiplomaPrintable({advisory, student, overrides}){
                                 <Text style={styles.smallFont2}>Principal {advisory?.institution?.abbr === 'GSCNSSAT' ? 'II' : ''}</Text>
                             </View>
                             <View style={{marginLeft:"auto", display: "flex", flexDirection:"column", alignItems: "center", gap: "3px"}}>
-                                <Image source={`/division-superintendent-e-sig.png`} style={{height: "180px", width:"180px", position: "absolute", bottom: "-50px", left: "60px"}}></Image>
+                                <Image source={`/division-superintendent-e-sig.png`} style={{height: "80px", width:"80px", position: "absolute", bottom: "0px", left: "110px"}}></Image>
                                 <Text style={styles.footerNames}>ISAGANI S. DELA CRUZ, CESO V</Text>
                                 <Text>Pansangay na Tagapamanihala ng mga Paaralan</Text>
                                 <Text style={styles.smallFont2}>Schools Division Superintendent</Text>
@@ -133,6 +136,9 @@ export default function SHSDiplomaPrintable({advisory, student, overrides}){
                         </View>
                         {/* ======== FOOTER ======== */}
                         
+                        {overrides?.qrCode && (
+                            <Image source={overrides?.qrCode} style={{height: "40px", width:"40px", position: "absolute", bottom: "23px", left: "34%"}}></Image>
+                        )}
                     </View>
                 </Page>
             </Document>
