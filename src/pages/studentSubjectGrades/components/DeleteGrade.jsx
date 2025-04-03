@@ -1,10 +1,10 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip } from "@mui/material";
+import { Dialog, DialogActions, DialogTitle, Tooltip } from "@mui/material";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAlert } from "../../../hooks/CustomHooks";
 
-export default function DeleteGrade({grade, refresh}){
+export default function DeleteGrade({grade, refresh, student}){
     const [open, setOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const alert = useAlert();
@@ -12,6 +12,12 @@ export default function DeleteGrade({grade, refresh}){
     const handleModalState = () => {
         setOpen(!open);
     };
+    
+    useEffect(() => {
+        if(open){
+            console.log(grade);
+        }
+    }, [open]);
     
     const handleDeleteGrade = async () => {
         setSubmitting(true);
