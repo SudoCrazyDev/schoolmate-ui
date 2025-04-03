@@ -65,6 +65,11 @@ const styles = StyleSheet.create({
     strandTitle:{
         fontWeight: "bold",
         fontSize: "12px",
+    },
+    studentRemarks:{
+        textTransform: "uppercase",
+        fontWeight: "bold",
+        fontSize: "9px",
     }
 })
 export default function SHSDiplomaPrintable({advisory, student, overrides}){
@@ -103,7 +108,7 @@ export default function SHSDiplomaPrintable({advisory, student, overrides}){
                                     <Text style={styles.studentlrn}>{cocHonors(getStudentRemarks(student, overrides ? JSON.parse(overrides?.selectedTemplate) : null))}</Text>
                                 )}
                                 {overrides?.showRemarks && overrides?.studentRemarks && (
-                                    <Text style={styles.studentlrn}>{overrides?.studentRemarks}</Text>
+                                    <Text style={styles.studentRemarks}>{overrides?.studentRemarks}</Text>
                                 )}
                                 <Text style={styles.studentlrn}>Learner Reference Number {'(LRN)'}: {student?.lrn}</Text>
                                 <Text style={{marginTop: "10px"}}>ay kasiya-siyang nakatupad sa mga kinakailangan sa pagtatapos ng Senior High School</Text>
