@@ -46,6 +46,11 @@ const reducer = (state, action) => {
                 ...state,
                 qrCode: action.payload
             };
+        case "set_paper_size":
+            return {
+                ...state,
+                paperSize: action.payload
+            };
         default:
             return state;
     }
@@ -60,7 +65,8 @@ export default function JHSCoc({advisory, student}){
         dateAlt: "",
         showRemarks: false,
         selectedTemplate: [],
-        qrCode: null
+        qrCode: null,
+        paperSize: "A4"
     });
     const [overrides, setOverrides] = useState(null);
     const alert = useAlert();
@@ -165,6 +171,15 @@ export default function JHSCoc({advisory, student}){
                                 {cardTemplate.title}
                             </option>
                         ))}
+                    </select>
+                    <p className="text-dark m-0 mt-2">Paper Size</p>
+                    <select className="form-select" defaultValue={state.paperSize} onChange={(e) => handleInputChange(e.target.value, "set_paper_size")}>
+                        <option value={"A4"}>
+                            A4
+                        </option>
+                        <option value={"LETTER"}>
+                            LETTER
+                        </option>
                     </select>
                     <div className="mt-2 d-flex flex-row">
                         <QRCodeCanvas value={student.id} setUrl={handleInputChange}/>

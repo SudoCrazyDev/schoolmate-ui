@@ -66,7 +66,7 @@ export default function JHSCocPrintable({advisory, student, overrides}){
     return(
         <PDFViewer className='w-100' style={{height: '90vh'}}>
             <Document>
-                <Page size="A4" orientation="landscape" style={styles.page}>
+                <Page size={overrides?.paperSize || "A4"} orientation="landscape" style={styles.page}>
                     <View style={{display: "flex", flexDirection: "column", height: "100%"}}>
                         {/* ======== HEADER ======== */}
                         <View style={{marginLeft:"15%", marginTop:"2%", marginRight:"15%", display: "flex", flexDirection: "row", justifyContent: "center"}}>
