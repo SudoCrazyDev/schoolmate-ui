@@ -15,7 +15,7 @@ export default function Teachers(){
     const [fetching, setFetching] = useState(false);
     const {institutions} = useSelector(state => state.user);
     const [staffs, setStaffs] = useState([]);
-    
+
     const handleFetchTeachers = async () => {
         setFetching(true);
         await axios.get(`users/all_by_institutions/${institutions[0].id}`)
@@ -27,16 +27,16 @@ export default function Teachers(){
             setFetching(false);
         });
     };
-    
+
     const filteredStaffs = useMemo(() => {
         if(keyword === '') return staffs;
         return staffs.filter(staff => String(Object.values(staff).join("").replaceAll(" ", "").toLowerCase()).includes(String(keyword).toLowerCase()));
     }, [staffs, keyword]);
-    
+
     useEffect(() => {
         handleFetchTeachers();
     }, []);
-    
+
     return(
         <div className="d-flex flex-row flex-wrap">
             <div className="col-12 p-2">

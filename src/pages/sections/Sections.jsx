@@ -134,6 +134,9 @@ export default function Sections(){
                                     <NavLink to={`/advisory/new-student/${selectedSection.id}`}>
                                         <button className="btn btn-primary fw-bold">Add Student</button>
                                     </NavLink>
+                                    <NavLink to={`/section-masterlist/${selectedSection.id}`}>
+                                        <button className="btn btn-primary fw-bold">View Master List</button>
+                                    </NavLink>
                                     </div>
                                 )}
                             </div>

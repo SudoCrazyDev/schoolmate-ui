@@ -45,6 +45,7 @@ import CardTemplates from "./pages/cardTemplates/CardTemplates";
 import AdvisoryAttendance from "./pages/classAdvisory/AdvisoryAttendance";
 import SchoolDays from "./pages/institutionSchoolDays/SchoolDays";
 import TeacherProfile from "./pages/teacherProfile/TeacherProfile";
+import StudentMasterList from "./pages/sections/components/StudentMasterlist";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -68,8 +69,13 @@ export const router = createBrowserRouter(
             <Route element={<CoreValues />} path="/advisory/core-values/:advisory_id" exact/>
             <Route element={<ClassAdvisoryStudents />} path="/advisory/students/:advisory_id" exact/>
             <Route element={<AdvisoryAttendance />} path="/advisory/attendance/:advisory_id" exact />
-            {/* ====== ALL ABOUT ADVISORY ====== */}
             
+            {/* ====== ALL ABOUT SECTION ====== */}
+            <Route element={<StudentMasterList />} path="/section-masterlist/:advisory_id" />
+            {/* ====== ALL ABOUT SECTION ====== */}
+            
+            {/* ====== ALL ABOUT ADVISORY ====== */}
+              
             {/* ====== TEACHER PROFILE ====== */}
             <Route element={<TeacherProfile />} path="/profile" exact/>
             {/* ====== TEACHER PROFILE ====== */}

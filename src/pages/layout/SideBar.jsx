@@ -117,20 +117,21 @@ export default function SideBar(){
                         />
                     </div>
                     </>
-                    
                 )}
 
-                <div className="d-flex flex-column p-2">
-                    <MenuTitle>
-                        GRADES MANAGEMENT
-                    </MenuTitle>
-                    <Menu
-                        link={`/grades-consolidation`}
-                        icon={<AssessmentIcon fontSize="inherit"/>}
-                        title={`CONSOLIDATED GRADES`}
-                    />
-                </div>
-                    
+                {userHasRole(['subject-teacher', 'institution-app-admin', 'principal', 'curriculum-heads']) && (
+                    <div className="d-flex flex-column p-2">
+                        <MenuTitle>
+                            GRADES MANAGEMENT
+                        </MenuTitle>
+                        <Menu
+                            link={`/grades-consolidation`}
+                            icon={<AssessmentIcon fontSize="inherit"/>}
+                            title={`CONSOLIDATED GRADES`}
+                        />
+                    </div>
+                )}
+
                 {userHasRole(['principal', 'institution-app-admin']) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
@@ -143,7 +144,7 @@ export default function SideBar(){
                         />
                     </div>
                 )}
-                
+
                 {userHasRole(['principal', 'institution-app-admin']) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
@@ -156,8 +157,8 @@ export default function SideBar(){
                         />
                     </div>
                 )}
-                
-                {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads']) && (
+
+                {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             HRIS
@@ -169,7 +170,7 @@ export default function SideBar(){
                         />
                     </div>
                 )}
-                
+
                 {advisory?.length > 0 && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
@@ -185,7 +186,7 @@ export default function SideBar(){
                         ))}
                     </div>
                 )}
-                
+
                 {asignatories?.length > 0 && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>

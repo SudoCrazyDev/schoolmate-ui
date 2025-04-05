@@ -60,9 +60,23 @@ const styles = StyleSheet.create({
     footerNames:{
         fontWeight: "bold",
         fontSize: "12px",
+    },
+    studentRemarks:{
+        textTransform: "uppercase",
+        fontWeight: "bold",
+        fontSize: "9px",
     }
 })
 export default function JHSCocPrintable({advisory, student, overrides}){
+    
+    const buildStudentName = () => {
+        if(student?.middle_name){
+            return `${student?.first_name} ${String(student?.middle_name).charAt(0)}. ${student?.last_name}`
+        } else {
+            return `${student?.first_name} ${student?.last_name}`
+        }
+    };
+    
     return(
         <PDFViewer className='w-100' style={{height: '90vh'}}>
             <Document>
@@ -93,11 +107,11 @@ export default function JHSCocPrintable({advisory, student, overrides}){
                                 <Text style={styles.schoolTitle}>{advisory?.institution?.title}</Text>
                                 <Text style={{marginTop: "15px",}}>Pinatutunayan nito na si</Text>
                                 <Text style={styles.smallFont2}>This certifies that</Text>
-                                <Text style={styles.studentName}>{student?.first_name} {String(student?.middle_name).charAt(0)}. {student?.last_name}</Text>
-                                {overrides?.showRemarks && (
-                                    <Text style={styles.studentlrn}>{cocHonors(getStudentRemarks(student, overrides ? JSON.parse(overrides?.selectedTemplate) : null))}</Text>
-                                )}
+                                <Text style={styles.studentName}>{buildStudentName()}</Text>
                                 <Text style={styles.studentlrn}>Learner Reference Number {'(LRN)'}: {student?.lrn}</Text>
+                                {overrides?.showRemarks && (
+                                    <Text style={styles.studentRemarks}>{cocHonors(getStudentRemarks(student, overrides ? JSON.parse(overrides?.selectedTemplate) : null))}</Text>
+                                )}
                                 <Text style={{marginTop: "10px"}}>ay kasiya-siyang nakatupad sa mga kinakailangan sa Kurikulum ng Junior High School na itinakda para sa</Text>
                                 <Text style={styles.smallFont2}>has satisfactorily completed the requirements of the Junior High School Curriculum prescribed for</Text>
                                 <Text style={{marginTop: "10px"}}>Mataas na Paaralan ng Kagawaran ng Edukasyon, kaya pinagkalooban siya nitong</Text>
@@ -113,9 +127,14 @@ export default function JHSCocPrintable({advisory, student, overrides}){
                         {/* ======== FOOTER ======== */}
                         <View style={{marginLeft:"5%", marginTop:"auto", marginRight:"5%", marginBottom: "2%", paddingTop:"20px", display: "flex", flexDirection: "row"}}>
                             <View style={{marginLeft: "8%", display: "flex", flexDirection:"column", alignItems: "center", gap: "3px"}}>
-                                <Text style={styles.footerNames}>{advisory?.institution?.principal?.[0]?.first_name} {String(advisory?.institution?.principal?.[0]?.middle_name).charAt(0)}. {advisory?.institution?.principal?.[0]?.last_name}</Text>
+                                <Text style={styles.footerNames}>{advisory?.institution?.principal?.[0]?.first_name} {String(advisory?.institution?.principal?.[0]?.middle_name || "").charAt(0)}. {advisory?.institution?.principal?.[0]?.last_name}</Text>
                                 <Text>Punongguro</Text>
                                 <Text style={styles.smallFont2}>Principal {advisory?.institution?.abbr === 'GSCNSSAT' ? 'II' : ''}</Text>
+                            </View>
+                            <View style={{marginLeft: "1%", display: "flex", flexDirection:"column", alignItems: "center"}}>
+                                {overrides?.qrCode && (
+                                    <Image source={overrides?.qrCode} style={{height: "40px", width:"40px"}}></Image>
+                                )}
                             </View>
                             <View style={{marginLeft:"auto", display: "flex", flexDirection:"column", alignItems: "center", gap: "3px"}}>
                                 <Image source={`/division-superintendent-e-sig.png`} style={{height: "80px", width:"80px", position: "absolute", bottom: "0px", left: "110px"}}></Image>
@@ -125,10 +144,6 @@ export default function JHSCocPrintable({advisory, student, overrides}){
                             </View>
                         </View>
                         {/* ======== FOOTER ======== */}
-                        
-                        {overrides?.qrCode && (
-                            <Image source={overrides?.qrCode} style={{height: "40px", width:"40px", position: "absolute", bottom: "23px", left: "34%"}}></Image>
-                        )}
                     </View>
                 </Page>
             </Document>
