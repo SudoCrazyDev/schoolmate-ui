@@ -46,6 +46,7 @@ import AdvisoryAttendance from "./pages/classAdvisory/AdvisoryAttendance";
 import SchoolDays from "./pages/institutionSchoolDays/SchoolDays";
 import TeacherProfile from "./pages/teacherProfile/TeacherProfile";
 import StudentMasterList from "./pages/sections/components/StudentMasterlist";
+import COCChecker from "./pages/cocChecker/COCChecker";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -74,7 +75,6 @@ export const router = createBrowserRouter(
             <Route element={<StudentMasterList />} path="/section-masterlist/:advisory_id" />
             {/* ====== ALL ABOUT SECTION ====== */}
             
-            {/* ====== ALL ABOUT ADVISORY ====== */}
               
             {/* ====== TEACHER PROFILE ====== */}
             <Route element={<TeacherProfile />} path="/profile" exact/>
@@ -89,6 +89,7 @@ export const router = createBrowserRouter(
             <Route element={<Gpa />} path="/gpa" exact/>
             <Route element={<CardTemplates />} path="/card-templates" exact />
             <Route element={<SchoolDays />} path="/institution-school-days" exact />
+
             {/* ADMIN ONLY ROUTES */}
             <Route element={<Institutions />} path="/institutions"/>
             <Route element={<Users />} path="/users"/>
@@ -99,6 +100,7 @@ export const router = createBrowserRouter(
           <Route element={<CertificateBuilder />} path="/certificate-builder" />
         </Route>
       <Route element={<PublicRoutes />}>
+        <Route element={<COCChecker />} path="/verify-coc/:student_id" />
         <Route element={<NewUserPassword />} path="/new-user-password/:user_id" />
         <Route element={<Login />} path="/login"/>
       </Route>

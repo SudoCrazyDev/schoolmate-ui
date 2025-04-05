@@ -200,7 +200,7 @@ export default function SHSDiploma({advisory, student}){
                         </div>
                     </div>
                     <div className="mt-2 d-flex flex-row">
-                        <QRCodeCanvas value={student.id} setUrl={handleInputChange}/>
+                        <QRCodeCanvas value={`https://scholastic.cloud/verify-dip/${student.id}`} setUrl={handleInputChange}/>
                     </div>
                     <button className="mt-3 btn btn-sm btn-primary" onClick={() => handleApplyOverrides()}>Apply Overrides</button>
                 </div>

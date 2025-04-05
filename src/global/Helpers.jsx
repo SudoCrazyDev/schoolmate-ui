@@ -226,3 +226,11 @@ export const cocHonors = (grade) => {
     }
     return "";
 };
+
+export const buildStudentName = (student) => {
+    if(student?.middle_name){
+        return `${student?.first_name} ${String(student?.middle_name).charAt(0)}. ${student?.last_name}`
+    } else {
+        return `${student?.first_name} ${student?.last_name}`
+    }
+};
