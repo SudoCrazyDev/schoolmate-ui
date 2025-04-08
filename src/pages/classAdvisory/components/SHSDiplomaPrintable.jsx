@@ -1,5 +1,5 @@
 import { Page, PDFViewer, View, Image, Font, StyleSheet, Document, Text  } from "@react-pdf/renderer";
-import { cocHonors, getStudentRemarks } from "../../../global/Helpers";
+import { buildStudentName, cocHonors, getStudentRemarks } from "../../../global/Helpers";
 import { QRCodeCanvas } from "../../../global/Components";
 
 Font.register({ family: 'Old English Text MT', src: '/assets/fonts/oldenglishtextmt.ttf' });
@@ -103,14 +103,14 @@ export default function SHSDiplomaPrintable({advisory, student, overrides}){
                                 <Text style={styles.schoolTitle}>{advisory?.institution?.title}</Text>
                                 <Text style={{marginTop: "15px",}}>Pinatutunayan nito na si</Text>
                                 <Text style={styles.smallFont2}>This certifies that</Text>
-                                <Text style={styles.studentName}>{student?.first_name} {String(student?.middle_name).charAt(0)}. {student?.last_name}</Text>
+                                <Text style={styles.studentName}>{buildStudentName(student)}</Text>
+                                <Text style={styles.studentlrn}>Learner Reference Number {'(LRN)'}: {student?.lrn}</Text>
                                 {overrides?.showRemarks && (
                                     <Text style={styles.studentlrn}>{cocHonors(getStudentRemarks(student, overrides ? JSON.parse(overrides?.selectedTemplate) : null))}</Text>
                                 )}
                                 {overrides?.showRemarks && overrides?.studentRemarks && (
                                     <Text style={styles.studentRemarks}>{overrides?.studentRemarks}</Text>
                                 )}
-                                <Text style={styles.studentlrn}>Learner Reference Number {'(LRN)'}: {student?.lrn}</Text>
                                 <Text style={{marginTop: "10px"}}>ay kasiya-siyang nakatupad sa mga kinakailangan sa pagtatapos ng Senior High School</Text>
                                 <Text style={styles.smallFont2}>has satisfactorily completed the requirements for graduation in Senior High School</Text>
                                 <Text style={{...styles.strandTitle, marginTop: "10px"}}>{overrides?.track}</Text>
