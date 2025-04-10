@@ -6,6 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DisableStudent from "./partials/DisableStudent";
 import JHSCoc from "./components/JHSCoc";
 import SHSDiploma from "./components/SHSDiploma";
+import Form137 from "../students/Forms/Form137";
 
 export default function ClassAdvisoryStudents(){
     const { advisory_id } = useParams();
@@ -133,6 +134,7 @@ export default function ClassAdvisoryStudents(){
                                             </Tooltip>
                                             <JHSCoc advisory={advisory} student={student}/>
                                             <SHSDiploma advisory={advisory} student={student}/>
+                                            <Form137 student={student}/>
                                             <DisableStudent student={student} refresh={handleFetchAdvisoryDetails}/>
                                         </td>
                                     </tr>
