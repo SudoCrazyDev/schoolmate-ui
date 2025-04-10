@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import JHSCoc from "../../classAdvisory/components/JHSCoc";
 import SHSDiploma from "../../classAdvisory/components/SHSDiploma";
+import Form137 from "../../students/Forms/Form137";
 
 export default function StudentMasterList(){
     const { advisory_id } = useParams();
@@ -27,9 +28,7 @@ export default function StudentMasterList(){
             setFetching(false);
         });
     };
-    
-    // const students = useMemo(handleStudentGrades, [advisory_id]);
-    
+
     useEffect(() => {
         handleFetchAdvisoryDetails();
     }, [advisory_id]);
@@ -67,6 +66,7 @@ export default function StudentMasterList(){
                                         <td>
                                             <JHSCoc advisory={advisory} student={student}/>
                                             <SHSDiploma advisory={advisory} student={student}/>
+                                            <Form137 student={student}/>
                                         </td>
                                     </tr>
                                 ))}
@@ -83,6 +83,7 @@ export default function StudentMasterList(){
                                         <td>
                                             <JHSCoc advisory={advisory} student={student}/>
                                             <SHSDiploma advisory={advisory} student={student}/>
+                                            <Form137 student={student}/>
                                         </td>
                                     </tr>
                                 ))}

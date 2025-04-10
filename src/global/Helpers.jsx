@@ -234,3 +234,77 @@ export const buildStudentName = (student) => {
         return `${student?.first_name} ${student?.last_name}`
     }
 };
+
+/**
+ * Simplify the Grades of the Students.
+ * @param {object} student Student Data object containing a 'grades' array.
+ * @returns {object|null} An object where keys are subject titles and values are objects containing grade details. Returns an empty string if student.grades is not defined.
+ */
+export const simplifyStudentGrades = (student) => {
+    let student_grades = student.grades;
+    let mapeh_subjects = ['pe', 'arts', 'health', 'music', 'pe & health', 'music & arts'];
+    if(!student_grades) return "";
+    let mapeh_subjects_count = 0;
+
+    const groupedGradesBySubject = student_grades.reduce((acc, gradeObj) => {
+        const { subject: { title: subjectTitle }, quarter, grade: gradeStr } = gradeObj;
+        const gradeValue = parseInt(gradeStr, 10);
+
+        if(mapeh_subjects.includes(String(subjectTitle).toLowerCase()) && !acc[subjectTitle]){
+            mapeh_subjects_count += 1;
+        }
+
+        acc[subjectTitle] = acc[subjectTitle] || {
+          grades: [],
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          total_grade: 0,
+          final_rating: 0,
+          remarks: ""
+        };
+
+        acc[subjectTitle].grades.push(gradeObj);
+        acc[subjectTitle][quarter] = gradeValue;
+        acc[subjectTitle].total_grade += gradeValue;
+        acc[subjectTitle].final_rating = parseFloat((acc[subjectTitle].total_grade / acc[subjectTitle].grades.length).toFixed());
+        acc[subjectTitle].remarks = cocHonors(acc[subjectTitle].final_rating);
+        
+        if(mapeh_subjects.includes(String(subjectTitle).toLowerCase())){
+            acc["MAPEH"] = acc["MAPEH"] || {
+                1: 0,
+                "1st_quarter_final": 0,
+                2: 0,
+                "2nd_quarter_final": 0,
+                3: 0,
+                "3rd_quarter_final": 0,
+                4: 0,
+                "4th_quarter_final": 0,
+                final_rating: 0,
+                remarks: "",
+            };
+            acc["MAPEH"][quarter] += gradeValue;
+            acc["MAPEH"]["1st_quarter_final"] = parseFloat((acc["MAPEH"][1] / mapeh_subjects_count).toFixed());
+            acc["MAPEH"]["2nd_quarter_final"] = parseFloat((acc["MAPEH"][2] / mapeh_subjects_count).toFixed());
+            acc["MAPEH"]["3rd_quarter_final"] = parseFloat((acc["MAPEH"][3] / mapeh_subjects_count).toFixed());
+            acc["MAPEH"]["4th_quarter_final"] = parseFloat((acc["MAPEH"][4] / mapeh_subjects_count).toFixed());
+            acc["MAPEH"].final_rating = parseFloat(((
+                acc["MAPEH"]["1st_quarter_final"] +
+                acc["MAPEH"]["2nd_quarter_final"] +
+                acc["MAPEH"]["3rd_quarter_final"] +
+                acc["MAPEH"]["4th_quarter_final"]
+            ) / mapeh_subjects_count).toFixed());
+            acc["MAPEH"]["remarks"] = cocHonors(acc["MAPEH"].final_rating);
+        }
+        return acc;
+      }, {});
+    return groupedGradesBySubject || null;
+};
+
+export const stringToUpperCase = (string) => {
+    if(String(string) === "" || string === null){
+        return "";
+    }
+    return String(string).toUpperCase();
+};

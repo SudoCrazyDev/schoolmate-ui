@@ -47,6 +47,7 @@ import SchoolDays from "./pages/institutionSchoolDays/SchoolDays";
 import TeacherProfile from "./pages/teacherProfile/TeacherProfile";
 import StudentMasterList from "./pages/sections/components/StudentMasterlist";
 import COCChecker from "./pages/cocChecker/COCChecker";
+import TimeTable from "./pages/basicConfiguration/TimeTable/TimeTable";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -79,6 +80,8 @@ export const router = createBrowserRouter(
             {/* ====== TEACHER PROFILE ====== */}
             <Route element={<TeacherProfile />} path="/profile" exact/>
             {/* ====== TEACHER PROFILE ====== */}
+            
+            <Route element={<TimeTable />} path="/timetable" exact/>
             
             <Route element={<Assignatory />} path="/assignatory/:subject_id" exact/>
             <Route element={<TeacherLoads />} path="/teacher-loads" exact/>
