@@ -275,12 +275,16 @@ export const simplifyStudentGrades = (student) => {
             acc["MAPEH"] = acc["MAPEH"] || {
                 1: 0,
                 "1st_quarter_final": 0,
+                "1st_quarter_total": 0,
                 2: 0,
                 "2nd_quarter_final": 0,
+                "2nd_quarter_total": 0,
                 3: 0,
                 "3rd_quarter_final": 0,
+                "3rd_quarter_total": 0,
                 4: 0,
                 "4th_quarter_final": 0,
+                "4th_quarter_total": 0,
                 final_rating: 0,
                 remarks: "",
             };
@@ -289,6 +293,22 @@ export const simplifyStudentGrades = (student) => {
             acc["MAPEH"]["2nd_quarter_final"] = parseFloat((acc["MAPEH"][2] / mapeh_subjects_count).toFixed());
             acc["MAPEH"]["3rd_quarter_final"] = parseFloat((acc["MAPEH"][3] / mapeh_subjects_count).toFixed());
             acc["MAPEH"]["4th_quarter_final"] = parseFloat((acc["MAPEH"][4] / mapeh_subjects_count).toFixed());
+            if(quarter === "1"){
+                acc["MAPEH"]["1st_quarter_total"] += gradeValue;
+                acc["MAPEH"][quarter] = parseFloat((acc["MAPEH"]["1st_quarter_total"] / mapeh_subjects_count).toFixed());
+            }
+            if(quarter === "2"){
+                acc["MAPEH"]["2nd_quarter_total"] += gradeValue;
+                acc["MAPEH"][quarter] = parseFloat((acc["MAPEH"]["2nd_quarter_total"] / mapeh_subjects_count).toFixed());
+            }
+            if(quarter === "3"){
+                acc["MAPEH"]["3rd_quarter_total"] += gradeValue;
+                acc["MAPEH"][quarter] = parseFloat((acc["MAPEH"]["3rd_quarter_total"] / mapeh_subjects_count).toFixed());
+            }
+            if(quarter === "4"){
+                acc["MAPEH"]["4th_quarter_total"] += gradeValue;
+                acc["MAPEH"][quarter] = parseFloat((acc["MAPEH"]["4th_quarter_total"] / mapeh_subjects_count).toFixed());
+            }
             acc["MAPEH"].final_rating = parseFloat(((
                 acc["MAPEH"]["1st_quarter_final"] +
                 acc["MAPEH"]["2nd_quarter_final"] +

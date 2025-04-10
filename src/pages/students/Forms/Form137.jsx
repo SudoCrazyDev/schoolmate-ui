@@ -26,7 +26,6 @@ export default function Form137({student}){
     subjectTemplate.forEach(subject => {
       finalized_grades.push(student_grades.filter(grade => String(grade.title).toLowerCase() === String(subject.subject_to_match).toLowerCase())[0]);
     });
-
     setDownloading(true)
     let dataBuilder = {
       first_name: stringToUpperCase(student.first_name),
