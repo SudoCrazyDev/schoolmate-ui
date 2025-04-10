@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+
 /**
  * Check if the user has certain role.
  * @param {array} accessRole Array of Roles.
@@ -247,8 +248,9 @@ export const simplifyStudentGrades = (student) => {
     let mapeh_subjects_count = 0;
 
     const groupedGradesBySubject = student_grades.reduce((acc, gradeObj) => {
-        const { subject: { title: subjectTitle }, quarter, grade: gradeStr } = gradeObj;
+        const { subject: { title: subject_title }, quarter, grade: gradeStr } = gradeObj;
         const gradeValue = parseInt(gradeStr, 10);
+        const subjectTitle = mapeh_subjects.includes(String(subject_title).toLowerCase()) ? capitalizeString(subject_title) : subject_title;
 
         if(mapeh_subjects.includes(String(subjectTitle).toLowerCase()) && !acc[subjectTitle]){
             mapeh_subjects_count += 1;
@@ -268,9 +270,11 @@ export const simplifyStudentGrades = (student) => {
         acc[subjectTitle].grades.push(gradeObj);
         acc[subjectTitle][quarter] = gradeValue;
         acc[subjectTitle].total_grade += gradeValue;
-        acc[subjectTitle].final_rating = parseFloat((acc[subjectTitle].total_grade / acc[subjectTitle].grades.length).toFixed());
+        if(!mapeh_subjects.includes(String(subjectTitle).toLowerCase())){
+            acc[subjectTitle].final_rating = parseFloat((acc[subjectTitle].total_grade / acc[subjectTitle].grades.length).toFixed());
+        }
         acc[subjectTitle].remarks = cocHonors(acc[subjectTitle].final_rating);
-        
+
         if(mapeh_subjects.includes(String(subjectTitle).toLowerCase())){
             acc["MAPEH"] = acc["MAPEH"] || {
                 1: 0,
@@ -328,3 +332,11 @@ export const stringToUpperCase = (string) => {
     }
     return String(string).toUpperCase();
 };
+
+export const capitalizeString = (str) => {
+    return str.toLowerCase().split(', ').map(phrase => {
+      return phrase.split(' ').map(word => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }).join(' ');
+    }).join(', ');
+  }

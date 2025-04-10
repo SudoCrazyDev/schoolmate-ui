@@ -34,7 +34,7 @@ export default function Form137({student}){
       lrn: student.lrn,
       extension: stringToUpperCase(student.ext_name),
       sex: stringToUpperCase(student.gender),
-      birthday: student.birthdate,
+      birthday: new Date(student.birthdate).toLocaleDateString('en-US'),
       student_grades: finalized_grades
     };
     await axios.post('school_forms/form137', dataBuilder)
