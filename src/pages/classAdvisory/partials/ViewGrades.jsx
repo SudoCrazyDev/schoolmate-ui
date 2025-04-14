@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Page, Text, View, Document, PDFViewer, Image, StyleSheet   } from '@react-pdf/renderer';
 import PrintIcon from '@mui/icons-material/Print';
 import { IconButton, Tooltip } from '@mui/material';
-import { calculateAge, CheckIfHonor, GetActiveInstitution, IsNegative } from '../../../global/Helpers';
+import { buildStudentNameReportCard, calculateAge, CheckIfHonor, GetActiveInstitution, IsNegative } from '../../../global/Helpers';
 import axios from 'axios';
 import Subjects from '../components/ViewGrades.Subjects';
 
@@ -604,7 +604,7 @@ export default function ViewGrades({student, subjects, advisory}){
                                                     <Text style={{fontFamily: 'Helvetica', fontSize: '8px', alignSelf:'flex-end'}}>LRN: {student.lrn}</Text>
                                                     
                                                     <View style={{marginTop: '2px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start'}}>
-                                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textTransform: 'uppercase'}}>Name:  <Text style={{textDecoration: 'underline'}}>{student.last_name}, {student.first_name} {String(student.middle_name).charAt(0).toUpperCase()}. {student.ext_name}</Text></Text>
+                                                        <Text style={{fontFamily: 'Helvetica-Bold', fontSize: '8px', textTransform: 'uppercase'}}>Name:  <Text style={{textDecoration: 'underline'}}>{buildStudentNameReportCard(student)}</Text></Text>
                                                     </View>
                                                     
                                                     <View style={{marginTop: '3px', display: 'flex', flexDirection: 'row', alignSelf: 'flex-start', gap: '20px'}}>

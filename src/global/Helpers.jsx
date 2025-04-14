@@ -236,6 +236,14 @@ export const buildStudentName = (student) => {
     }
 };
 
+export const buildStudentNameReportCard = (student) => {
+    if(student?.middle_name && student?.middle_name !== null){
+        return `${student?.last_name}, ${student?.first_name} ${String(student?.middle_name).charAt(0)}. ${student.ext_name}`
+    } else {
+        return `${student?.last_name}, ${student?.first_name}`
+    }
+};
+
 /**
  * Simplify the Grades of the Students.
  * @param {object} student Student Data object containing a 'grades' array.
