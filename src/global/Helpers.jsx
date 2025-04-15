@@ -237,11 +237,21 @@ export const buildStudentName = (student) => {
 };
 
 export const buildStudentNameReportCard = (student) => {
-    if(student?.middle_name && student?.middle_name !== null){
-        return `${student?.last_name}, ${student?.first_name} ${String(student?.middle_name).charAt(0)}. ${student.ext_name}`
-    } else {
-        return `${student?.last_name}, ${student?.first_name}`
+    let studentName = '';
+    
+    if(student?.last_name !== null || student?.last_name !== ''){
+        studentName = `${student?.last_name},`;
     }
+    if(student?.first_name !== null || student?.first_name !== ''){
+        studentName = studentName + ` ${student?.first_name}`;
+    }
+    if(student?.middle_name !== null || student?.middle_name !== ''){
+        studentName = studentName + ` ${String(student?.middle_name).charAt(0)}.`;
+    }
+    if(student?.ext_name !== null || student?.ext_name !== ''){
+        studentName = studentName + ` ${String(student.ext_name)}`;
+    }
+    return studentName;
 };
 
 /**

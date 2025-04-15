@@ -1,7 +1,23 @@
-import Form137 from "../../students/Forms/Form137";
+import { useEffect, useState } from "react";
 import TimeTableForm from "./components/TimeTableForm";
+import axios from 'axios';
+import { GetActiveInstitution } from "../../../global/Helpers";
 
 export default function TimeTable(){
+    const [timeSchedules, setTimeSchedules] = useState([]);
+    const institution = GetActiveInstitution();
+    
+    const handleFetchTimeSchedules = async () => {
+        await axios.get(`time_schedules/${institution.id}`)
+        .then((res) => {
+            setTimeSchedules(res.data.data);
+        });
+    };
+    
+    useEffect(() => {
+        handleFetchTimeSchedules()
+    }, []);
+    
     return(
         <div className="d-flex flex-row flex-wrap">
             <div className="col-12 p-2">
@@ -11,7 +27,7 @@ export default function TimeTable(){
                     <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>manage staffs schedules.</p>
                     </div>
                     <div className="ms-auto">
-                        <TimeTableForm type="create" />
+                        <TimeTableForm type="create" refresh={handleFetchTimeSchedules}/>
                     </div>
                 </div>
             </div>
@@ -25,21 +41,25 @@ export default function TimeTable(){
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Type</th>
                                 <th>Working Hours</th>
+                                <th width="1%"></th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Normal Shift</td>
-                                <td>Normal Shift</td>
-                                <td>8:00 AM - 10:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>SHS Shift</td>
-                                <td>Flexible Shift</td>
-                                <td>8:00 AM - 10:00 AM</td>
-                            </tr>
+                            {timeSchedules.map(timeSchedule => (
+                               <tr key={timeSchedule.id}>
+                                    <td>{timeSchedule.title}</td>
+                                    <td>{timeSchedule.start_working_time} - {timeSchedule.end_working_time}</td>
+                                    <td>
+                                        <div className="p-3 rounded-0 border-0" style={{background: timeSchedule.color}}>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <TimeTableForm isCreate={false} refresh={handleFetchTimeSchedules} timetable={timeSchedule}/>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
