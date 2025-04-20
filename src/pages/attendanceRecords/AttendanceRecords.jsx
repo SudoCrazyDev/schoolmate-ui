@@ -1,0 +1,94 @@
+import axios from "axios";
+import UploadRecords from "./components/UploadRecords";
+import { GetActiveInstitution, sortStaff, staffNameBuilder } from "../../global/Helpers";
+import { useEffect, useState } from "react";
+import { useFormik } from "formik";
+import ViewDTR from "./components/ViewDTR";
+
+const AttendanceRecord = () => {
+    const [attendanceRecords, setAttendanceRecords] = useState([]);
+    const institution = GetActiveInstitution();
+    
+    const handleFetchAttendanceRecords = async (values) => {
+        await axios.post('users/attendance', values)
+        .then((res) => {
+            let fetched_staffs = res.data.data;
+            setAttendanceRecords(sortStaff(fetched_staffs));
+        });
+    };
+    
+    const formik = useFormik({
+        initialValues:{
+            institution_id: institution.id,
+            employee_id: '',
+            start_date: new Date().toLocaleDateString('en-CA'),
+            end_date: new Date().toLocaleDateString('en-CA'),
+        },
+        onSubmit: handleFetchAttendanceRecords
+    });
+    
+    return(
+        <div className="d-flex flex-column gap-3">
+            <div className="card">
+                <div className="card-body d-flex flex-row align-items-center">
+                    <div className="d-flex flex-column">
+                        <h2 className="m-0 fw-bolder">TEACHERS ATTENDANCE LOGS</h2>
+                        <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>View teacher's attendance logs.</p>
+                    </div>
+                    <div className="ms-auto">
+                        <UploadRecords />
+                    </div>
+                </div>
+            </div>
+            <div className="card">
+                <div className="card-body d-flex flex-column">
+                    <form onSubmit={formik.handleSubmit}>
+                        <div className="d-flex flex-row gap-3 align-items-end">
+                            <div className="d-flex flex-column">
+                                <label htmlFor="search">Employee ID</label>
+                                <input id="search" type="text" className="form-control" placeholder="Type employee id..."/>
+                            </div>
+                            <div className="d-flex flex-column">
+                                <label htmlFor="start-date">Start Period Date</label>
+                                <input type="date" className="form-control" {...formik.getFieldProps('start_date')}/>
+                            </div>
+                            <div className="d-flex flex-column">
+                                <label htmlFor="start-date">End Period Date</label>
+                                <input type="date" className="form-control" {...formik.getFieldProps('end_date')}/>
+                            </div>
+                            <div className="d-flex flex-column">
+                                <button className="btn btn-primary" disabled={formik.isSubmitting} onClick={() => handleFetchAttendanceRecords(formik.values)}>
+                                    {formik.isSubmitting && <div className="spinner-border spinner-border-sm"></div>}
+                                    Generate
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {attendanceRecords.map(record => (
+                                <tr key={record.id}>
+                                    <td>{record?.employment?.employee_id}</td>
+                                    <td className="fw-bolder">{staffNameBuilder(record)}</td>
+                                    <td>
+                                        <ViewDTR attendances={record?.attendances}/>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default AttendanceRecord;

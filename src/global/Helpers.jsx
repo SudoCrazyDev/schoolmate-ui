@@ -239,16 +239,16 @@ export const buildStudentName = (student) => {
 export const buildStudentNameReportCard = (student) => {
     let studentName = '';
     
-    if(student?.last_name !== null || student?.last_name !== ''){
+    if(student?.last_name !== null && student?.last_name !== ''){
         studentName = `${student?.last_name},`;
     }
-    if(student?.first_name !== null || student?.first_name !== ''){
+    if(student?.first_name !== null && student?.first_name !== ''){
         studentName = studentName + ` ${student?.first_name}`;
     }
-    if(student?.middle_name !== null || student?.middle_name !== ''){
+    if(student?.middle_name !== null && student?.middle_name !== ''){
         studentName = studentName + ` ${String(student?.middle_name).charAt(0)}.`;
     }
-    if(student?.ext_name !== null || student?.ext_name !== ''){
+    if(student?.ext_name !== null && student?.ext_name !== ''){
         studentName = studentName + ` ${String(student.ext_name)}`;
     }
     return studentName;
@@ -357,4 +357,46 @@ export const capitalizeString = (str) => {
         return word.charAt(0).toUpperCase() + word.slice(1);
       }).join(' ');
     }).join(', ');
-  }
+}
+
+export const sortStaff = (staffs) => {
+    return staffs.sort((a,b) => a.last_name.localeCompare(b.last_name, "en", { sensitivity: "base"}))
+};
+
+export const staffNameBuilder = (staff) => {
+    let stafName = '';
+    if(staff?.last_name !== null && staff?.last_name !== ''){
+        stafName = `${staff?.last_name},`;
+    }
+    if(staff?.first_name !== null && staff?.first_name !== ''){
+        stafName = stafName + ` ${staff?.first_name}`;
+    }
+    if(staff?.middle_name !== null && staff?.middle_name !== ''){
+        stafName = stafName + ` ${String(staff?.middle_name).charAt(0)}.`;
+    }
+    if(staff?.ext_name !== null && staff?.ext_name !== ''){
+        stafName = stafName + ` ${String(staff.ext_name)}`;
+    }
+    return String(stafName).toUpperCase();
+};
+
+export const sortAttendanceLogByDate = (attendances) => {
+    return attendances.sort((a,b) => {
+        const dateA = new Date(a.auth_date);
+        const dateB = new Date(b.auth_date);
+        return dateA - dateB;
+    });
+};
+
+export const convertTo12Hour = (timeString) => {
+    if (!timeString) return null;
+    const [hours, minutes, seconds] = timeString.split(':');
+    let hours12 = parseInt(hours);
+    const period = hours12 >= 12 ? 'PM' : 'AM';
+    hours12 = hours12 % 12;
+    hours12 = hours12 ? hours12 : 12;
+    const formattedHours = String(hours12).padStart(2, '0');
+    const formattedMinutes = String(parseInt(minutes)).padStart(2, '0');
+    const formattedSeconds = String(parseInt(seconds)).padStart(2, '0');
+    return `${formattedHours}:${formattedMinutes} ${period}`;
+}

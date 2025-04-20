@@ -48,6 +48,7 @@ import TeacherProfile from "./pages/teacherProfile/TeacherProfile";
 import StudentMasterList from "./pages/sections/components/StudentMasterlist";
 import COCChecker from "./pages/cocChecker/COCChecker";
 import TimeTable from "./pages/basicConfiguration/TimeTable/TimeTable";
+import AttendanceRecord from "./pages/attendanceRecords/AttendanceRecords";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -59,7 +60,6 @@ export const router = createBrowserRouter(
             <Route element={<NewSection />} path="/sections/new-section" />
             <Route element={<ScheduleVisualizer />} path="/sections/visualizer" />
             <Route element={<StudentsGrading />} path="/sections/grading" />
-            <Route element={<Teachers />} path="/staffs" />
             <Route element={<CurriculumHeads />} path="/curriculum-heads" />
             
             {/* ====== ALL ABOUT ADVISORY ====== */}
@@ -93,6 +93,11 @@ export const router = createBrowserRouter(
             <Route element={<CardTemplates />} path="/card-templates" exact />
             <Route element={<SchoolDays />} path="/institution-school-days" exact />
 
+            {/* ====== HRIS ====== */}
+            <Route element={<Teachers />} path="/staffs" />
+            <Route element={<AttendanceRecord />} path="/attendance-records" />
+            {/* ====== HRIS ====== */}
+            
             {/* ADMIN ONLY ROUTES */}
             <Route element={<Institutions />} path="/institutions"/>
             <Route element={<Users />} path="/users"/>

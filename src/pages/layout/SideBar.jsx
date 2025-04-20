@@ -17,6 +17,7 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import SchoolIcon from '@mui/icons-material/School';
 import DescriptionIcon from '@mui/icons-material/Description';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 
 export default function SideBar(){
     const user = useSelector(state => state.user);
@@ -167,7 +168,12 @@ export default function SideBar(){
                         <Menu
                             link={`/staffs`}
                             icon={<GroupsIcon fontSize="inherit"/>}
-                            title={`STAFFS`}
+                            title={`STAFF`}
+                        />
+                        <Menu
+                            link={`/attendance-records`}
+                            icon={<DateRangeIcon fontSize="inherit"/>}
+                            title={`ATTENDANCE`}
                         />
                         <MenuTitle>
                             BASIC CONFIGURATION

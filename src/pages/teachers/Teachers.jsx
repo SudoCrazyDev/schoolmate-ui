@@ -6,9 +6,10 @@ import EditTeacher from './partials/EditTeacher';
 import pb from '../../global/pb';
 import ChangeRoleModal from './partials/ChangeRole';
 import { useAlert } from '../../hooks/CustomHooks';
-import { GetActiveInstitution } from '../../global/Helpers';
+import { GetActiveInstitution, sortStaff } from '../../global/Helpers';
 import axios from 'axios';
 import { Skeleton } from '@mui/material';
+import UpdateTeacherEmployment from './partials/UpdateTeacherEmployment';
 
 export default function Teachers(){
     const [keyword, setKeyword] = useState("");
@@ -21,7 +22,7 @@ export default function Teachers(){
         await axios.get(`users/all_by_institutions/${institutions[0].id}`)
         .then(res => {
             let fetched_staffs = res.data.data;
-            setStaffs(fetched_staffs.sort((a,b) => a.last_name.localeCompare(b.last_name, "en", { sensitivity: "base"})));
+            setStaffs(sortStaff(fetched_staffs));
         })
         .finally(() => {
             setFetching(false);
@@ -83,6 +84,7 @@ export default function Teachers(){
                                         <td>{staff.roles[0].title}</td>
                                         <td>
                                             <EditTeacher teacher={staff} refresh={handleFetchTeachers}/>
+                                            <UpdateTeacherEmployment teacher={staff} refresh={handleFetchTeachers}/>
                                             <ChangeRoleModal teacher={staff} refresh={handleFetchTeachers}/>
                                         </td>
                                     </tr>
