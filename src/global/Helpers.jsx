@@ -45,6 +45,16 @@ export const GetActiveInstitution = () => {
     };
 };
 
+/**
+ * Returns the active subscription details.
+ * @constructor
+ * @returns {{string}}
+ */
+export const CheckSubscriptionAccess = (subscription_plans) => {
+    const subscription = useSelector(state => state.org?.subscription?.title);
+    return subscription_plans.includes(String(subscription).replaceAll(' ', '-').toLowerCase());
+};
+
 export const GetAppInstitutionRoles = async () => {
     return [];
 };

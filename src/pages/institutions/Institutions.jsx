@@ -7,6 +7,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useAlert } from "../../hooks/CustomHooks";
 import { Skeleton } from "@mui/material";
 import EditInstitution from "./components/EditInstitution";
+import UpdateInsitutionSubscription from "./components/UpdateInstitutionSubscription";
 
 export default function Institutions(){
     const [fetching, setFetching] = useState(false);
@@ -67,6 +68,7 @@ export default function Institutions(){
                                         <td>
                                             <div className="d-flex flex-row">
                                                 <EditInstitution institution={insititution} refresh={handleFetchInstitutions}/>
+                                                <UpdateInsitutionSubscription institution={insititution} refresh={handleFetchInstitutions}/>
                                             </div>
                                         </td>
                                     </tr>

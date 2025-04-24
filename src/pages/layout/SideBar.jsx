@@ -1,4 +1,4 @@
-import { userHasRole } from "../../global/Helpers";
+import { CheckSubscriptionAccess, userHasRole } from "../../global/Helpers";
 import { useSelector } from 'react-redux';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Fragment, useEffect, useState } from "react";
@@ -18,36 +18,37 @@ import SchoolIcon from '@mui/icons-material/School';
 import DescriptionIcon from '@mui/icons-material/Description';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import CardMembershipIcon from '@mui/icons-material/CardMembership';
 
 export default function SideBar(){
     const user = useSelector(state => state.user);
     const {info} = useSelector(state => state.user);
     const [advisory, setAdvisory] = useState(null);
     const [asignatories, setAsignatories] = useState([]);
-    
+
     const handleCheckAdvisory = async() => {
         await axios.get(`institution_sections/get_by_user/${info.id}`)
         .then((res) => {
             setAdvisory(res.data);
         });
     };
-    
+
     const handleTeacherLoads = async () => {
         await axios.get(`subjects/by_user/${info.id}`)
         .then((res) => {
             setAsignatories(res.data);
         });
     };
-    
+
     useEffect(() => {
         handleCheckAdvisory();
         handleTeacherLoads();
     }, []);
-    
+
     return(
         <div className="sidebar d-flex flex-column col-2" style={{position: 'fixed'}}>
             <div className="d-flex flex-column" style={{minHeight: '100vh', maxHeight: '100vh', overflowY: 'scroll'}}>
-                
+
                 <div className="d-flex flex-row justify-content-center p-2">
                     <h3 className="m-0 fw-bolder text-center text-capitalize">
                         Hi, {user?.info?.first_name}
@@ -65,6 +66,11 @@ export default function SideBar(){
                             icon={<ApartmentIcon fontSize="inherit"/>}
                             title={`Institutions`}
                         />
+                        <Menu
+                            link={`/subscriptions`}
+                            icon={<CardMembershipIcon fontSize="inherit"/>}
+                            title={`Subscriptions`}
+                        />
                         <MenuTitle>
                             USER MANAGEMENT
                         </MenuTitle>
@@ -81,7 +87,7 @@ export default function SideBar(){
                     </div>
                 )}
                 {/* END ADMIN ROUTES */}
-                {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads']) && (
+                {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads']) && CheckSubscriptionAccess(["standard"]) && (
                     <>
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
@@ -121,7 +127,7 @@ export default function SideBar(){
                     </>
                 )}
 
-                {userHasRole(['subject-teacher', 'institution-app-admin', 'principal', 'curriculum-heads']) && (
+                {userHasRole(['subject-teacher', 'institution-app-admin', 'principal', 'curriculum-heads']) && CheckSubscriptionAccess(["standard"]) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             GRADES MANAGEMENT
@@ -134,7 +140,7 @@ export default function SideBar(){
                     </div>
                 )}
 
-                {userHasRole(['principal', 'institution-app-admin']) && (
+                {userHasRole(['principal', 'institution-app-admin']) && CheckSubscriptionAccess(["standard"]) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             GRADES MANAGEMENT
@@ -147,7 +153,7 @@ export default function SideBar(){
                     </div>
                 )}
 
-                {userHasRole(['principal', 'institution-app-admin']) && (
+                {userHasRole(['principal', 'institution-app-admin']) && CheckSubscriptionAccess(["standard"]) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             REPORTS
@@ -160,7 +166,7 @@ export default function SideBar(){
                     </div>
                 )}
 
-                {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']) && (
+                {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']) && CheckSubscriptionAccess(["standard", "basic"]) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             HRIS

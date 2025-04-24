@@ -9,6 +9,7 @@ export const actionTypes = {
     SET_TEACHERS: "SET TEACHERS",
     SET_GRADELEVELS: "SET GRADELEVELS",
     SET_CURRICULUM_HEADS: "SET CURRICULUM_HEADS",
+    SET_SUBSCRIPTION: "SET SUBSCRIPTION",
     LOGOUT: 'LOGOUT'
 };
 
@@ -16,6 +17,7 @@ const initialState = {
     teachers: [],
     curriculumHeads: [],
     gradeLevels: [],
+    subscription: null,
 };
 
 const persistConfig = {
@@ -31,6 +33,8 @@ export const reducer = persistReducer(persistConfig, (state = initialState, acti
             return {...state, gradeLevels: action.payload};
         case actionTypes.SET_CURRICULUM_HEADS:
             return {...state, curriculumHeads: action.payload};
+        case actionTypes.SET_SUBSCRIPTION:
+            return {...state, subscription: action.payload};
         case actionTypes.LOGOUT:
             return state = initialState;
         default:
@@ -42,6 +46,7 @@ export const actions = {
     SET_TEACHERS: (teachers) => ({type: actionTypes.SET_TEACHERS, payload: teachers}),
     SET_GRADELEVELS: (gradeLevels) => ({type: actionTypes.SET_GRADELEVELS, payload: gradeLevels}),
     SET_CURRICULUM_HEADS: (curriculumHeads) => ({type: actionTypes.SET_CURRICULUM_HEADS, payload: curriculumHeads}),
+    SET_SUBSCRIPTION: (subscription) => ({type: actionTypes.SET_SUBSCRIPTION, payload: subscription}),
     SET_LOGOUT: () => ({type: actionTypes.LOGOUT}),
 };
 
@@ -79,6 +84,10 @@ function* handleFetchGradeLevels(){
         }
     }
 }
+
+function* handleFetchSubscription(){
+   const {user} = yield select(state => state.user);
+};
 
 function* watchTokenChange(){
     // yield takeLatest(user.actionTypes.SET_USER, handleTokenChange);

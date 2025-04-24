@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import { useAlert } from "../../hooks/CustomHooks";
 import { useDispatch } from "react-redux";
 import { actions } from "../../redux/slices/UserSlice";
+import { actions as OrgActions } from "../../redux/slices/OrgSlice";
 import pb from '../../global/pb';
 import { useNavigate } from "react-router-dom";
 import { axiosErrorCodeHandler } from "../../global/Helpers";
@@ -30,6 +31,7 @@ export default function Login(){
                 dispatch(actions.SET_TOKEN(res.data.token));
                 dispatch(actions.SET_ROLES(res.data.roles));
                 dispatch(actions.SET_INSTITUTIONS(res.data.institutions));
+                dispatch(OrgActions.SET_SUBSCRIPTION(res.data.institutions?.[0]?.subscriptions?.[0]?.subscription));
             }
         })
         .catch(err => {

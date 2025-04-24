@@ -49,6 +49,7 @@ import StudentMasterList from "./pages/sections/components/StudentMasterlist";
 import COCChecker from "./pages/cocChecker/COCChecker";
 import TimeTable from "./pages/basicConfiguration/TimeTable/TimeTable";
 import AttendanceRecord from "./pages/attendanceRecords/AttendanceRecords";
+import Subscriptions from "./pages/subscriptions/Subscriptions";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -103,6 +104,7 @@ export const router = createBrowserRouter(
             <Route element={<Users />} path="/users"/>
             <Route element={<Roles />} path="/roles"/>
             <Route element={<Permissions />} path="/permissions"/>
+            <Route element={<Subscriptions />} path="/subscriptions"/>
             <Route element={<Logout />} path="/logout" />
           </Route>
           <Route element={<CertificateBuilder />} path="/certificate-builder" />
