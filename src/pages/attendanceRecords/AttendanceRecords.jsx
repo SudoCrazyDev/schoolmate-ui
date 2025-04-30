@@ -4,6 +4,7 @@ import { GetActiveInstitution, sortStaff, staffNameBuilder } from "../../global/
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import ViewDTR from "./components/ViewDTR";
+import CustomBulkUpload from "./components/CustomBulkUpload";
 
 const AttendanceRecord = () => {
     const [attendanceRecords, setAttendanceRecords] = useState([]);
@@ -13,7 +14,12 @@ const AttendanceRecord = () => {
         await axios.post('users/attendance', values)
         .then((res) => {
             let fetched_staffs = res.data.data;
-            setAttendanceRecords(sortStaff(fetched_staffs));
+            setAttendanceRecords(sortStaff(fetched_staffs.map((staff) => {
+                return {
+                    ...staff,
+                    attendances: [...staff?.proper_attendances, ...staff?.custom_attendances]
+                }
+            })));
         });
     };
     
@@ -35,8 +41,9 @@ const AttendanceRecord = () => {
                         <h2 className="m-0 fw-bolder">TEACHERS ATTENDANCE LOGS</h2>
                         <p className="m-0 text-muted fw-normal" style={{fontSize: '12px'}}>View teacher's attendance logs.</p>
                     </div>
-                    <div className="ms-auto">
+                    <div className="ms-auto d-flex flex-row gap-2">
                         <UploadRecords />
+                        <CustomBulkUpload />
                     </div>
                 </div>
             </div>

@@ -5,6 +5,8 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LogoutIcon from '@mui/icons-material/Logout';
+import WorkHistorySharpIcon from '@mui/icons-material/WorkHistorySharp';
+
 export default function Account(){
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -31,6 +33,11 @@ export default function Account(){
                 <MenuItem>
                     <NavLink to={`/profile`} style={{textDecoration: 'none'}}>
                         <AccountBoxIcon /> Profile
+                    </NavLink>
+                </MenuItem>
+                <MenuItem>
+                    <NavLink to={`/my-dtr`} style={{textDecoration: 'none'}}>
+                        <WorkHistorySharpIcon /> DTR
                     </NavLink>
                 </MenuItem>
                 <MenuItem>
