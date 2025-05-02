@@ -1,13 +1,14 @@
 import axios from "axios";
 import UploadRecords from "./components/UploadRecords";
-import { GetActiveInstitution, sortStaff, staffNameBuilder } from "../../global/Helpers";
-import { useEffect, useState } from "react";
+import { GetActiveInstitution, objectToString, sortStaff, staffNameBuilder } from "../../global/Helpers";
+import { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import ViewDTR from "./components/ViewDTR";
 import CustomBulkUpload from "./components/CustomBulkUpload";
 
 const AttendanceRecord = () => {
     const [attendanceRecords, setAttendanceRecords] = useState([]);
+    const [keyword, setKeyword] = useState(null);
     const institution = GetActiveInstitution();
     
     const handleFetchAttendanceRecords = async (values) => {
@@ -23,10 +24,14 @@ const AttendanceRecord = () => {
         });
     };
     
+    const filteredAttendanceRecords = useMemo(() => {
+        if(!keyword) return attendanceRecords;
+        return attendanceRecords.filter((record) => String(objectToString(record)).includes(String(keyword).toLowerCase()));
+    }, [attendanceRecords, keyword]);
+    
     const formik = useFormik({
         initialValues:{
             institution_id: institution.id,
-            employee_id: '',
             start_date: new Date().toLocaleDateString('en-CA'),
             end_date: new Date().toLocaleDateString('en-CA'),
         },
@@ -52,8 +57,15 @@ const AttendanceRecord = () => {
                     <form onSubmit={formik.handleSubmit}>
                         <div className="d-flex flex-row gap-3 align-items-end">
                             <div className="d-flex flex-column">
-                                <label htmlFor="search">Employee ID</label>
-                                <input id="search" type="text" className="form-control" placeholder="Type employee id..."/>
+                                <label htmlFor="search">Employee</label>
+                                <input
+                                    id="search"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Type employee id..."
+                                    value={keyword}
+                                    onChange={(e) => setKeyword(e.target.value)}
+                                />
                             </div>
                             <div className="d-flex flex-column">
                                 <label htmlFor="start-date">Start Period Date</label>
@@ -69,24 +81,32 @@ const AttendanceRecord = () => {
                                     Generate
                                 </button>
                             </div>
+                            <div className="ms-auto">
+                                <button className="btn btn-primary">
+                                    Bulk Print
+                                </button>
+                            </div>
                         </div>
                     </form>
                     <hr />
                     <table className="table table-bordered">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Name</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {attendanceRecords.map(record => (
+                            {filteredAttendanceRecords.map(record => (
                                 <tr key={record.id}>
-                                    <td>{record?.employment?.employee_id}</td>
                                     <td className="fw-bolder">{staffNameBuilder(record)}</td>
                                     <td>
-                                        <ViewDTR attendances={record?.attendances}/>
+                                        <ViewDTR
+                                            attendances={record?.attendances}
+                                            start_period={formik.values?.start_date}
+                                            end_period={formik.values?.end_date}
+                                            refresh={formik.submitForm}
+                                        />
                                     </td>
                                 </tr>
                             ))}

@@ -37,7 +37,7 @@ const CustomBulkUpload = () => {
         formData.append('institution_id', institution.id);
         await axios.post('attendance_records/custom-bulk-upload', formData)
         .then(() => {
-            alert.setAlert("info", "File is now being process");
+            alert.setAlert("success", "Records has been processed");
             handleModalState();
         })
         .catch((err) => {

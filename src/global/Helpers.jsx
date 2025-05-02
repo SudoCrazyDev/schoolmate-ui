@@ -109,7 +109,6 @@ export const CheckIfHonor = (grade) => {
     }
 };
 
-
 export const IsNegative = (value) => {
     return typeof value === 'number' && value < 0;
 };
@@ -398,7 +397,7 @@ export const sortAttendanceLogByDate = (attendances) => {
     });
 };
 
-export const convertTo12Hour = (timeString) => {
+export const convertTo12Hour = (timeString, hasPeriod = false) => {
     if (!timeString) return null;
     const [hours, minutes, seconds] = timeString.split(':');
     let hours12 = parseInt(hours);
@@ -408,5 +407,12 @@ export const convertTo12Hour = (timeString) => {
     const formattedHours = String(hours12).padStart(2, '0');
     const formattedMinutes = String(parseInt(minutes)).padStart(2, '0');
     const formattedSeconds = String(parseInt(seconds)).padStart(2, '0');
-    return `${formattedHours}:${formattedMinutes} ${period}`;
+    if (hasPeriod) {
+        return `${formattedHours}:${formattedMinutes} ${period}`;
+    }
+    return `${hours}:${minutes}`;
 }
+
+export const objectToString = (obj) => {
+    return Object.values(obj).join("").replaceAll(" ", "").toLowerCase();
+};
