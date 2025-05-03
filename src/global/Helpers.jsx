@@ -389,6 +389,23 @@ export const staffNameBuilder = (staff) => {
     return String(stafName).toUpperCase();
 };
 
+export const staffNameBuilderFirstNameFirst = (staff) => {
+    let stafName = '';
+    if(staff?.first_name !== null && staff?.first_name !== ''){
+        stafName = `${staff?.first_name}`;
+    }
+    if(staff?.middle_name !== null && staff?.middle_name !== ''){
+        stafName = stafName + ` ${String(staff?.middle_name).charAt(0)}.`;
+    }
+    if(staff?.last_name !== null && staff?.last_name !== ''){
+        stafName = stafName + ` ${staff?.last_name}`;
+    }
+    if(staff?.ext_name !== null && staff?.ext_name !== ''){
+        stafName = stafName + ` ${String(staff.ext_name)}`;
+    }
+    return String(stafName).toUpperCase();
+};
+
 export const sortAttendanceLogByDate = (attendances) => {
     return attendances.sort((a,b) => {
         const dateA = new Date(a.auth_date);
@@ -397,7 +414,7 @@ export const sortAttendanceLogByDate = (attendances) => {
     });
 };
 
-export const convertTo12Hour = (timeString, hasPeriod = false) => {
+export const convertTo12Hour = (timeString, hasPeriod = false, formatted = false) => {
     if (!timeString) return null;
     const [hours, minutes, seconds] = timeString.split(':');
     let hours12 = parseInt(hours);
@@ -409,6 +426,9 @@ export const convertTo12Hour = (timeString, hasPeriod = false) => {
     const formattedSeconds = String(parseInt(seconds)).padStart(2, '0');
     if (hasPeriod) {
         return `${formattedHours}:${formattedMinutes} ${period}`;
+    }
+    if(formatted){
+        return `${formattedHours}:${formattedMinutes}`;
     }
     return `${hours}:${minutes}`;
 }

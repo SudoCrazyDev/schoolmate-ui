@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import ViewDTR from "./components/ViewDTR";
 import CustomBulkUpload from "./components/CustomBulkUpload";
+import BulkPrintDTR from "./components/BulkPrintDTR";
 
 const AttendanceRecord = () => {
     const [attendanceRecords, setAttendanceRecords] = useState([]);
@@ -69,11 +70,11 @@ const AttendanceRecord = () => {
                             </div>
                             <div className="d-flex flex-column">
                                 <label htmlFor="start-date">Start Period Date</label>
-                                <input type="date" className="form-control" {...formik.getFieldProps('start_date')}/>
+                                <input type="date" className="form-control" value={formik.values.start_date} {...formik.getFieldProps('start_date')}/>
                             </div>
                             <div className="d-flex flex-column">
                                 <label htmlFor="start-date">End Period Date</label>
-                                <input type="date" className="form-control" {...formik.getFieldProps('end_date')}/>
+                                <input type="date" className="form-control" value={formik.values.end_date} {...formik.getFieldProps('end_date')}/>
                             </div>
                             <div className="d-flex flex-column">
                                 <button className="btn btn-primary" disabled={formik.isSubmitting} onClick={() => handleFetchAttendanceRecords(formik.values)}>
@@ -82,9 +83,7 @@ const AttendanceRecord = () => {
                                 </button>
                             </div>
                             <div className="ms-auto">
-                                <button className="btn btn-primary">
-                                    Bulk Print
-                                </button>
+                                <BulkPrintDTR records={filteredAttendanceRecords}/>
                             </div>
                         </div>
                     </form>
@@ -102,6 +101,7 @@ const AttendanceRecord = () => {
                                     <td className="fw-bolder">{staffNameBuilder(record)}</td>
                                     <td>
                                         <ViewDTR
+                                            teacher={record}
                                             attendances={record?.attendances}
                                             start_period={formik.values?.start_date}
                                             end_period={formik.values?.end_date}

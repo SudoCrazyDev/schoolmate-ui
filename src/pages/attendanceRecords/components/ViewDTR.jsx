@@ -9,7 +9,7 @@ import axios from "axios";
 import { useAlert } from "../../../hooks/CustomHooks";
 import PrintDTR from "./PrintDTR";
 
-export default function ViewDTR({attendances, start_period, end_period, refresh}){
+export default function ViewDTR({teacher, attendances, start_period, end_period, refresh}){
     const [open, setOpen] = useState(false);
     const [sortedAttendances, setSortedAttendances] = useState([]);
     const [editMode, setEditMode] = useState(false);
@@ -149,7 +149,7 @@ export default function ViewDTR({attendances, start_period, end_period, refresh}
             <DialogContent>
                 <div className="d-flex flex-row">
                     <div className="ms-auto mb-3">
-                        <PrintDTR />
+                        <PrintDTR teacher={teacher} attendances={attendances}/>
                     </div>
                 </div>
                 <table className="table table-bordered">
