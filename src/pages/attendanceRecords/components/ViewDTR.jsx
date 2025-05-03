@@ -1,22 +1,26 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Icon, IconButton, Tooltip } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip } from "@mui/material";
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import { useEffect, useState } from "react";
-import { convertTo12Hour, sortAttendanceLogByDate } from "../../../global/Helpers";
-import EditIcon from '@mui/icons-material/Edit';
+import { convertTo12Hour, GetActiveInstitution, sortAttendanceLogByDate } from "../../../global/Helpers";
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import axios from "axios";
 import { useAlert } from "../../../hooks/CustomHooks";
 import PrintDTR from "./PrintDTR";
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function ViewDTR({teacher, attendances, start_period, end_period, refresh}){
     const [open, setOpen] = useState(false);
     const [sortedAttendances, setSortedAttendances] = useState([]);
     const [editMode, setEditMode] = useState(false);
+    const [addMode, setAddMode] = useState(false);
     const [editTime, setEditTime] = useState(null);
     const [editPeriod, setEditPeriod] = useState(null);
     const [editDay, setEditDay] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+    const institution = GetActiveInstitution();
+    
     const alert = useAlert();
     
     const handleModalState = () => {
@@ -62,7 +66,30 @@ export default function ViewDTR({teacher, attendances, start_period, end_period,
         );
     };
     
+    const handleDeletedSortedAttendances = (id) => {
+        setSortedAttendances((prevAttendances) => {
+          const updatedAttendances = prevAttendances.filter(
+            (attendance) => attendance.id !== id
+          );
+          return sortAttendanceLogByDate(updatedAttendances);
+        });
+    };
+    
+    const handleAddSortedAttendances = (record) => {
+        setSortedAttendances((prevAttendances) => {
+          const updatedAttendances = [...prevAttendances,
+            {
+            ...record
+            }
+          ];
+          return sortAttendanceLogByDate(updatedAttendances);
+        });
+    };
+    
     const handleEditMode = (period, day, time, id) => {
+        if(!id){
+            setAddMode(true);
+        }
         setEditMode(!editMode);
         setEditPeriod(period);
         setEditDay(day);
@@ -74,6 +101,7 @@ export default function ViewDTR({teacher, attendances, start_period, end_period,
         setEditPeriod(null);
         setEditDay(null);
         setEditTime(null);
+        setAddMode(false);
     };
         
     const handleSave = async () => {
@@ -92,8 +120,50 @@ export default function ViewDTR({teacher, attendances, start_period, end_period,
         })
     };
     
-    const handleTimeChange = (e, id) => {
-        setEditTime({val: e.target.value, id: id});
+    const handleDelete = async (id) => {
+        setSubmitting(true);
+        await axios.post('attendance_records/delete/attendance-record', {id: id})
+        .then(() => {
+            alert.setAlert('success', 'Attendance record deleted successfully');
+            handleDeletedSortedAttendances(id);
+            handleCancel();
+        })
+        .catch(() => {
+            alert.setAlert('error', 'Failed to delete record');
+        })
+        .finally(() => {
+            setSubmitting(false);
+        })
+    };
+    
+    const handleAdd = async () => {
+        setSubmitting(true);
+        await axios.post('attendance_records/add/attendance-record', editTime)
+        .then((res) => {
+            alert.setAlert('success', 'Attendance record added successfully');
+            handleAddSortedAttendances(res.data.record);
+            handleCancel();
+        })
+        .catch(() => {
+            alert.setAlert('error', 'Failed to add attendance record');
+        })
+        .finally(() => {
+            setSubmitting(false);
+        })
+    };
+    
+    const handleTimeChange = (e, id, period, day) => {
+        if(addMode){
+            setEditTime({
+                institution_id: institution.id,
+                employee_id: teacher.id,
+                status: period,
+                auth_date: `2025-04-${day}`,
+                val: e.target.value
+            });
+        } else {
+            setEditTime({val: e.target.value, id: id});
+        }
     };
     
     const handleShowButton = (period, day, index) => {
@@ -104,14 +174,32 @@ export default function ViewDTR({teacher, attendances, start_period, end_period,
                         type="time"
                         className="form-control"
                         value={editTime?.val}
-                        onChange={(e) => handleTimeChange(e, handleFilterByDay(index + 1, period)?.id)}
+                        onChange={(e) => handleTimeChange(e, handleFilterByDay(index + 1, period)?.id, period, index + 1)}
                     />
-                    <Tooltip title="Save">
-                        <button className="btn btn-sm btn-outline-success" onClick={() => handleSave()} disabled={submitting}>
-                            {submitting && <div className="spinner-border spinner-border-sm"></div>}
-                            {!submitting && <CheckIcon fontSize="inherit"/>}
-                        </button>
-                    </Tooltip>
+                    {addMode && (
+                        <Tooltip title="Add">
+                            <button className="btn btn-sm btn-outline-success" onClick={() => handleAdd()} disabled={submitting}>
+                                {submitting && <div className="spinner-border spinner-border-sm"></div>}
+                                {!submitting && <AddIcon fontSize="inherit"/>}
+                            </button>
+                        </Tooltip>
+                    )}
+                    {!addMode && (
+                        <Tooltip title="Save">
+                            <button className="btn btn-sm btn-outline-success" onClick={() => handleSave()} disabled={submitting}>
+                                {submitting && <div className="spinner-border spinner-border-sm"></div>}
+                                {!submitting && <CheckIcon fontSize="inherit"/>}
+                            </button>
+                        </Tooltip>
+                    )}
+                    {!addMode && (
+                        <Tooltip title="Delete Entry">
+                            <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(handleFilterByDay(index + 1, period)?.id)} disabled={submitting}>
+                                {submitting && <div className="spinner-border spinner-border-sm"></div>}
+                                {!submitting && <DeleteIcon fontSize="inherit"/>}
+                            </button>
+                        </Tooltip>
+                    )}
                     <Tooltip title="Cancel">
                         <button className="btn btn-sm btn-outline-danger" onClick={() => handleCancel()} disabled={submitting}>
                             <ClearIcon fontSize="inherit"/>
@@ -133,6 +221,7 @@ export default function ViewDTR({teacher, attendances, start_period, end_period,
             )
         }
     };
+    
     return(
         <>
         <Tooltip title="View DTR">
@@ -149,7 +238,7 @@ export default function ViewDTR({teacher, attendances, start_period, end_period,
             <DialogContent>
                 <div className="d-flex flex-row">
                     <div className="ms-auto mb-3">
-                        <PrintDTR teacher={teacher} attendances={attendances}/>
+                        <PrintDTR teacher={teacher} attendances={sortedAttendances}/>
                     </div>
                 </div>
                 <table className="table table-bordered">

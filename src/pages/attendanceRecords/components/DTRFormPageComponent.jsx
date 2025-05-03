@@ -135,7 +135,7 @@ const DTRFormPageComponent = ({teacher, attendances}) => {
                 {/* ============================================ */}
                 {/* ===== START ATTENDANCES ===== */}
                 {Array(31).fill().map((_, i) => (
-                    <View style={{display: "flex", flexDirection: "row", border: "1px solid black", borderTop: "0"}}>
+                    <View key={crypto.randomUUID()} style={{display: "flex", flexDirection: "row", border: "1px solid black", borderTop: "0"}}>
                         <View style={{width: "10%", borderRight: "1px solid black", padding: "2px"}}>
                             <Text style={{...styles.infoHeading}}>{i + 1}</Text>
                         </View>
