@@ -87,18 +87,20 @@ export default function SideBar(){
                     </div>
                 )}
                 {/* END ADMIN ROUTES */}
-                {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads']) && CheckSubscriptionAccess(["standard"]) && (
+                {CheckSubscriptionAccess(["standard"]) && (
                     <>
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             CLASS MANAGEMENT
                         </MenuTitle>
                         <Menu
+                            allowedRole={['principal', 'institution-app-admin', 'curriculum-heads']}
                             link={`/sections`}
                             icon={<HomeIcon fontSize="inherit"/>}
                             title={`SECTIONS`}
                         />
                         <Menu
+                            allowedRole={['principal', 'institution-app-admin', 'curriculum-heads']}
                             link={`/teacher-loads`}
                             icon={<AccessTimeIcon fontSize="inherit"/>}
                             title={`TEACHER LOADS`}
@@ -109,6 +111,7 @@ export default function SideBar(){
                             ATTENDANCE MANAGEMENT
                         </MenuTitle>
                         <Menu
+                            allowedRole={['principal', 'institution-app-admin', 'curriculum-heads']}
                             link={`/institution-school-days`}
                             icon={<SchoolIcon fontSize="inherit"/>}
                             title={`SCHOOL DAYS`}
@@ -119,6 +122,7 @@ export default function SideBar(){
                             CARD TEMPLATES
                         </MenuTitle>
                         <Menu
+                            allowedRole={['principal', 'institution-app-admin', 'curriculum-heads']}
                             link={`/card-templates`}
                             icon={<DescriptionIcon fontSize="inherit"/>}
                             title={`CARD TEMPLATES`}
@@ -127,12 +131,13 @@ export default function SideBar(){
                     </>
                 )}
 
-                {userHasRole(['subject-teacher', 'institution-app-admin', 'principal', 'curriculum-heads']) && CheckSubscriptionAccess(["standard"]) && (
+                {CheckSubscriptionAccess(["standard"]) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             GRADES MANAGEMENT
                         </MenuTitle>
                         <Menu
+                            allowedRole={['subject-teacher', 'institution-app-admin', 'principal', 'curriculum-heads']}
                             link={`/grades-consolidation`}
                             icon={<AssessmentIcon fontSize="inherit"/>}
                             title={`CONSOLIDATED GRADES`}
@@ -140,12 +145,13 @@ export default function SideBar(){
                     </div>
                 )}
 
-                {userHasRole(['principal', 'institution-app-admin']) && CheckSubscriptionAccess(["standard"]) && (
+                {CheckSubscriptionAccess(["standard"]) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             GRADES MANAGEMENT
                         </MenuTitle>
                         <Menu
+                            allowedRole={['principal', 'institution-app-admin']}
                             link={`/grades-access-management`}
                             icon={<KeyIcon fontSize="inherit"/>}
                             title={`ACCESS`}
@@ -153,12 +159,13 @@ export default function SideBar(){
                     </div>
                 )}
 
-                {userHasRole(['principal', 'institution-app-admin']) && CheckSubscriptionAccess(["standard"]) && (
+                {CheckSubscriptionAccess(["standard"]) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             REPORTS
                         </MenuTitle>
                         <Menu
+                            allowedRole={['principal', 'institution-app-admin']}
                             link={`/gpa`}
                             icon={<LeaderboardIcon fontSize="inherit"/>}
                             title={`GPA`}
@@ -166,17 +173,19 @@ export default function SideBar(){
                     </div>
                 )}
 
-                {userHasRole(['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']) && CheckSubscriptionAccess(["standard", "basic"]) && (
+                {CheckSubscriptionAccess(["standard", "basic"]) && (
                     <div className="d-flex flex-column p-2">
                         <MenuTitle>
                             HRIS
                         </MenuTitle>
                         <Menu
+                            allowedRole={['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']}
                             link={`/staffs`}
                             icon={<GroupsIcon fontSize="inherit"/>}
                             title={`STAFF`}
                         />
                         <Menu
+                            allowedRole={['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']}
                             link={`/attendance-records`}
                             icon={<DateRangeIcon fontSize="inherit"/>}
                             title={`ATTENDANCE`}
@@ -185,6 +194,7 @@ export default function SideBar(){
                             BASIC CONFIGURATION
                         </MenuTitle>
                         <Menu
+                            allowedRole={['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']}
                             link={`/timetable`}
                             icon={<EventNoteIcon fontSize="inherit"/>}
                             title={`Timetable`}

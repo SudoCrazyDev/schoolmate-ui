@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const DTRFormPageComponent = ({teacher, attendances}) => {
+const DTRFormPageComponent = ({teacher, attendances, assignatory, position, override}) => {
     
     const handleFilterByDay = (day, type) => {
         if (attendances && attendances.length > 0) {
@@ -180,27 +180,37 @@ const DTRFormPageComponent = ({teacher, attendances}) => {
                     
                 </View>
                 <Text style={{fontSize: "9px", marginTop: "2px", fontFamily: "Times-Italic", alignSelf: "center"}}>Signature of Employee</Text>
-                {!checkIfPrincipal() && (
+                {!override && !checkIfPrincipal() && (
                     <Text style={{fontSize: "9px", marginTop: "25px", alignSelf: "center", fontFamily: "Helvetica-Bold"}}>
                         {staffNameBuilderFirstNameFirst(teacher?.institutions?.[0]?.principal?.[0])}
                     </Text>
                 )}
-                {checkIfPrincipal() && (
+                {!override && checkIfPrincipal() && (
                     <Text style={{fontSize: "9px", marginTop: "25px", alignSelf: "center", fontFamily: "Helvetica-Bold"}}>
                         MERVIE Y. SEBLOS, CESE
+                    </Text>
+                )}
+                {override && (
+                    <Text style={{fontSize: "9px", marginTop: "25px", alignSelf: "center", fontFamily: "Helvetica-Bold"}}>
+                        {override.assignatory}
                     </Text>
                 )}
                 <View style={{borderBottom: "1px solid black", width: "80%", alignSelf: "center"}}>
                     
                 </View>
-                {!checkIfPrincipal() && (
+                {!override && !checkIfPrincipal() && (
                     <Text style={{fontSize: "9px", marginTop: "2px", fontFamily: "Times-Italic", alignSelf: "center"}}>
                         School Head
                     </Text>
                 )}
-                {checkIfPrincipal() && (
+                {!override && checkIfPrincipal() && (
                     <Text style={{fontSize: "9px", marginTop: "2px", fontFamily: "Times-Italic", alignSelf: "center"}}>
                         Assistant Schools Division Superintendent
+                    </Text>
+                )}
+                {override && (
+                    <Text style={{fontSize: "9px", marginTop: "2px", fontFamily: "Times-Italic", alignSelf: "center"}}>
+                        {override.position}
                     </Text>
                 )}
             </View>
@@ -309,12 +319,12 @@ const DTRFormPageComponent = ({teacher, attendances}) => {
                     
                 </View>
                 <Text style={{fontSize: "9px", marginTop: "2px", fontFamily: "Times-Italic", alignSelf: "center"}}>Signature of Employee</Text>
-                {!checkIfPrincipal() && (
+                {!override && !checkIfPrincipal() && (
                     <Text style={{fontSize: "9px", marginTop: "25px", alignSelf: "center", fontFamily: "Helvetica-Bold"}}>
                         {staffNameBuilderFirstNameFirst(teacher?.institutions?.[0]?.principal?.[0])}
                     </Text>
                 )}
-                {checkIfPrincipal() && (
+                {!override && checkIfPrincipal() && (
                     <Text style={{fontSize: "9px", marginTop: "25px", alignSelf: "center", fontFamily: "Helvetica-Bold"}}>
                         MERVIE Y. SEBLOS, CESE
                     </Text>
@@ -322,15 +332,28 @@ const DTRFormPageComponent = ({teacher, attendances}) => {
                 <View style={{borderBottom: "1px solid black", width: "80%", alignSelf: "center"}}>
                     
                 </View>
-                {!checkIfPrincipal() && (
+                {!override && !checkIfPrincipal() && (
                     <Text style={{fontSize: "9px", marginTop: "2px", fontFamily: "Times-Italic", alignSelf: "center"}}>
                         School Head
                     </Text>
                 )}
-                {checkIfPrincipal() && (
+                {!override && checkIfPrincipal() && (
                     <Text style={{fontSize: "9px", marginTop: "2px", fontFamily: "Times-Italic", alignSelf: "center"}}>
                         Assistant Schools Division Superintendent
                     </Text>
+                )}
+                {override && (
+                    <>
+                    <Text style={{fontSize: "9px", marginTop: "25px", alignSelf: "center", fontFamily: "Helvetica-Bold"}}>
+                        {override.assignatory}
+                    </Text>
+                    <View style={{borderBottom: "1px solid black", width: "80%", alignSelf: "center"}}>
+                    
+                    </View>
+                    <Text style={{fontSize: "9px", marginTop: "2px", fontFamily: "Times-Italic", alignSelf: "center"}}>
+                        {override.position}
+                    </Text>
+                    </>
                 )}
             </View>
         </Page>
