@@ -46,18 +46,18 @@ export default function SideBar(){
     }, []);
 
     return(
-        <div className="sidebar d-flex flex-column col-2" style={{position: 'fixed'}}>
-            <div className="d-flex flex-column" style={{minHeight: '100vh', maxHeight: '100vh', overflowY: 'scroll'}}>
+        <div className="flex flex-col w-[100%] h-screen">
+            <div className="flex flex-col h-screen overflow-y-scroll">
 
-                <div className="d-flex flex-row justify-content-center p-2">
-                    <h3 className="m-0 fw-bolder text-center text-capitalize">
+                <div className="flex flex-row justify-center p-2">
+                    <h3 className="m-0 font-bold text-xl uppercase">
                         Hi, {user?.info?.first_name}
                     </h3>
                 </div>
-
+                        
                 {/* START ADMIN ROUTES */}
                 {userHasRole(['app-admin']) && (
-                    <div className="d-flex flex-column p-2">
+                    <div className="flex flex-col p-2">
                         <MenuTitle>
                             APP MANAGEMENT
                         </MenuTitle>
@@ -65,11 +65,13 @@ export default function SideBar(){
                             link={`/institutions`}
                             icon={<ApartmentIcon fontSize="inherit"/>}
                             title={`Institutions`}
+                            allowedRole={['app-admin']}
                         />
                         <Menu
                             link={`/subscriptions`}
                             icon={<CardMembershipIcon fontSize="inherit"/>}
                             title={`Subscriptions`}
+                            allowedRole={['app-admin']}
                         />
                         <MenuTitle>
                             USER MANAGEMENT
@@ -78,15 +80,18 @@ export default function SideBar(){
                             link={`/users`}
                             icon={<GroupsIcon fontSize="inherit"/>}
                             title={`Users`}
+                            allowedRole={['app-admin']}
                         />
                         <Menu
                             link={`/roles`}
                             icon={<AdminPanelSettingsIcon fontSize="inherit"/>}
                             title={`Roles`}
+                            allowedRole={['app-admin']}
                         />
                     </div>
                 )}
                 {/* END ADMIN ROUTES */}
+                
                 {CheckSubscriptionAccess(["standard"]) && (
                     <>
                     <div className="d-flex flex-column p-2">
@@ -97,13 +102,13 @@ export default function SideBar(){
                             allowedRole={['principal', 'institution-app-admin', 'curriculum-heads']}
                             link={`/sections`}
                             icon={<HomeIcon fontSize="inherit"/>}
-                            title={`SECTIONS`}
+                            title={`Sections`}
                         />
                         <Menu
                             allowedRole={['principal', 'institution-app-admin', 'curriculum-heads']}
                             link={`/teacher-loads`}
                             icon={<AccessTimeIcon fontSize="inherit"/>}
-                            title={`TEACHER LOADS`}
+                            title={'Teacher Loads'}
                         />
                     </div>
                     <div className="d-flex flex-column p-2">
@@ -114,7 +119,7 @@ export default function SideBar(){
                             allowedRole={['principal', 'institution-app-admin', 'curriculum-heads']}
                             link={`/institution-school-days`}
                             icon={<SchoolIcon fontSize="inherit"/>}
-                            title={`SCHOOL DAYS`}
+                            title={`School Days`}
                         />
                     </div>
                     <div className="d-flex flex-column p-2">
@@ -125,7 +130,7 @@ export default function SideBar(){
                             allowedRole={['principal', 'institution-app-admin', 'curriculum-heads']}
                             link={`/card-templates`}
                             icon={<DescriptionIcon fontSize="inherit"/>}
-                            title={`CARD TEMPLATES`}
+                            title={`Card Templates`}
                         />
                     </div>
                     </>
@@ -140,7 +145,7 @@ export default function SideBar(){
                             allowedRole={['subject-teacher', 'institution-app-admin', 'principal', 'curriculum-heads']}
                             link={`/grades-consolidation`}
                             icon={<AssessmentIcon fontSize="inherit"/>}
-                            title={`CONSOLIDATED GRADES`}
+                            title={`Consolidated Grades`}
                         />
                     </div>
                 )}
@@ -154,7 +159,7 @@ export default function SideBar(){
                             allowedRole={['principal', 'institution-app-admin']}
                             link={`/grades-access-management`}
                             icon={<KeyIcon fontSize="inherit"/>}
-                            title={`ACCESS`}
+                            title={`Access`}
                         />
                     </div>
                 )}
@@ -182,22 +187,28 @@ export default function SideBar(){
                             allowedRole={['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']}
                             link={`/staffs`}
                             icon={<GroupsIcon fontSize="inherit"/>}
-                            title={`STAFF`}
+                            title={`Staff`}
                         />
                         <Menu
                             allowedRole={['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']}
                             link={`/attendance-records`}
                             icon={<DateRangeIcon fontSize="inherit"/>}
-                            title={`ATTENDANCE`}
+                            title={`Attendances`}
                         />
                         <MenuTitle>
-                            BASIC CONFIGURATION
+                            CONFIGURATIONS
                         </MenuTitle>
                         <Menu
                             allowedRole={['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']}
                             link={`/timetable`}
                             icon={<EventNoteIcon fontSize="inherit"/>}
                             title={`Timetable`}
+                        />
+                        <Menu
+                            allowedRole={['principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']}
+                            link={`/academic-years`}
+                            icon={<SchoolIcon fontSize="inherit"/>}
+                            title={`Academic Years`}
                         />
                     </div>
                 )}

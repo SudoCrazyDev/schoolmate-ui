@@ -3,6 +3,14 @@ import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAlert } from "../../../hooks/CustomHooks";
+import { 
+    Modal,
+    ModalContent,
+    ModalHeader,
+    SelectComponent,
+    ModalActions,
+    Button
+} from "@UIComponents";
 
 const UpdateInsitutionSubscription = ({institution, refresh}) => {
     const [open, setOpen] = useState(false);
@@ -51,8 +59,10 @@ const UpdateInsitutionSubscription = ({institution, refresh}) => {
     };
     
     useEffect(() => {
-        handleFetchSubscriptions();
-    }, []);
+        if(open){
+            handleFetchSubscriptions();
+        }
+    }, [open]);
     
     return(
         <>
@@ -61,34 +71,28 @@ const UpdateInsitutionSubscription = ({institution, refresh}) => {
                 <CardMembershipIcon fontSize="small" color="primary"/>
             </IconButton>
         </Tooltip>
-        <Dialog open={open} maxWidth="md" fullWidth>
-            <DialogTitle className="h2 m-0 fw-bold">
-                Update Institution Subscription
-            </DialogTitle>
-            <hr />
-            <DialogContent>
-                <div className="d-flex flex-column">
-                    <label>Select a Subscription</label>
-                    {fetchedSubscriptions.length > 0 && (
-                         <select className="form-select" defaultValue={fetchedSubscriptions?.[0].id} onChange={(e) => setSelectedSubscription(e.target.value)}>
-                            {fetchedSubscriptions.map((subscription) =>(
-                                <option key={subscription.id} value={subscription.id}>
-                                    {subscription.title}
-                                </option>
-                            ))}
-                        </select>
-                    )}
-                </div>
-            </DialogContent>
-            <hr />
-            <DialogActions className="d-flex flex-row justify-content-start gap-2">
-                <button className="btn btn-primary" onClick={() => handleSaveInstitutionSubscription()} disabled={fetching}>
-                    {fetching && <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>}
-                    Save
-                </button>
-                <button className="btn btn-danger" onClick={() => handleModalState()}>Cancel</button>
-            </DialogActions>
-        </Dialog>
+        <Modal open={open}>
+            <ModalHeader title="Update Institution Subscription" />
+            <ModalContent>
+                <p className="font-normal mb-2 capitalize">Select a Subscription</p>
+                <SelectComponent className="p-3 text-md uppercase" defaultValue={"default"} onChange={(e) => setSelectedSubscription(e.target.value)}>
+                    <option value="default" className="text-gray-300 p-5 text-md" disabled>Select an Option</option>
+                    {fetchedSubscriptions.map((subscription) =>(
+                        <option key={subscription.id} value={subscription.id} className="text-black text-md uppercase">
+                            {subscription.title}
+                        </option>
+                    ))}
+                </SelectComponent>
+            </ModalContent>
+            <ModalActions>
+                <Button type="submit" loading={fetching} disabled={fetching} onClick={() => handleSaveInstitutionSubscription()}>
+                    Submit
+                </Button>
+                <Button type="cancel" disabled={fetching} onClick={() => handleModalState()}>
+                    Cancel
+                </Button>
+            </ModalActions>
+        </Modal>
         </>
     );
 }

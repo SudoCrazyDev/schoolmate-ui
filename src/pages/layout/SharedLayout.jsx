@@ -4,11 +4,11 @@ import { Outlet } from "react-router-dom";
 
 export default function SharedLayout(){
     return(
-        <div className="d-flex flex-row" style={{minHeight: '100vh'}}>
-            <div className="col-2">
+        <div className="flex flex-row flex-wrap min-h-screen">
+            <div className="hidden md:block w-[240px] border border-gray-300">
                 <SideBar />
             </div>
-            <div className="col-10 d-flex flex-column">
+            <div className="flex flex-col grow">
                 <Header />
                 <div className="p-3">
                     <Outlet />

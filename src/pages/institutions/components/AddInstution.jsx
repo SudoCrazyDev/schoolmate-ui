@@ -1,13 +1,15 @@
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from "@mui/material/Button";
-import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import Axios from 'axios';
 import { useAlert } from '../../../hooks/CustomHooks';
+import {
+    Button,
+    Modal,
+    ModalHeader,
+    ModalContent,
+    ModalActions,
+    TextField
+} from "@UIComponents";
 
 export default function AddInstitution({setInstitutions}){
     const [open, setOpen] = useState(false);
@@ -46,33 +48,32 @@ export default function AddInstitution({setInstitutions}){
     
     return(
         <>
-        <Button className='fw-bolder' variant='contained' onClick={() => handleModalState()}>NEW</Button>
-        <Dialog open={open} maxWidth="md" fullWidth>
-            <DialogTitle className='fw-bolder'>NEW INSTITUTION</DialogTitle>
+        <Button type="button" onClick={() => handleModalState()}>
+            NEW INSTITUTION
+        </Button>
+        <Modal open={open}>
+            <ModalHeader title="NEW INSTITUTIONS"/>
             <form onSubmit={formik.handleSubmit}>
-                <DialogContent dividers>
-                    <div className="d-flex flex-column gap-2">
-                        <TextField variant='outlined' label="Insitution" {...formik.getFieldProps('title')} disabled={formik.isSubmitting}/>
-                        <TextField variant='outlined' label="Abbrevation (Eg. ILSNHMD, GSCNSSAT)" {...formik.getFieldProps('abbr')} disabled={formik.isSubmitting}/>
-                        <TextField variant='outlined' label="Address" {...formik.getFieldProps('address')} disabled={formik.isSubmitting}/>
-                        <TextField variant='outlined' label="School ID" {...formik.getFieldProps('gov_id')} disabled={formik.isSubmitting}/>
-                        <TextField variant='outlined' label="Region" {...formik.getFieldProps('region')} disabled={formik.isSubmitting}/>
-                        <TextField variant='outlined' label="Division" {...formik.getFieldProps('division')} disabled={formik.isSubmitting}/>
-                        {/* <TextField variant='outlined' label="School ID" {...formik.getFieldProps('gov_id')} disabled={formik.isSubmitting}/> */}
+                <ModalContent>
+                    <div className="flex flex-col gap-2">
+                        <TextField type="text" label="Institution" value={formik.values.title} onChange={(e) => formik.setFieldValue("title", e.target.value)}/>
+                        <TextField type="text" label="Abbrevation" value={formik.values.abbr} onChange={(e) => formik.setFieldValue("abbr", e.target.value)}/>
+                        <TextField type="text" label="Address" value={formik.values.address} onChange={(e) => formik.setFieldValue("address", e.target.value)}/>
+                        <TextField type="text" label="School ID" value={formik.values.gov_id} onChange={(e) => formik.setFieldValue("gov_id", e.target.value)}/>
+                        <TextField type="text" label="Region" value={formik.values.region} onChange={(e) => formik.setFieldValue("region", e.target.value)}/>
+                        <TextField type="text" label="Division" value={formik.values.division} onChange={(e) => formik.setFieldValue("division", e.target.value)}/>
                     </div>
-                </DialogContent>
-                <DialogActions className='d-flex flex-row justify-content-start'>
-                    <Button type="submit" variant='contained' disabled={formik.isSubmitting}>
-                        {formik.isSubmitting ?
-                            <div className="spinner-border spinner-border-sm"></div>
-                        :
-                            "Submit"
-                        }
+                </ModalContent>
+                <ModalActions>
+                    <Button type="submit" loading={formik.isSubmitting} disabled={formik.isSubmitting}>
+                        Save
                     </Button>
-                    <Button variant='contained' color="error" onClick={() => handleModalState()} disabled={formik.isSubmitting}>Cancel</Button>
-                </DialogActions>
+                    <Button type="cancel" onClick={() => handleModalState()} disabled={formik.isSubmitting}>
+                        Cancel
+                    </Button>
+                </ModalActions>
             </form>
-        </Dialog>
+        </Modal>
         </>
     );
 };

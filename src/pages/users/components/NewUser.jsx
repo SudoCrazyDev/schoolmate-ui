@@ -1,15 +1,17 @@
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 import { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useAlert } from '../../../hooks/CustomHooks';
-import pb from '../../../global/pb';
+import {
+    TextField,
+    Button,
+    Modal,
+    ModalHeader,
+    ModalContent,
+    ModalActions,
+    SelectComponent
+} from "@UIComponents";
 
 export default function NewUser({refreshUsers}){
     const [open, setOpen] = useState(false);
@@ -85,8 +87,67 @@ export default function NewUser({refreshUsers}){
     
     return(
         <>
-        <button className="btn btn-primary fw-bolder" onClick={() => handleOpenModalState()}>New User</button>
-        <Dialog open={open} maxWidth="md" fullWidth>
+        <Button type="button" onClick={() => handleOpenModalState()}>
+            New User
+        </Button>
+        <Modal open={open}>
+            <ModalHeader title="Create New User"/>
+            <form onSubmit={formik.handleSubmit}>
+                <ModalContent>
+                    <div className="flex flex-col gap-2">
+                        <div className="flex flex-row gap-2">
+                            <TextField type="text" label="First Name" placeholder="John" value={formik.values.first_name} onChange={(e) => formik.setFieldValue("first_name", e.target.value)} />
+                            <TextField type="text" label="Middle Name" placeholder="Martin" value={formik.values.middle_name} onChange={(e) => formik.setFieldValue("middle_name", e.target.value)} />
+                        </div>
+                        <TextField type="text" label="Last Name" placeholder="Doe" value={formik.values.last_name} onChange={(e) => formik.setFieldValue("last_name", e.target.value)} />
+                        <div className="flex flex-row gap-2">
+                            <TextField type="date" label="Birthdate" value={formik.values.birthdate} onChange={(e) => formik.setFieldValue("birthdate", e.target.value)} />
+                            <div className="flex flex-col gap-2 w-full">
+                                <p className="font-normal capitalize">Gender</p>
+                                <SelectComponent className="text-md uppercase" defaultValue={"male"} onChange={(e) => formik.setFieldValue('gender', e.target.value)}>
+                                    <option value="male" className="text-black text-md uppercase">
+                                        Male
+                                    </option>
+                                    <option value="female" className="text-black text-md uppercase">
+                                        Female
+                                    </option>
+                                </SelectComponent>
+                            </div>
+                        </div>
+                        <TextField type="email" label="Email" placeholder="john.doe@gmail.com" value={formik.values.email} onChange={(e) => formik.setFieldValue("email", e.target.value)} />
+                        <div className="flex flex-col gap-2 w-full">
+                            <p className="font-normal capitalize">Institution</p>
+                            <SelectComponent className="text-md uppercase" defaultValue={"male"} onChange={(e) => formik.setFieldValue('institution_id', e.target.value)}>
+                                {institutions.map((institution => (
+                                    <option key={institution.id} value={institution.id} className="text-black text-md uppercase">
+                                        {institution.title}
+                                    </option>
+                                )))}
+                            </SelectComponent>
+                        </div>
+                         <div className="flex flex-col gap-2 w-full">
+                            <p className="font-normal capitalize">Role</p>
+                            <SelectComponent className="text-md uppercase" defaultValue={"male"} onChange={(e) => formik.setFieldValue('role_id', e.target.value)}>
+                                {roles.map((role => (
+                                    <option key={role.id} value={role.id} className="text-black text-md uppercase">
+                                        {role.title}
+                                    </option>
+                                )))}
+                            </SelectComponent>
+                        </div>
+                    </div>
+                </ModalContent>
+                <ModalActions>
+                    <Button type="submit" loading={formik.isSubmitting} disabled={formik.isSubmitting}>
+                        Save
+                    </Button>
+                    <Button type="cancel" disabled={formik.isSubmitting}>
+                        Cancel
+                    </Button>
+                </ModalActions>
+            </form>
+        </Modal>
+        {/* <Dialog open={open} maxWidth="md" fullWidth>
             <DialogTitle className='fw-bolder'>Create New User</DialogTitle>
             <form onSubmit={formik.handleSubmit}>
                 <DialogContent dividers>
@@ -131,7 +192,7 @@ export default function NewUser({refreshUsers}){
                     <button type="button" className="btn btn-danger" disabled={formik.isSubmitting} onClick={handleModalState}>Cancel</button>
                 </DialogActions>
             </form>
-        </Dialog>
+        </Dialog> */}
         </>
     );
 };

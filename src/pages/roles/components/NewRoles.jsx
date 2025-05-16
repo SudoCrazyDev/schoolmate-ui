@@ -2,8 +2,15 @@ import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material
 import axios from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useAlert } from "../../../hooks/CustomHooks";
+import {
+    Button,
+    Modal,
+    ModalHeader,
+    ModalContent,
+    ModalActions,
+    TextField
+} from "@UIComponents";
 
 export default function NewRole({refresh}){
     const [open, setOpen] = useState(false);
@@ -35,7 +42,7 @@ export default function NewRole({refresh}){
     
     return(
         <>
-        <button className="btn btn-primary fw-bold" onClick={() => handleModalState()}>New User Role</button>
+        {/* <button className="btn btn-primary fw-bold" onClick={() => handleModalState()}>New User Role</button>
         <Dialog open={open} maxWidth="md" fullWidth>
             <DialogTitle className="fw-bold">Create New Role</DialogTitle>
             <form onSubmit={formik.handleSubmit}>
@@ -50,7 +57,28 @@ export default function NewRole({refresh}){
                     <button type="button" className="btn btn-danger" disabled={formik.isSubmitting} onClick={() => handleModalState()}>Cancel</button>
                 </DialogActions>
             </form>
-        </Dialog>
+        </Dialog> */}
+        <Button type="button" onClick={() => handleModalState()}>
+            New Role
+        </Button>
+        <Modal open={open}>
+            <ModalHeader title="Create New Role"/>
+            <form onSubmit={formik.handleSubmit}>
+                <ModalContent>
+                    <div className="flex flex-col gap-2">
+                        <TextField type="text" label="Role" value={formik.values.title} onChange={(e) => formik.setFieldValue("title", e.target.value)}/>
+                    </div>
+                </ModalContent>
+                <ModalActions>
+                    <Button type="submit" loading={formik.isSubmitting} disabled={formik.isSubmitting}>
+                        Save
+                    </Button>
+                    <Button type="cancel" onClick={() => handleModalState()} disabled={formik.isSubmitting}>
+                        Cancel
+                    </Button>
+                </ModalActions>
+            </form>
+        </Modal>
         </>
     );
 };

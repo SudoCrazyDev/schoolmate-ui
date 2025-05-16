@@ -1,6 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAlert } from "../../hooks/CustomHooks";
+import {
+    ContentContainer,
+    ParentContentContainer,
+    PageHeading,
+    PageContent,
+    TableContainer,
+    TableFunctions,
+    Table,
+    Button,
+    TextField
+} from "@UIComponents";
 
 const Subscriptions = () => {
     const [fetching, setFetching] = useState(false);
@@ -104,99 +115,67 @@ const Subscriptions = () => {
     }, []);
     
     return(
-        <div className="d-flex flex-column gap-3">
-            <div className="col-12">
-                <div className="card">
-                    <div className="card-body d-flex flex-row align-items-center">
-                        <div className="d-flex flex-column">
-                            <h2 className="m-0 fw-bolder">Subscriptions</h2>
-                            <p className="m-0 fst-italic" style={{fontSize: '12px'}}>Create, Retrieve, Update and Delete subscriptions.</p>
-                        </div>
+        <ParentContentContainer>
+            <ContentContainer className="w-[100%] gap-3">
+                <PageHeading title="Subscriptions" info="add, update, delete and manage subscriptions.">
+                    <div className="lg:ml-auto">
                     </div>
-                </div>
-            </div>
-            <div className="d-flex flex-row gap-2">
-                <div className="col-4">
-                    <div className="card">
-                        <div className="card-body d-flex flex-column gap-2">
-                            <div className="d-flex flex-column">
-                                <label>Subscription Title</label>
-                                <input
-                                type="text"
-                                className="form-control w-100 rounded"
-                                placeholder="Title..."
-                                value={subscriptionTitle}
-                                onChange={(e) => setSubscriptionTitle(e.target.value)}
-                                />
-                            </div>
-                            <div className="d-flex flex-column">
-                                <label>Description</label>
-                                <textarea
-                                type="text"
-                                className="form-control"
-                                placeholder="Description..."
-                                value={subscriptionDescription}
-                                onChange={(e) => setSubscriptionDescription(e.target.value)}
-                                />
-                            </div>
-                            <div className="d-flex flex-column">
-                                <label>Price</label>
-                                <input
-                                type="number"
-                                className="form-control"
-                                value={subscriptionPrice}
-                                onChange={(e) => setSubscriptionPrice(e.target.value)}
-                                />
-                            </div>
-                            <div className="d-flex flex-row gap-2">
-                                <button className="btn btn-primary" disabled={fetching} onClick={() => handleButtonClick()}>
-                                    {fetching && <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>}
-                                    {selectedSubscription ? "Update" : "Add"} Subscription
-                                </button>
-                                    <button className="btn btn-danger" disabled={fetching} onClick={() => handleClearSubscriptions()}>
-                                        Clear
-                                </button>
+                </PageHeading>
+                <PageContent>
+                    <ContentContainer className="w-full lg:w-1/2">
+                        <div className="flex flex-col w-1/2 gap-2">
+                            <TextField type="text" label="Subscription Title" value={subscriptionTitle} onChange={(e) => setSubscriptionTitle(e.target.value)}/>
+                            <TextField type="text" label="Description" value={subscriptionDescription} onChange={(e) => setSubscriptionDescription(e.target.value)}/>
+                            <TextField type="number" label="Price" value={subscriptionPrice} onChange={(e) => setSubscriptionPrice(e.target.value)}/>
+                            <div className="flex flex-row gap-3">
+                                <Button type="submit" onClick={() => handleButtonClick()}>
+                                    {selectedSubscription ? "Save" : "Add"} Subscription
+                                </Button>
+                                <Button type="cancel" onClick={() => handleClearSubscriptions()}>
+                                    Clear
+                                </Button>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div className="col-8">
-                    <div className="card">
-                        <div className="card-body d-flex flex-row align-items-center">
-                            <table className="table table-bordered">
+                    </ContentContainer>
+                    <ContentContainer className="w-full lg:w-1/2">
+                        <TableContainer>
+                            <TableFunctions>
+                                
+                            </TableFunctions>
+                            <Table>
                                 <thead>
                                     <tr>
-                                        <th>Subscription</th>
-                                        <th>Price</th>
-                                        <th></th>
+                                        <th width={'50%'} className="text-xl px-1 py-2 uppercase bg-zinc-50 border text-start border-gray-300">Subscription</th>
+                                        <th width={'40%'} className="text-xl px-1 py-2 uppercase bg-zinc-50 border text-start border-gray-300">Price</th>
+                                        <th width={'10%'} className="text-xl px-1 py-2 uppercase bg-zinc-50 border text-start border-gray-300"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {fetchedSubscriptions.map((subscription) => (
                                         <tr key={subscription.id}>
-                                            <td className="fw-bold">{subscription.title}</td>
-                                            <td>{subscription.price}</td>
+                                            <td className="p-1 py-2 font-bold uppercase border-y border-gray-300">{subscription.title}</td>
+                                            <td className="p-1 py-2 font-bold uppercase border-y border-gray-300">{subscription.price}</td>
                                             <td>
                                                 <div className="d-flex flex-row">
-                                                    <button className="btn btn-primary" onClick={() => {
+                                                    <Button type="button" onClick={() => {
                                                         setSelectedSubscription(subscription);
                                                         setSubscriptionTitle(subscription.title);
                                                         setSubscriptionDescription(subscription.description);
                                                         setSubscriptionPrice(subscription.price);
                                                     }}>
                                                         Edit
-                                                    </button>
+                                                    </Button>
                                                 </div>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            </Table>
+                        </TableContainer>
+                    </ContentContainer>
+                </PageContent>
+            </ContentContainer>
+        </ParentContentContainer>
     );
 };
 

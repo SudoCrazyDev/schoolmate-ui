@@ -14,10 +14,10 @@ export default function Account(){
     
     return(
         <div className="p-2">
-            <div className="p-2 d-flex flex-row gap-2 align-items-center rounded account-button" style={{background: '#e9e1e1'}} onClick={(e) => setAnchorEl(e.currentTarget)}>
+            <div className="p-2 flex flex-row gap-2 items-center rounded cursor-pointer bg-stone-200 shadow-md" onClick={(e) => setAnchorEl(e.currentTarget)}>
                 <div className="d-flex flex-column">
-                    <h6 className="m-0 fw-bold text-capitalize" style={{fontSize: '13px'}}>{info.first_name} {info.last_name}</h6>
-                    <p className="m-0 fw-light" style={{fontSize: '10px'}}>{info.email}</p>
+                    <h6 className="m-0 font-bold uppercase" style={{fontSize: '13px'}}>{info.first_name} {info.last_name}</h6>
+                    <p className="m-0 font-light" style={{fontSize: '10px'}}>{info.email}</p>
                 </div>
                 <div className="ms-auto">
                     <ChevronRightIcon />

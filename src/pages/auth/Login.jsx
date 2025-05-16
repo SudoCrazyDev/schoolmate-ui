@@ -1,4 +1,3 @@
-import { TextField, Button } from "@mui/material";
 import Axios from "axios";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -6,9 +5,16 @@ import { useAlert } from "../../hooks/CustomHooks";
 import { useDispatch } from "react-redux";
 import { actions } from "../../redux/slices/UserSlice";
 import { actions as OrgActions } from "../../redux/slices/OrgSlice";
-import pb from '../../global/pb';
 import { useNavigate } from "react-router-dom";
 import { axiosErrorCodeHandler } from "../../global/Helpers";
+import {
+    BaseContainer,
+    ContentContainer,
+    ParentContentContainer,
+    TextField,
+    Button
+} from "@UIComponents";
+import { useState } from "react";
 
 const validationSchema = yup.object().shape({
     email: yup.string().email('Must be a valid email'),
@@ -19,6 +25,7 @@ export default function Login(){
     const alert = useAlert();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [invalid, setInvalid] = useState(null);
     
     const handleSubmit = async (values) => {
         formik.setSubmitting(true);
@@ -35,7 +42,7 @@ export default function Login(){
             }
         })
         .catch(err => {
-            alert.setAlert('error', axiosErrorCodeHandler(err));
+            setInvalid(axiosErrorCodeHandler(err));
             formik.setSubmitting(false);
         });
     };
@@ -49,27 +56,41 @@ export default function Login(){
         onSubmit: handleSubmit,
     });
     
+    setTimeout(() => {
+        if(invalid){
+            setTimeout(() => {
+                setInvalid(null);
+            }, 1500);
+        }
+    }, [invalid]);
     return(
-        <div className="d-flex flex-row justify-content-center align-items-center vh-100">
-            <div className="col-6 p-5 d-flex flex-column align-items-center">
-                <form onSubmit={formik.handleSubmit} className="d-flex flex-column justify-content-center" style={{width:'500px'}}>
-                    <h1 className="m-0 fw-bolder text-center" style={{letterSpacing: '3px'}}>SCHOLASTIC CLOUD</h1>
-                    <p className="m-0 fw-normal text-center mb-3" style={{letterSpacing: '5px'}}>EMPOWERING EDUCATION</p>
-                    <hr />
-                    <div className="py-3 px-3">
-                        <div className="card-body d-flex flex-column gap-2">
-                            <TextField id="email" type="email" variant="outlined" label="Email" fullWidth {...formik.getFieldProps('email')} error={formik.errors.email}/>
-                            <TextField id="password" type="password" variant="outlined" label="Password" fullWidth {...formik.getFieldProps('password')} error={formik.errors.password}/>
-                            <Button type="submit" size="large" variant="contained" className="fw-bolder" fullWidth disabled={formik.isSubmitting}>
-                                {formik.isSubmitting ? <span className="ms-2 spinner-border spinner-border-sm"></span> : "Login"}
-                            </Button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div className="col-6 p-3">
-                <iframe className="w-100" style={{minHeight: '95vh'}} src="https://lottie.host/embed/c00b4ad6-461f-49ba-a860-09e94fab466c/Jpi7xwkxI4.json"></iframe>
-            </div>
-        </div>
+        <BaseContainer>
+            <ParentContentContainer>
+                    <ContentContainer className="w-[100%] lg:w-[50%] items-center justify-center">
+                        <form onSubmit={formik.handleSubmit}>
+                            <div className="flex flex-col items-stretch justify-stretch">
+                                <h1 className="text-3xl md:text-5xl font-semibold tracking-widest text-center text-gray-800">SCHOLASTIC CLOUD</h1>
+                                <h5 className="text-1xl md:text-1xl font-light sm:tracking-normal md:tracking-[10px] text-center text-gray-800">EMPOWERING EDUCATION</h5>
+                                <p className="text-base font-light mt-5 md:mt-10 tracking-[-1px] text-center text-gray-800">Enter your email and password to access your account.</p>
+                                {invalid && (
+                                    <div className="h-20 bg-red-300/80 rounded-lg border-red-600 border-2 shadow-md mt-3 flex flex-col items-center justify-center text-white">
+                                        <h3 className="text-lg text-white">{invalid}</h3>
+                                    </div>
+                                )}
+                                <div className="flex flex-row w-100 mt-3 mb-5">
+                                    <hr />
+                                </div>
+                                <TextField type="text" required placeholder="info@gmail.com" label="Email" value={formik.values.email} onChange={(e) => formik.setFieldValue('email', e.target.value)}/>
+                                <TextField type="password" required label="Password" className="mt-2" value={formik.values.password} onChange={(e) => formik.setFieldValue('password', e.target.value)}/>
+                                <Button type="submit" className="mt-3" loading={formik.isSubmitting} disabled={formik.isSubmitting}>
+                                    Submit
+                                </Button>
+                            </div>
+                        </form>
+                    </ContentContainer>
+                <ContentContainer className="w-0 hidden lg:block lg:w-[50%]" style={{backgroundImage: "url(/assets/bg/login-bg.png)", backgroundSize: "cover"}}>
+                </ContentContainer>
+            </ParentContentContainer>
+        </BaseContainer>
     );
 };

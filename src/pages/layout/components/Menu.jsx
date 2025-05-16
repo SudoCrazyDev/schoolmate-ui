@@ -5,14 +5,14 @@ export default function Menu({link, icon, title, allowedRole = []}){
     return(
         <>
             {userHasRole(allowedRole) && (
-                <div className="menu-option-container">
-                    <NavLink to={link}>
-                        <div className="menu-option">
+                <NavLink to={link}>
+                    <div className="flex flex-col p-1">
+                        <div className="flex flex-row gap-2 items-center hover:bg-blue-500/80 hover:text-white hover:shadow-md p-2 rounded-sm">
                             {icon}
-                            <p className="text-uppercase">{title}</p>
+                            <p className="text-sm capitalize">{title}</p>
                         </div>
-                    </NavLink>
-                </div>
+                    </div>
+                </NavLink>
             )}
         </>
     )

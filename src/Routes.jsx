@@ -50,6 +50,7 @@ import COCChecker from "./pages/cocChecker/COCChecker";
 import TimeTable from "./pages/basicConfiguration/TimeTable/TimeTable";
 import AttendanceRecord from "./pages/attendanceRecords/AttendanceRecords";
 import Subscriptions from "./pages/subscriptions/Subscriptions";
+import StyleGuide from "./pages/styleGuide/StyleGuide";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -112,6 +113,7 @@ export const router = createBrowserRouter(
       <Route element={<PublicRoutes />}>
         <Route element={<COCChecker />} path="/verify-coc/:student_id" />
         <Route element={<NewUserPassword />} path="/new-user-password/:user_id" />
+        <Route element={<StyleGuide />} path="/style-guide"/>
         <Route element={<Login />} path="/login"/>
       </Route>
       <Route element={<QuickEnrollmentForm />} path="/form/:institution/:grade/:section"/>

@@ -1,7 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@mui/material";
 import NewRole from "./components/NewRoles";
+import {
+    ContentContainer,
+    ParentContentContainer,
+    PageHeading,
+    PageContent,
+    TableContainer,
+    TableFunctions,
+    Table
+} from "@UIComponents";
 
 export default function Roles(){
     const [fetching, setFetching] = useState(false);
@@ -26,43 +34,35 @@ export default function Roles(){
     }, []);
     
     return(
-        <div className="d-flex flex-column gap-2">
-            <div className="card">
-                <div className="card-body d-flex flex-row align-items-center">
-                    <div className="d-flex flex-column">
-                        <h2 className="m-0 fw-bolder">User Roles</h2>
-                        <p className="m-0">Manage Users Roles.</p>
-                    </div>
-                    <div className="ms-auto">
+        <ParentContentContainer>
+            <ContentContainer className="w-[100%] gap-3">
+                <PageHeading title="Roles" info="add, update, delete and manage institutions.">
+                    <div className="lg:ml-auto">
                         <NewRole refresh={handleFetchRoles}/>
                     </div>
-                </div>
-            </div>
-            <div className="card">
-                <div className="card-body">
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Roles</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {fetching && Array(5).fill().map((_, i) => (
-                                <tr key={i}>
-                                    <td colSpan={2}><Skeleton variant="rect" height={25}/></td>
+                </PageHeading>
+                <PageContent>
+                    <TableContainer>
+                        <TableFunctions>
+                            
+                        </TableFunctions>
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <th width={'50%'} className="text-xl px-1 py-2 uppercase bg-zinc-50 border text-start border-gray-300">Roles</th>
                                 </tr>
-                            ))}
-                            {!fetching && roles.map((permission, index) => (
-                                <tr key={index}>
-                                    <td>{permission.title}</td>
-                                    <td></td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+                            </thead>
+                            <tbody>
+                                {roles.map((role) => (
+                                    <tr key={role.id}>
+                                        <td className="p-1 py-2 font-bold uppercase border-y border-gray-300">{role.title}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </TableContainer>
+                </PageContent>
+            </ContentContainer>
+        </ParentContentContainer>
     );
 };
