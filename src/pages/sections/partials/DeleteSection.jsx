@@ -4,6 +4,9 @@ import { useState } from "react";
 import axios from "axios";
 import { useAlert } from "../../../hooks/CustomHooks";
 import { userHasRole } from "../../../global/Helpers";
+import {
+    Button
+} from "@UIComponents";
 
 export default function DeleteSection({section, refresh}){
     const [open, setOpen] = useState(false);
@@ -42,15 +45,15 @@ export default function DeleteSection({section, refresh}){
         <Dialog open={open} maxWidth="md" fullWidth>
             <DialogTitle>Are you sure you want to delete {section.grade_level} - {section.title}?</DialogTitle>
             <DialogContent dividers>
-                <h3 className="fw-bold">STUDENTS, GRADES & SUBJECTS will also be deleted.</h3>
+                <h3 className="font-bold">STUDENTS, GRADES & SUBJECTS will also be deleted.</h3>
                 <p>Are you really sure? You can't undo this action.</p>
             </DialogContent>
             <DialogActions className="d-flex flex-row justify-content-start gap-1">
-                <button className="btn btn-primary" disabled={deleting} onClick={() => handleDelete()}>
+                <Button type="button" disabled={deleting} loading={deleting} onClick={() => handleDelete()}>
                     {deleting && <span className="spinner-border spinner-border-sm"></span>}
                     Submit
-                </button>
-                <button className="btn btn-danger" disabled={deleting} onClick={() => handleModalState()}>Cancel</button>
+                </Button>
+                <Button type="cancel" disabled={deleting} loading={deleting} onClick={() => handleModalState()}>Cancel</Button>
             </DialogActions>
         </Dialog>
         </>

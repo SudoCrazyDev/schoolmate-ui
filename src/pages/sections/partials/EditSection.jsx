@@ -1,10 +1,7 @@
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import { useEffect, useMemo, useState } from 'react';
 import Divider from '@mui/material/Divider'
 import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
@@ -13,19 +10,27 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { Tooltip } from '@mui/material';
+import {
+    TextField,
+    AutoComplete,
+    Button
+} from "@UIComponents";
+import { objectToString } from '../../../global/Helpers';
 
 export default function EditSection({section, refresh}){
     const {institutions} = useSelector(state => state.user);
     const [teachers, setTeachers] = useState([]);
     const [fetching, setFetching] = useState(false);
+    const [search, setSearch] = useState("");
     const [open, setOpen] = useState(false);
+    const [selectedTeacher, setSelectedTeacher] = useState("");
     const alert = useAlert();
-    
+
     const handleModalState = () => {
       formik.resetForm();
       setOpen(!open);
     };
-    
+
     const handleFetchTeachers = async () => {
       setFetching(true);
       await axios.get(`users/all_by_institutions/${institutions[0].id}`)
@@ -39,8 +44,17 @@ export default function EditSection({section, refresh}){
       .finally(() => {
           setFetching(false);
       });
-  };
-  
+    };
+
+    const findSelectedTeacher = () => {
+      setSelectedTeacher(teachers.filter(teacher => teacher.id === section.class_adviser.id)[0]);
+    };
+    
+    const filteredTeachers = useMemo(() => {
+      if(search === "") return teachers;
+      return teachers.filter(teacher => objectToString(teacher).includes(String(search).toLowerCase()));
+    },[search, teachers]);
+
     const handleSubmit = async (values) => {
       await axios.post(`institution_sections/update`, values)
       .then(({data}) => {
@@ -55,7 +69,7 @@ export default function EditSection({section, refresh}){
         formik.setSubmitting(false);
       });
     };
-    
+
     const formik = useFormik({
         initialValues: {
           section_id: section.id,
@@ -65,12 +79,21 @@ export default function EditSection({section, refresh}){
         enableReinitialize: true,
         onSubmit: handleSubmit
     });
-    
+
     useEffect(() => {
       if(open){
         handleFetchTeachers();
       }
     }, [open]);
+
+    const handleOnChange = (item) => {
+      setSelectedTeacher(item);
+      formik.setFieldValue('class_adviser', item.id);
+    };
+
+    useEffect(() => {
+      findSelectedTeacher();
+    }, [teachers]);
     
     return(
         <>
@@ -84,24 +107,31 @@ export default function EditSection({section, refresh}){
             <Divider />
             <DialogContent>
                 <form onSubmit={formik.handleSubmit}>
-                    <div className="d-flex flex-column gap-3">
-                        <TextField label="Section Name" variant="outlined" disabled={formik.isSubmitting} {...formik.getFieldProps('title')}/>
-                        <Autocomplete
-                            disabled={formik.isSubmitting}
-                            options={teachers}
-                            fullWidth
-                            disableClearable
-                            onChange={(event, newValue) =>{
-                              formik.setFieldValue('class_adviser', newValue.id);
-                            }}
-                            defaultValue={section.class_adviser}
-                            getOptionLabel={(option) => `${String(option.last_name).toUpperCase()}, ${String(option.first_name).toUpperCase()}`}
-                            renderInput={(params) => <TextField {...params} label="Class Adviser" />}
+                    <div className="flex flex-col gap-3">
+                        <TextField
+                          required={true}
+                          type="text"
+                          label="Section Name"
+                          disabled={formik.isSubmitting}
+                          {...formik.getFieldProps('title')}
+                        />
+                        <AutoComplete
+                          label="Section Adviser"
+                          options={filteredTeachers}
+                          onChange={handleOnChange}
+                          textChange={(text) => setSearch(text)}
+                          value={selectedTeacher ? `${String(selectedTeacher.last_name).toUpperCase()}, ${String(selectedTeacher.first_name).toUpperCase()}` : search}
+                          key="id"
+                          getOptionLabel={(option) => `${String(option.last_name).toUpperCase()}, ${String(option.first_name).toUpperCase()}`}
                         />
                         <Divider />
-                        <div className="d-flex flex-row mt-2 gap-2">
-                            <Button type="submit" variant="contained" color="primary" disabled={formik.isSubmitting}>Submit</Button>
-                            <Button type="button" variant="contained" color="error" onClick={handleModalState} disabled={formik.isSubmitting}>Cancel</Button>
+                        <div className="flex flex-row mt-2 gap-2">
+                            <Button type="submit" disabled={formik.isSubmitting} loading={formik.isSubmitting}>
+                              Submit
+                            </Button>
+                            <Button type="cancel" disabled={formik.isSubmitting} loading={formik.isSubmitting} onClick={handleModalState}>
+                              Cancel
+                            </Button>
                         </div>
                     </div>
                 </form>

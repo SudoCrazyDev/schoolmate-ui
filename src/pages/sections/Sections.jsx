@@ -11,7 +11,6 @@ import { Tooltip } from '@mui/material';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import DeleteSection from './partials/DeleteSection';
-
 import {
     ContentContainer,
     ParentContentContainer,
@@ -20,6 +19,7 @@ import {
     TableContainer,
     TableFunctions,
     Table,
+    ReusableTable,
     Button,
     SelectComponent
 } from "@UIComponents";
@@ -33,7 +33,7 @@ export default function Sections(){
     const [fetchingSections, setFetchingSections] = useState(false);
     const [fetchingSubjects, setFetchingsSubjects] = useState(false);
     const [gradeLevel, setGradeLevel] = useState("7");
-    
+
     const handleFetchSections = async () => {
         setSelectedSection(null);
         setSubjects([]);
@@ -43,17 +43,17 @@ export default function Sections(){
             setSections(res.data);
         })
         .catch(() => {
-            
+
         })
         .finally(() => {
             setFetchingSections(false);
         });
     };
-    
+
     const filteredSections = useMemo(() => {
         return sections.filter(section => section.grade_level === gradeLevel);
     }, [sections, gradeLevel]);
-    
+
     const handleFetchSectionSubjects = async () => {
         if(!selectedSection) return;
         setFetchingsSubjects(true);
@@ -113,9 +113,66 @@ export default function Sections(){
                             </option>
                         </SelectComponent>
                         <hr className='my-4'/>
+                        {fetchingSections && Array(5).fill().map((_,i) => (
+                            <div key={i} className="border-0 my-0.5 rounded-2xl">
+                                <Skeleton variant="rectangle" sx={{ width: '100%', height: '25px' }} />
+                            </div>
+                        ))}
+                        {!fetchingSections && filteredSections.map(section => (
+                            <div onClick={() => setSelectedSection(section)} key={section.id} className="transition items-center flex flex-row border-1 border-gray-300 cursor-pointer px-3 py-1 my-1 rounded-lg hover:shadow-lg">
+                                <h6>{section.grade_level} - {section.title}</h6>
+                                <div className="ml-auto">
+                                    <EditSection section={section} refresh={handleFetchSections}/>
+                                    <DeleteSection section={section} refresh={handleFetchSections} />
+                                </div>
+                            </div>
+                        ))}
                     </ContentContainer>
-                    <ContentContainer className="w-10/12 py-2">
-                        
+                    <ContentContainer className="w-10/12 pl-10 flex flex-col">
+                        {selectedSection && (
+                            <div className="shadow-lg p-5 rounded-lg flex flex-col">
+                                <div className="flex flex-row">
+                                    <h2 className='font-bold text-3xl'>
+                                        {selectedSection && `${selectedSection?.grade_level} - ${selectedSection?.title}`}
+                                    </h2>
+                                    {selectedSection && (
+                                        <div className="ml-auto flex flex-row gap-3">
+                                            <NavLink to={`/advisory/new-student/${selectedSection.id}`}>
+                                                <Button>Add Student</Button>
+                                            </NavLink>
+                                            <NavLink to={`/section-masterlist/${selectedSection.id}`}>
+                                                <Button>View Master List</Button>
+                                            </NavLink>
+                                            <AddSubject selectedSection={selectedSection} refresh={handleFetchSectionSubjects}/>
+                                        </div>
+                                    )}
+                                </div>
+                                <hr className='my-8'/>
+                                <ReusableTable
+                                    items={subjects}
+                                    headers={[
+                                        'Subject', 'Start/End Time', 'Assigned Teacher', 'Actions'
+                                    ]}
+                                    renderRow={(subject, index) => (
+                                        <tr>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{subject.title}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{subject.start_time} - {subject.end_time}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                                                {subject.subject_teacher === "" || subject.subject_teacher === null ?
+                                                     <Tooltip title="NO ASSIGNED TEACHER "><ReportGmailerrorredIcon color='error' /></Tooltip>
+                                                     :
+                                                     `${String(subject.subject_teacher?.last_name).toUpperCase()}, ${String(subject.subject_teacher?.first_name).toUpperCase()}`
+                                                 }
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 flex flex-row">
+                                                <EditSubject subject={subject} refresh={handleFetchSectionSubjects}/>
+                                                <DeleteSubject subject={subject} refresh={handleFetchSectionSubjects}/>
+                                            </td>
+                                        </tr>
+                                    )}
+                                />
+                            </div>
+                        )}
                     </ContentContainer>
                     {/* <TableContainer>
                         <TableFunctions>

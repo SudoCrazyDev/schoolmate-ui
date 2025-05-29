@@ -13,7 +13,8 @@ export default defineConfig({
   },
   resolve:{
     alias:{
-      '@UIComponents': path.resolve(__dirname, 'src/global/UIComponents.jsx')
+      '@UIComponents': path.resolve(__dirname, 'src/global/UIComponents.jsx'),
+      '@CustomHooks':path.resolve(__dirname, 'src/hooks/CustomHooks.jsx')
     }
   },
   plugins: [

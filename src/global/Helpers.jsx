@@ -434,5 +434,5 @@ export const convertTo12Hour = (timeString, hasPeriod = false, formatted = false
 }
 
 export const objectToString = (obj) => {
-    return Object.values(obj).join("").replaceAll(" ", "").toLowerCase();
+    return String(Object.values(obj).join("").replaceAll(" ", "").toLowerCase());
 };

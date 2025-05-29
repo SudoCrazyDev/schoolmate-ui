@@ -2,8 +2,8 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"
 import { put, select, takeLatest } from "redux-saga/effects";
 import Axios from 'axios';
-import * as user from "../slices/UserSlice";
 import {all, call} from "redux-saga/effects";
+import * as user from '../slices/UserSlice';
 
 export const actionTypes = {
     SET_TEACHERS: "SET TEACHERS",
@@ -51,47 +51,23 @@ export const actions = {
 };
 
 
-function* handleTokenChange(){
-    const {token, user} = yield select(state => state.user);
-    if(user.roles.includes('subject-teacher'))return ;
+function* handleFetchTeachers(){
+    const {token, institutions} = yield select(state => state.user);
     if(token){
         try {
-            // const response = yield call(() => Axios.get('teachers', {
-            //     headers: {Authorization: `Bearer ${token}`}
-            // }));
-            // const currResponse = yield call(() => Axios.get('curricuum-head', {
-            //     headers: {Authorization: `Bearer ${token}`}
-            // }));
-            // yield put(actions.SET_TEACHERS(response.data));
-            // yield put(actions.SET_CURRICULUM_HEADS(currResponse.data));
-        } catch (error) {
-            console.error('Error fetching teachers:', error);
-        }
-    }
-};
-
-function* handleFetchGradeLevels(){
-    const {token, user} = yield select(state => state.user);
-    if(user.roles.includes('subject-teacher'))return ;
-    if(token){
-        try {
-            const response = yield call(() => Axios.get('sections', {
+            const response = yield call(() => Axios.get(`users/all_by_institutions/${institutions[0].id}`, {
                 headers: {Authorization: `Bearer ${token}`}
             }));
-            yield put(actions.SET_GRADELEVELS(response.data));
+            let fetched = response.data.data;
+            yield put(actions.SET_TEACHERS(fetched.sort((a,b) => a.last_name.localeCompare(b.last_name))));
         } catch (error) {
             console.error('Error fetching teachers:', error);
         }
     }
-}
-
-function* handleFetchSubscription(){
-   const {user} = yield select(state => state.user);
 };
 
 function* watchTokenChange(){
-    // yield takeLatest(user.actionTypes.SET_USER, handleTokenChange);
-    // yield takeLatest(user.actionTypes.SET_USER, handleFetchGradeLevels)
+    yield takeLatest(user.actionTypes.SET_INSTITUTIONS, handleFetchTeachers);
 };
 
 export function* saga(){

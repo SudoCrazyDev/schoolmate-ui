@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { AlertContext } from "./ContextStore";
 import { useSelector } from "react-redux";
 import pb from "../global/pb";
+import useFilterTeacher from "./useFilterTeachers";
 
 export const useAlert = () => {
     const {setAlertSettings} = useContext(AlertContext);
@@ -58,4 +59,8 @@ export const useIsAllowedTo = (action) => {
       }, [action, roles]); // Dependency array includes both action and roles
     
       return { isAllowed, isLoading };
+};
+
+export {
+  useFilterTeacher
 };
