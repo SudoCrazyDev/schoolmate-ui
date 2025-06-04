@@ -231,6 +231,7 @@ export default function SideBar(){
                             <Fragment key={load.id}>
                             {!load.parent_subject && (
                                 <Menu
+                                    allowedRole={['subject-teacher', 'principal', 'institution-app-admin', 'curriculum-heads', 'hris-admin']}
                                     key={load.id}
                                     link={`/grading/${load.id}`}
                                     icon={<CastForEducationIcon fontSize="inherit"/>}
