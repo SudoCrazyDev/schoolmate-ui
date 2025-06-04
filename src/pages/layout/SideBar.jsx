@@ -62,11 +62,13 @@ export default function SideBar(){
                             APP MANAGEMENT
                         </MenuTitle>
                         <Menu
+                            allowedRole={['app-admin']}
                             link={`/institutions`}
                             icon={<ApartmentIcon fontSize="inherit"/>}
                             title={`Institutions`}
                         />
                         <Menu
+                            allowedRole={['app-admin']}
                             link={`/subscriptions`}
                             icon={<CardMembershipIcon fontSize="inherit"/>}
                             title={`Subscriptions`}
@@ -75,11 +77,13 @@ export default function SideBar(){
                             USER MANAGEMENT
                         </MenuTitle>
                         <Menu
+                            allowedRole={['app-admin']}
                             link={`/users`}
                             icon={<GroupsIcon fontSize="inherit"/>}
                             title={`Users`}
                         />
                         <Menu
+                            allowedRole={['app-admin']}
                             link={`/roles`}
                             icon={<AdminPanelSettingsIcon fontSize="inherit"/>}
                             title={`Roles`}
