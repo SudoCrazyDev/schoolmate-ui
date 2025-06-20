@@ -69,150 +69,153 @@ const EducationTab = ({ initialEntries }) => {
     },
   });
 
-  const { values, handleChange, handleBlur, touched, errors, handleSubmit } = formik;
+  // The main formik instance from useFormik()
+  // const { values, handleChange, handleBlur, touched, errors, handleSubmit } = formik;
+  // We will use 'formik' directly for overall form actions like handleSubmit, dirty, isValid, resetForm.
+  // For FieldArray interactions, we'll use the 'form' object from its render prop.
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+    <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
       <Typography variant="h6" gutterBottom>
         Educational Background
       </Typography>
 
       <FieldArray
         name="educationEntries"
-        render={(arrayHelpers) => (
-          <div>
-            {values.educationEntries && values.educationEntries.length > 0 ? (
-              values.educationEntries.map((entry, index) => (
-                // Use entry.id if available (from initialData), otherwise index for new items.
-                <Paper key={entry.id || index} sx={{ p: 2, mb: 2, border: '1px solid #ddd' }}>
-                  <Grid container spacing={2} alignItems="flex-start"> {/* Changed to flex-start for better alignment with helper texts */}
-                    <Grid item xs={12} sm={2.5}>
-                      <TextField
-                        fullWidth
-                        name={`educationEntries[${index}].level`}
-                        label="Education Level"
-                        value={entry.level}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean(
-                            getIn(touched, `educationEntries[${index}].level`) &&
-                            getIn(errors, `educationEntries[${index}].level`)
-                        )}
-                        helperText={
-                            getIn(touched, `educationEntries[${index}].level`) &&
-                            getIn(errors, `educationEntries[${index}].level`)
-                        }
-                      />
+        render={({ form, push, remove: removeHelper }) => { // Destructure form, push, remove
+          const { values, touched, errors, handleChange, handleBlur } = form; // Use Formik context from render prop
+          return (
+            <div>
+              {values.educationEntries && values.educationEntries.length > 0 ? (
+                values.educationEntries.map((entry, index) => (
+                  <Paper key={entry.id || index} sx={{ p: 2, mb: 2, border: '1px solid #ddd' }}>
+                    <Grid container spacing={2} alignItems="flex-start">
+                      <Grid item xs={12} sm={2.5}>
+                        <TextField
+                          fullWidth
+                          name={`educationEntries[${index}].level`}
+                          label="Education Level"
+                          value={entry.level} // Direct value for display
+                          onChange={handleChange} // form.handleChange
+                          onBlur={handleBlur}   // form.handleBlur
+                          error={Boolean(
+                              getIn(touched, `educationEntries[${index}].level`) &&
+                              getIn(errors, `educationEntries[${index}].level`)
+                          )}
+                          helperText={
+                              getIn(touched, `educationEntries[${index}].level`) &&
+                              getIn(errors, `educationEntries[${index}].level`)
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={3}>
+                        <TextField
+                          fullWidth
+                          name={`educationEntries[${index}].school`}
+                          label="School/Institution"
+                          value={entry.school}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={Boolean(
+                              getIn(touched, `educationEntries[${index}].school`) &&
+                              getIn(errors, `educationEntries[${index}].school`)
+                          )}
+                          helperText={
+                              getIn(touched, `educationEntries[${index}].school`) &&
+                              getIn(errors, `educationEntries[${index}].school`)
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={2.5}>
+                        <TextField
+                          fullWidth
+                          name={`educationEntries[${index}].degree`}
+                          label="Degree/Course"
+                          value={entry.degree}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={Boolean(
+                              getIn(touched, `educationEntries[${index}].degree`) &&
+                              getIn(errors, `educationEntries[${index}].degree`)
+                          )}
+                          helperText={
+                              getIn(touched, `educationEntries[${index}].degree`) &&
+                              getIn(errors, `educationEntries[${index}].degree`)
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={1.5}>
+                        <TextField
+                          fullWidth
+                          name={`educationEntries[${index}].yearGraduated`}
+                          label="Year Graduated"
+                          type="number"
+                          value={entry.yearGraduated}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={Boolean(
+                              getIn(touched, `educationEntries[${index}].yearGraduated`) &&
+                              getIn(errors, `educationEntries[${index}].yearGraduated`)
+                          )}
+                          helperText={
+                              getIn(touched, `educationEntries[${index}].yearGraduated`) &&
+                              getIn(errors, `educationEntries[${index}].yearGraduated`)
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={2}>
+                        <TextField
+                          fullWidth
+                          name={`educationEntries[${index}].awards`}
+                          label="Awards/Recognition"
+                          value={entry.awards}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={Boolean(
+                              getIn(touched, `educationEntries[${index}].awards`) &&
+                              getIn(errors, `educationEntries[${index}].awards`)
+                          )}
+                          helperText={
+                              getIn(touched, `educationEntries[${index}].awards`) &&
+                              getIn(errors, `educationEntries[${index}].awards`)
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={0.5} sx={{ textAlign: 'right' }}>
+                        <IconButton
+                          onClick={() => removeHelper(index)} // Use removeHelper from render prop
+                          color="error"
+                        >
+                          <DeleteOutlineIcon />
+                        </IconButton>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={3}>
-                      <TextField
-                        fullWidth
-                        name={`educationEntries[${index}].school`}
-                        label="School/Institution"
-                        value={entry.school}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean(
-                            getIn(touched, `educationEntries[${index}].school`) &&
-                            getIn(errors, `educationEntries[${index}].school`)
-                        )}
-                        helperText={
-                            getIn(touched, `educationEntries[${index}].school`) &&
-                            getIn(errors, `educationEntries[${index}].school`)
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={2.5}>
-                      <TextField
-                        fullWidth
-                        name={`educationEntries[${index}].degree`}
-                        label="Degree/Course"
-                        value={entry.degree}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean(
-                            getIn(touched, `educationEntries[${index}].degree`) &&
-                            getIn(errors, `educationEntries[${index}].degree`)
-                        )}
-                        helperText={
-                            getIn(touched, `educationEntries[${index}].degree`) &&
-                            getIn(errors, `educationEntries[${index}].degree`)
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={1.5}>
-                      <TextField
-                        fullWidth
-                        name={`educationEntries[${index}].yearGraduated`}
-                        label="Year Graduated"
-                        type="number"
-                        value={entry.yearGraduated}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean(
-                            getIn(touched, `educationEntries[${index}].yearGraduated`) &&
-                            getIn(errors, `educationEntries[${index}].yearGraduated`)
-                        )}
-                        helperText={
-                            getIn(touched, `educationEntries[${index}].yearGraduated`) &&
-                            getIn(errors, `educationEntries[${index}].yearGraduated`)
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                      <TextField
-                        fullWidth
-                        name={`educationEntries[${index}].awards`}
-                        label="Awards/Recognition"
-                        value={entry.awards}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean(
-                            getIn(touched, `educationEntries[${index}].awards`) &&
-                            getIn(errors, `educationEntries[${index}].awards`)
-                        )}
-                        helperText={
-                            getIn(touched, `educationEntries[${index}].awards`) &&
-                            getIn(errors, `educationEntries[${index}].awards`)
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={0.5} sx={{ textAlign: 'right' }}>
-                      <IconButton
-                        onClick={() => arrayHelpers.remove(index)}
-                        color="error"
-                        // Allow deleting any entry; validation will ensure min length if needed.
-                      >
-                        <DeleteOutlineIcon />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                </Paper>
-              ))
-            ) : (
-                 <Typography sx={{my: 2, textAlign: 'center', color: 'text.secondary'}}>No education entries added yet.</Typography>
-            )}
-            <Button
-              type="button"
-              startIcon={<AddCircleOutlineIcon />}
-              onClick={() => arrayHelpers.push({
-                id: Date.now().toString() + Math.random(), // Generate a temporary unique ID for the new entry for React key purposes
-                level: '', school: '', degree: '', yearGraduated: '', awards: ''
-              })}
-              variant="outlined"
-              sx={{ mt: 1, mb: 2 }}
-            >
-              Add Education Entry
-            </Button>
-            {/* Display general array errors (like min length) */}
-            {typeof errors.educationEntries === 'string' && (
-                 <Alert severity="error" sx={{ mb: 2 }}>
-                    <AlertTitle>Error</AlertTitle>
-                    {errors.educationEntries}
-                 </Alert>
-            )}
-          </div>
-        )}
+                  </Paper>
+                ))
+              ) : (
+                   <Typography sx={{my: 2, textAlign: 'center', color: 'text.secondary'}}>No education entries added yet.</Typography>
+              )}
+              <Button
+                type="button"
+                startIcon={<AddCircleOutlineIcon />}
+                onClick={() => push({ // Use push from render prop
+                  id: Date.now().toString() + Math.random(),
+                  level: '', school: '', degree: '', yearGraduated: '', awards: ''
+                })}
+                variant="outlined"
+                sx={{ mt: 1, mb: 2 }}
+              >
+                Add Education Entry
+              </Button>
+              {typeof errors.educationEntries === 'string' && (
+                   <Alert severity="error" sx={{ mb: 2 }}>
+                      <AlertTitle>Error</AlertTitle>
+                      {errors.educationEntries} {/* This refers to form.errors */}
+                   </Alert>
+              )}
+            </div>
+          );
+        }}
       />
 
       <Box sx={{ mt: 3, mb: 2, position: 'relative' }}>
@@ -227,7 +230,7 @@ const EducationTab = ({ initialEntries }) => {
           type="submit"
           variant="contained"
           color="primary"
-          disabled={loading || !formik.dirty || !formik.isValid}
+          disabled={loading || !formik.dirty || !formik.isValid} // Use main formik instance here
           sx={{ mr: 1 }}
         >
           {loading ? <CircularProgress size={24} /> : 'Save Changes'}
@@ -236,8 +239,7 @@ const EducationTab = ({ initialEntries }) => {
             type="button"
             variant="outlined"
             onClick={() => {
-                // Reset form to the initial values passed via props, or to a blank state if none.
-                formik.resetForm({
+                formik.resetForm({ // Use main formik instance here
                     values: {
                         educationEntries: initialEntries && initialEntries.length > 0
                         ? initialEntries.map(e => ({ ...e, id: e.id || Date.now().toString() + Math.random() }))
@@ -247,7 +249,7 @@ const EducationTab = ({ initialEntries }) => {
                 setSubmitStatus(null);
                 setAlertMessage('');
             }}
-            disabled={loading || !formik.dirty} // Keep disabled if form is pristine
+            disabled={loading || !formik.dirty} // Use main formik instance here
         >
             Reset
         </Button>

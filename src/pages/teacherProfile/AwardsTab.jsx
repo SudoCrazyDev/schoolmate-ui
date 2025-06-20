@@ -124,13 +124,32 @@ const AwardsTab = ({ initialEntries }) => {
     }
   };
 
-  // Removes a specific image from the 'images' array for a given award entry
-  const removeImage = (entryIndex, imageIndexToRemove) => {
-    const updatedImages = values.awardEntries[entryIndex].images.filter((_, imgIndex) => imgIndex !== imageIndexToRemove);
-    setFieldValue(`awardEntries[${entryIndex}].images`, updatedImages);
+  // Modified to accept 'form' from FieldArray render prop
+  const handleFileChangeInArray = (event, index, formInstance) => {
+    const files = Array.from(event.currentTarget.files);
+    const currentImages = formInstance.values.awardEntries[index].images || [];
+    const availableSlots = MAX_FILES_PER_AWARD - currentImages.length;
 
-    // If all files are removed for this specific entry, and we have a ref to its input, clear the input.
-    // This helps if the user wants to re-select files after removing all previous ones.
+    if (files.length > availableSlots) {
+      const filesToUpload = files.slice(0, availableSlots);
+      formInstance.setFieldValue(`awardEntries[${index}].images`, [...currentImages, ...filesToUpload]);
+      formInstance.setFieldError(`awardEntries[${index}].images`, `You can select a maximum of ${MAX_FILES_PER_AWARD} files. ${files.length - availableSlots} file(s) were not added.`);
+    } else {
+      formInstance.setFieldValue(`awardEntries[${index}].images`, [...currentImages, ...files]);
+      formInstance.setFieldError(`awardEntries[${index}].images`, undefined);
+    }
+    formInstance.setFieldTouched(`awardEntries[${index}].images`, true, false);
+
+    if (!fileInputRefs.current[index]) {
+      fileInputRefs.current[index] = event.currentTarget;
+    }
+  };
+
+  // Modified to accept 'form' from FieldArray render prop
+  const removeImageInArray = (entryIndex, imageIndexToRemove, formInstance) => {
+    const updatedImages = formInstance.values.awardEntries[entryIndex].images.filter((_, imgIndex) => imgIndex !== imageIndexToRemove);
+    formInstance.setFieldValue(`awardEntries[${entryIndex}].images`, updatedImages);
+
     if (updatedImages.length === 0 && fileInputRefs.current[entryIndex]) {
       fileInputRefs.current[entryIndex].value = null;
     }
@@ -138,150 +157,151 @@ const AwardsTab = ({ initialEntries }) => {
 
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+    <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}> {/* Use main formik instance for submission */}
       <Typography variant="h6" gutterBottom>
         Awards and Recognitions
       </Typography>
 
       <FieldArray
         name="awardEntries"
-        render={(arrayHelpers) => (
-          <div>
-            {values.awardEntries && values.awardEntries.length > 0 ? (
-              values.awardEntries.map((entry, index) => (
-                <Paper key={entry.id || index} sx={{ p: 2, mb: 2, border: '1px solid #ddd' }}> {/* Use entry.id for key */}
-                  <Grid container spacing={2} alignItems="flex-start">
-                    {/* Placeholder comment: Display existing images (e.g., from URLs in entry.existingImageUrls) here if applicable */}
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        name={`awardEntries[${index}].title`}
-                        label="Award/Recognition Title"
-                        value={entry.title}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean(getIn(touched, `awardEntries[${index}].title`) && getIn(errors, `awardEntries[${index}].title`))}
-                        helperText={getIn(touched, `awardEntries[${index}].title`) && getIn(errors, `awardEntries[${index}].title`)}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        multiline
-                        rows={2}
-                        name={`awardEntries[${index}].description`}
-                        label="Brief Description (Optional)"
-                        value={entry.description}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean(getIn(touched, `awardEntries[${index}].description`) && getIn(errors, `awardEntries[${index}].description`))}
-                        helperText={getIn(touched, `awardEntries[${index}].description`) && getIn(errors, `awardEntries[${index}].description`)}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        name={`awardEntries[${index}].date`}
-                        label="Date Received"
-                        type="date"
-                        InputLabelProps={{ shrink: true }}
-                        value={entry.date}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean(getIn(touched, `awardEntries[${index}].date`) && getIn(errors, `awardEntries[${index}].date`))}
-                        helperText={getIn(touched, `awardEntries[${index}].date`) && getIn(errors, `awardEntries[${index}].date`)}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Button
-                        variant="outlined"
-                        component="label"
-                        startIcon={<AttachFileIcon />}
-                        disabled={(values.awardEntries[index].images?.length || 0) >= MAX_FILES_PER_AWARD}
-                      >
-                        { (values.awardEntries[index].images?.length || 0) >= MAX_FILES_PER_AWARD
-                          ? `Max Files Reached (${MAX_FILES_PER_AWARD})`
-                          : `Upload Images (${values.awardEntries[index].images?.length || 0}/${MAX_FILES_PER_AWARD})`
-                        }
-                        <input
-                          type="file"
-                          hidden
-                          multiple
-                          accept="image/jpeg, image/png, image/gif, application/pdf" // Example file types
-                          onChange={(event) => handleFileChange(event, index)}
-                          ref={el => fileInputRefs.current[index] = el} // Assign ref
-                        />
-                      </Button>
-                      {getIn(errors, `awardEntries[${index}].images`) && (
-                        <Typography color="error" variant="caption" display="block" sx={{mt:1}}>
-                            { typeof getIn(errors, `awardEntries[${index}].images`) === 'string'
-                                ? getIn(errors, `awardEntries[${index}].images`)
-                                : "Error with one or more files (e.g. size)"
-                            }
-                        </Typography>
-                      )}
-                    </Grid>
-
-                    {entry.images && entry.images.length > 0 && (
+        render={({ form, push, remove: removeHelper }) => { // Destructure form, push, remove
+          const { values, touched, errors, handleChange, handleBlur } = form; // Use Formik context from render prop
+          return (
+            <div>
+              {values.awardEntries && values.awardEntries.length > 0 ? (
+                values.awardEntries.map((entry, index) => (
+                  <Paper key={entry.id || index} sx={{ p: 2, mb: 2, border: '1px solid #ddd' }}>
+                    <Grid container spacing={2} alignItems="flex-start">
                       <Grid item xs={12}>
-                        <Typography variant="subtitle2" sx={{mt: 1}}>Selected Files:</Typography>
-                        <List dense>
-                          {entry.images.map((file, fileIndex) => (
-                            <ListItem
-                              key={file.name + fileIndex}
-                              secondaryAction={
-                                <IconButton edge="end" aria-label="delete" onClick={() => removeImage(index, fileIndex)}>
-                                  <DeleteOutlineIcon />
-                                </IconButton>
-                              }
-                            >
-                              <ListItemText
-                                primary={file.name}
-                                secondary={`(${(file.size / 1024).toFixed(2)} KB)`}
-                              />
-                            </ListItem>
-                          ))}
-                        </List>
+                        <TextField
+                          fullWidth
+                          name={`awardEntries[${index}].title`}
+                          label="Award/Recognition Title"
+                          value={entry.title} // Direct value
+                          onChange={handleChange} // form.handleChange
+                          onBlur={handleBlur}   // form.handleBlur
+                          error={Boolean(getIn(touched, `awardEntries[${index}].title`) && getIn(errors, `awardEntries[${index}].title`))}
+                          helperText={getIn(touched, `awardEntries[${index}].title`) && getIn(errors, `awardEntries[${index}].title`)}
+                        />
                       </Grid>
-                    )}
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          multiline
+                          rows={2}
+                          name={`awardEntries[${index}].description`}
+                          label="Brief Description (Optional)"
+                          value={entry.description}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={Boolean(getIn(touched, `awardEntries[${index}].description`) && getIn(errors, `awardEntries[${index}].description`))}
+                          helperText={getIn(touched, `awardEntries[${index}].description`) && getIn(errors, `awardEntries[${index}].description`)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          name={`awardEntries[${index}].date`}
+                          label="Date Received"
+                          type="date"
+                          InputLabelProps={{ shrink: true }}
+                          value={entry.date}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={Boolean(getIn(touched, `awardEntries[${index}].date`) && getIn(errors, `awardEntries[${index}].date`))}
+                          helperText={getIn(touched, `awardEntries[${index}].date`) && getIn(errors, `awardEntries[${index}].date`)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Button
+                          variant="outlined"
+                          component="label"
+                          startIcon={<AttachFileIcon />}
+                          disabled={(values.awardEntries[index].images?.length || 0) >= MAX_FILES_PER_AWARD}
+                        >
+                          { (values.awardEntries[index].images?.length || 0) >= MAX_FILES_PER_AWARD
+                            ? `Max Files Reached (${MAX_FILES_PER_AWARD})`
+                            : `Upload Images (${values.awardEntries[index].images?.length || 0}/${MAX_FILES_PER_AWARD})`
+                          }
+                          <input
+                            type="file"
+                            hidden
+                            multiple
+                            accept="image/jpeg, image/png, image/gif, application/pdf"
+                            onChange={(event) => handleFileChangeInArray(event, index, form)} // Pass form instance
+                            ref={el => fileInputRefs.current[index] = el}
+                          />
+                        </Button>
+                        {getIn(errors, `awardEntries[${index}].images`) && (
+                          <Typography color="error" variant="caption" display="block" sx={{mt:1}}>
+                              { typeof getIn(errors, `awardEntries[${index}].images`) === 'string'
+                                  ? getIn(errors, `awardEntries[${index}].images`)
+                                  : "Error with one or more files (e.g. size)"
+                              }
+                          </Typography>
+                        )}
+                      </Grid>
 
-                    <Grid item xs={12} sx={{ textAlign: 'right' }}>
-                      <IconButton
-                        onClick={() => arrayHelpers.remove(index)}
-                        color="error"
-                        // Allow deleting any entry
-                      >
-                        <DeleteOutlineIcon />
-                      </IconButton>
+                      {entry.images && entry.images.length > 0 && (
+                        <Grid item xs={12}>
+                          <Typography variant="subtitle2" sx={{mt: 1}}>Selected Files:</Typography>
+                          <List dense>
+                            {entry.images.map((file, fileIndex) => (
+                              <ListItem
+                                key={file.name + fileIndex}
+                                secondaryAction={
+                                  <IconButton edge="end" aria-label="delete" onClick={() => removeImageInArray(index, fileIndex, form)}> {/* Pass form instance */}
+                                    <DeleteOutlineIcon />
+                                  </IconButton>
+                                }
+                              >
+                                <ListItemText
+                                  primary={file.name}
+                                  secondary={`(${(file.size / 1024).toFixed(2)} KB)`}
+                                />
+                              </ListItem>
+                            ))}
+                          </List>
+                        </Grid>
+                      )}
+
+                      <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                        <IconButton
+                          onClick={() => removeHelper(index)} // Use removeHelper from render prop
+                          color="error"
+                        >
+                          <DeleteOutlineIcon />
+                        </IconButton>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Paper>
-              ))
-            ) : (
-                <Typography sx={{my: 2, textAlign: 'center', color: 'text.secondary'}}>No awards or recognitions added yet.</Typography>
-            )}
-            <Button
-              type="button"
-              startIcon={<AddCircleOutlineIcon />}
-              onClick={() => {
-                arrayHelpers.push({
-                    id: Date.now().toString() + Math.random(), // Generate a temporary unique ID for the new entry
-                    title: '', description: '', date: '', images: []
-                });
-              }}
-              variant="outlined"
-              sx={{ mt: 1, mb: 2 }}
-            >
-              Add Award/Recognition
-            </Button>
-            {typeof errors.awardEntries === 'string' && (
-                 <Alert severity="error" sx={{ mb: 2 }}>
-                    <AlertTitle>Error</AlertTitle>
-                    {errors.awardEntries}
-                 </Alert>
-            )}
-          </div>
-        )}
+                  </Paper>
+                ))
+              ) : (
+                  <Typography sx={{my: 2, textAlign: 'center', color: 'text.secondary'}}>No awards or recognitions added yet.</Typography>
+              )}
+              <Button
+                type="button"
+                startIcon={<AddCircleOutlineIcon />}
+                onClick={() => {
+                  push({ // Use push from render prop
+                      id: Date.now().toString() + Math.random(),
+                      title: '', description: '', date: '', images: []
+                  });
+                }}
+                variant="outlined"
+                sx={{ mt: 1, mb: 2 }}
+              >
+                Add Award/Recognition
+              </Button>
+              {typeof errors.awardEntries === 'string' && (
+                   <Alert severity="error" sx={{ mb: 2 }}>
+                      <AlertTitle>Error</AlertTitle>
+                      {errors.awardEntries} {/* This refers to form.errors */}
+                   </Alert>
+              )}
+            </div>
+          );
+        }}
       />
 
       <Box sx={{ mt: 3, mb: 2, position: 'relative' }}>
@@ -295,7 +315,7 @@ const AwardsTab = ({ initialEntries }) => {
           type="submit"
           variant="contained"
           color="primary"
-          disabled={loading || !formik.dirty || !formik.isValid}
+          disabled={loading || !formik.dirty || !formik.isValid} // Use main formik instance for these
           sx={{ mr: 1 }}
         >
           {loading ? <CircularProgress size={24} /> : 'Save Changes'}
@@ -304,7 +324,7 @@ const AwardsTab = ({ initialEntries }) => {
             type="button"
             variant="outlined"
             onClick={() => {
-                formik.resetForm({
+                formik.resetForm({ // Use main formik instance
                     values: {
                         awardEntries: initialEntries && initialEntries.length > 0
                         ? initialEntries.map(e => ({
@@ -312,17 +332,16 @@ const AwardsTab = ({ initialEntries }) => {
                             title: e.title || '',
                             description: e.description || '',
                             date: e.date || '',
-                            images: [] // Reset images; existing images are not part of this form's direct state
+                            images: []
                           }))
                         : [{ id: Date.now().toString(), title: '', description: '', date: '', images: [] }]
                     }
                 });
                 fileInputRefs.current.forEach(ref => { if (ref) ref.value = null; });
-    // Do not clear the fileInputRefs.current array itself, as refs are tied to rendered inputs.
                 setSubmitStatus(null);
                 setAlertMessage('');
             }}
-            disabled={loading || !formik.dirty}
+            disabled={loading || !formik.dirty} // Use main formik instance
         >
             Reset
         </Button>
