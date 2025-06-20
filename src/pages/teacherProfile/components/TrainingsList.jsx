@@ -58,7 +58,7 @@ const TrainingsList = ({ trainings, setTrainings, onEditTraining }) => {
         setLoading(true);
         setError(null);
         try {
-            await axios.delete(`/api/trainings/${deleteConfirmation.id}`);
+            await axios.delete(`trainings/${deleteConfirmation.id}`);
             setTrainings(prevTrainings => prevTrainings.filter(t => t.id !== deleteConfirmation.id));
             setLoading(false);
             closeDeleteConfirmation();

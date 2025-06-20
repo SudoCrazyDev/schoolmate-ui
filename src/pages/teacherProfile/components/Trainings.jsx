@@ -16,7 +16,7 @@ const Trainings = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get('/api/trainings');
+            const response = await axios.get('trainings');
             // Assuming the API returns data in a structure like { data: [...] } or directly [...]
             setTrainings(response.data.data || response.data || []);
         } catch (err) {

@@ -20,8 +20,8 @@ userHasRole.propTypes = {
 };
 
 export const getUserId = () => {
-    const { user } = useSelector(state => state.user);
-    return user.id;
+    const { info } = useSelector(state => state.user);
+    return info.id;
 };
 
 /**

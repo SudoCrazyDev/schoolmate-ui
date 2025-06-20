@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { TextField, Button, CircularProgress, Alert, Box, Typography, IconButton } from '@mui/material';
 import { AddPhotoAlternate, Delete } from '@mui/icons-material';
+import { getUserId } from '../../../global/Helpers';
 
 // Helper to format date for input type="date"
 const formatDateForInput = (dateString) => {
@@ -21,6 +22,7 @@ const AddTrainingForm = ({ onFormSubmit, existingTraining, onCancel }) => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
     const [previewImages, setPreviewImages] = useState([]);
+    const userId = getUserId();
     const isEditMode = Boolean(existingTraining);
 
     const validationSchema = Yup.object({
@@ -57,7 +59,7 @@ const AddTrainingForm = ({ onFormSubmit, existingTraining, onCancel }) => {
             title: '',
             description: '',
             date: '',
-            images: [], // This will hold File objects for new uploads
+            images: [],
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
@@ -69,6 +71,7 @@ const AddTrainingForm = ({ onFormSubmit, existingTraining, onCancel }) => {
             formData.append('title', values.title);
             formData.append('description', values.description);
             formData.append('date', values.date);
+            formData.append('user_id', userId);
 
             // Only append images if new ones are selected
             if (values.images && values.images.length > 0) {
@@ -91,14 +94,14 @@ const AddTrainingForm = ({ onFormSubmit, existingTraining, onCancel }) => {
                     // For PUT with FormData, some backends prefer POST with a _method field
                     // formData.append('_method', 'PUT');
                     // response = await axios.post(`/api/trainings/${existingTraining.id}`, formData, {
-                    response = await axios.put(`/api/trainings/${existingTraining.id}`, formData, {
+                    response = await axios.put(`trainings/${existingTraining.id}`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         },
                     });
                     setSuccess('Training updated successfully!');
                 } else {
-                    response = await axios.post('/api/trainings', formData, {
+                    response = await axios.post('trainings', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         },
