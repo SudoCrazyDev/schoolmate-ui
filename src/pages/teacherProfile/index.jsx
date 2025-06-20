@@ -117,8 +117,8 @@ const TeacherProfile = () => {
         <EducationTab initialEntries={profileData?.educationEntries} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        {/* TrainingsTab already handles its own sample data if prop is not provided or empty */}
-        <TrainingsTab trainings={profileData?.trainings} />
+        {/* Pass trainingEntries from profileData to TrainingsTab's initialEntries prop */}
+        <TrainingsTab initialEntries={profileData?.trainingEntries} />
       </TabPanel>
       <TabPanel value={value} index={3}>
         <AwardsTab initialEntries={profileData?.awards} />
