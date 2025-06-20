@@ -82,8 +82,17 @@ const EducationTab = ({ initialEntries }) => {
 
       <FieldArray
         name="educationEntries"
-        render={({ form, push, remove: removeHelper }) => { // Destructure form, push, remove
-          const { values, touched, errors, handleChange, handleBlur } = form; // Use Formik context from render prop
+        render={(arrayHelpers) => {
+          const form = arrayHelpers.form;
+          const { push, remove: removeHelper } = arrayHelpers;
+
+          if (!form || !form.values) {
+            // This case should ideally not happen if arrayHelpers.form is correct.
+            console.error('Formik context (form or form.values) not available in EducationTab FieldArray as expected via arrayHelpers.form.');
+            return <Alert severity="error">Error: Form context is not properly loaded for education entries.</Alert>;
+          }
+
+          const { values, touched, errors, handleChange, handleBlur } = form; // Use Formik context from arrayHelpers.form
           const educationEntriesArray = values?.educationEntries || []; // Safe access to the array
 
           return (
