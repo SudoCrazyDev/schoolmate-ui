@@ -1,0 +1,342 @@
+import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
+import { useFormik, FieldArray, getIn } from 'formik';
+import * as Yup from 'yup';
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  IconButton,
+  Paper,
+  Grid,
+  CircularProgress,
+  Alert,
+  Chip,
+  List,
+  ListItem,
+  ListItemText,
+  AlertTitle, // Added
+} from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { updateAwardsInfoAPI, awardEntryShape as awardEntryPropType } from './utils'; // Import shape
+
+const MAX_FILES_PER_AWARD = 5;
+const MAX_FILE_SIZE_MB = 2; // Max file size in MB
+
+// Renamed for clarity
+const awardEntryValidationSchema = Yup.object().shape({
+  title: Yup.string().required('Title is required'),
+  description: Yup.string().nullable(),
+  date: Yup.date().required('Date is required').nullable().typeError('Invalid date format. Please use YYYY-MM-DD.'),
+  // 'images' here refers to the FileList/array of File objects from the input for new uploads
+  images: Yup.array()
+    .of(
+      Yup.mixed()
+        .test(
+          'fileSize',
+          `File size should not exceed ${MAX_FILE_SIZE_MB}MB`,
+          // value here is a File object
+          (value) => !value || (value && value.size <= MAX_FILE_SIZE_MB * 1024 * 1024)
+        )
+        // Example: .test('fileType', 'Unsupported file format', (value) => !value || (value && ['image/jpeg', 'image/png'].includes(value.type)))
+    )
+    .max(MAX_FILES_PER_AWARD, `Cannot upload more than ${MAX_FILES_PER_AWARD} images per award.`),
+  // If you had a field for already uploaded image metadata (e.g., from API), it would be separate:
+  // existingImageUrls: Yup.array().of(PropTypes.string)
+});
+
+const AwardsTab = ({ initialEntries }) => {
+  const [loading, setLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [alertMessage, setAlertMessage] = useState('');
+  const fileInputRefs = useRef([]); // Refs for file inputs
+
+  const formik = useFormik({
+    initialValues: {
+      awardEntries: initialEntries && initialEntries.length > 0
+        ? initialEntries.map(e => ({
+            id: e.id || Date.now().toString() + Math.random(), // Ensure id for key
+            title: e.title || '',
+            description: e.description || '',
+            date: e.date || '',
+            images: [], // For new file uploads. Existing images would be handled differently (e.g. displayed from URLs)
+            // existingImageUrls: e.existingImageUrls || [] // If you were to load URLs of already uploaded images
+          }))
+        : [{ id: Date.now().toString(), title: '', description: '', date: '', images: [] }], // Default new entry with an ID
+    },
+    // enableReinitialize allows the form to update if the initialEntries prop changes.
+    enableReinitialize: true,
+    validationSchema: Yup.object().shape({
+      awardEntries: Yup.array().of(awardEntryValidationSchema).min(1, 'At least one award entry is required'),
+    }),
+    onSubmit: async (values) => {
+      setLoading(true);
+      setSubmitStatus(null);
+      setAlertMessage('');
+
+      // The console.log for the API call itself (which includes image handling notes) is in utils.js.
+      // No need for additional console.logs here regarding FormData simulation.
+
+      try {
+        const response = await updateAwardsInfoAPI(values.awardEntries);
+        setAlertMessage(response.message);
+        setSubmitStatus('success');
+        // Optionally reset form if successful and desired, for example:
+        // if (response.data) { // Or some other condition indicating full success
+        //   formik.resetForm();
+        //   fileInputRefs.current.forEach(ref => { if (ref) ref.value = null; });
+        // }
+      } catch (error) {
+        setAlertMessage(error.message || 'An unexpected error occurred.');
+        setSubmitStatus('error');
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+
+  const { values, handleChange, handleBlur, touched, errors, handleSubmit, setFieldValue } = formik;
+
+  const handleFileChange = (event, index) => {
+    const files = Array.from(event.currentTarget.files); // Convert FileList to array
+    const currentImages = values.awardEntries[index].images || [];
+    const availableSlots = MAX_FILES_PER_AWARD - currentImages.length;
+
+    if (files.length > availableSlots) {
+      // If trying to upload more files than available slots, take only what fits
+      const filesToUpload = files.slice(0, availableSlots);
+      setFieldValue(`awardEntries[${index}].images`, [...currentImages, ...filesToUpload]);
+      formik.setFieldError(`awardEntries[${index}].images`, `You can select a maximum of ${MAX_FILES_PER_AWARD} files. ${files.length - availableSlots} file(s) were not added.`);
+    } else {
+      setFieldValue(`awardEntries[${index}].images`, [...currentImages, ...files]);
+      formik.setFieldError(`awardEntries[${index}].images`, undefined); // Clear previous error
+    }
+    formik.setFieldTouched(`awardEntries[${index}].images`, true, false); // Mark as touched
+
+    // Store ref to the input element. This is useful if we need to programmatically clear it,
+    // though direct manipulation of file input value is limited for security reasons.
+    // It's more for keeping track of the input elements themselves if needed.
+    if (!fileInputRefs.current[index]) {
+      fileInputRefs.current[index] = event.currentTarget;
+    }
+  };
+
+  // Removes a specific image from the 'images' array for a given award entry
+  const removeImage = (entryIndex, imageIndexToRemove) => {
+    const updatedImages = values.awardEntries[entryIndex].images.filter((_, imgIndex) => imgIndex !== imageIndexToRemove);
+    setFieldValue(`awardEntries[${entryIndex}].images`, updatedImages);
+
+    // If all files are removed for this specific entry, and we have a ref to its input, clear the input.
+    // This helps if the user wants to re-select files after removing all previous ones.
+    if (updatedImages.length === 0 && fileInputRefs.current[entryIndex]) {
+      fileInputRefs.current[entryIndex].value = null;
+    }
+  };
+
+
+  return (
+    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+      <Typography variant="h6" gutterBottom>
+        Awards and Recognitions
+      </Typography>
+
+      <FieldArray
+        name="awardEntries"
+        render={(arrayHelpers) => (
+          <div>
+            {values.awardEntries && values.awardEntries.length > 0 ? (
+              values.awardEntries.map((entry, index) => (
+                <Paper key={entry.id || index} sx={{ p: 2, mb: 2, border: '1px solid #ddd' }}> {/* Use entry.id for key */}
+                  <Grid container spacing={2} alignItems="flex-start">
+                    {/* Placeholder comment: Display existing images (e.g., from URLs in entry.existingImageUrls) here if applicable */}
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        name={`awardEntries[${index}].title`}
+                        label="Award/Recognition Title"
+                        value={entry.title}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={Boolean(getIn(touched, `awardEntries[${index}].title`) && getIn(errors, `awardEntries[${index}].title`))}
+                        helperText={getIn(touched, `awardEntries[${index}].title`) && getIn(errors, `awardEntries[${index}].title`)}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        multiline
+                        rows={2}
+                        name={`awardEntries[${index}].description`}
+                        label="Brief Description (Optional)"
+                        value={entry.description}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={Boolean(getIn(touched, `awardEntries[${index}].description`) && getIn(errors, `awardEntries[${index}].description`))}
+                        helperText={getIn(touched, `awardEntries[${index}].description`) && getIn(errors, `awardEntries[${index}].description`)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        name={`awardEntries[${index}].date`}
+                        label="Date Received"
+                        type="date"
+                        InputLabelProps={{ shrink: true }}
+                        value={entry.date}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={Boolean(getIn(touched, `awardEntries[${index}].date`) && getIn(errors, `awardEntries[${index}].date`))}
+                        helperText={getIn(touched, `awardEntries[${index}].date`) && getIn(errors, `awardEntries[${index}].date`)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Button
+                        variant="outlined"
+                        component="label"
+                        startIcon={<AttachFileIcon />}
+                        disabled={(values.awardEntries[index].images?.length || 0) >= MAX_FILES_PER_AWARD}
+                      >
+                        { (values.awardEntries[index].images?.length || 0) >= MAX_FILES_PER_AWARD
+                          ? `Max Files Reached (${MAX_FILES_PER_AWARD})`
+                          : `Upload Images (${values.awardEntries[index].images?.length || 0}/${MAX_FILES_PER_AWARD})`
+                        }
+                        <input
+                          type="file"
+                          hidden
+                          multiple
+                          accept="image/jpeg, image/png, image/gif, application/pdf" // Example file types
+                          onChange={(event) => handleFileChange(event, index)}
+                          ref={el => fileInputRefs.current[index] = el} // Assign ref
+                        />
+                      </Button>
+                      {getIn(errors, `awardEntries[${index}].images`) && (
+                        <Typography color="error" variant="caption" display="block" sx={{mt:1}}>
+                            { typeof getIn(errors, `awardEntries[${index}].images`) === 'string'
+                                ? getIn(errors, `awardEntries[${index}].images`)
+                                : "Error with one or more files (e.g. size)"
+                            }
+                        </Typography>
+                      )}
+                    </Grid>
+
+                    {entry.images && entry.images.length > 0 && (
+                      <Grid item xs={12}>
+                        <Typography variant="subtitle2" sx={{mt: 1}}>Selected Files:</Typography>
+                        <List dense>
+                          {entry.images.map((file, fileIndex) => (
+                            <ListItem
+                              key={file.name + fileIndex}
+                              secondaryAction={
+                                <IconButton edge="end" aria-label="delete" onClick={() => removeImage(index, fileIndex)}>
+                                  <DeleteOutlineIcon />
+                                </IconButton>
+                              }
+                            >
+                              <ListItemText
+                                primary={file.name}
+                                secondary={`(${(file.size / 1024).toFixed(2)} KB)`}
+                              />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Grid>
+                    )}
+
+                    <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                      <IconButton
+                        onClick={() => arrayHelpers.remove(index)}
+                        color="error"
+                        // Allow deleting any entry
+                      >
+                        <DeleteOutlineIcon />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              ))
+            ) : (
+                <Typography sx={{my: 2, textAlign: 'center', color: 'text.secondary'}}>No awards or recognitions added yet.</Typography>
+            )}
+            <Button
+              type="button"
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => {
+                arrayHelpers.push({
+                    id: Date.now().toString() + Math.random(), // Generate a temporary unique ID for the new entry
+                    title: '', description: '', date: '', images: []
+                });
+              }}
+              variant="outlined"
+              sx={{ mt: 1, mb: 2 }}
+            >
+              Add Award/Recognition
+            </Button>
+            {typeof errors.awardEntries === 'string' && (
+                 <Alert severity="error" sx={{ mb: 2 }}>
+                    <AlertTitle>Error</AlertTitle>
+                    {errors.awardEntries}
+                 </Alert>
+            )}
+          </div>
+        )}
+      />
+
+      <Box sx={{ mt: 3, mb: 2, position: 'relative' }}>
+        {submitStatus && alertMessage && (
+          <Alert severity={submitStatus} sx={{ mb: 2 }}>
+             <AlertTitle>{submitStatus.charAt(0).toUpperCase() + submitStatus.slice(1)}</AlertTitle>
+            {alertMessage}
+          </Alert>
+        )}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={loading || !formik.dirty || !formik.isValid}
+          sx={{ mr: 1 }}
+        >
+          {loading ? <CircularProgress size={24} /> : 'Save Changes'}
+        </Button>
+         <Button
+            type="button"
+            variant="outlined"
+            onClick={() => {
+                formik.resetForm({
+                    values: {
+                        awardEntries: initialEntries && initialEntries.length > 0
+                        ? initialEntries.map(e => ({
+                            id: e.id || Date.now().toString() + Math.random(),
+                            title: e.title || '',
+                            description: e.description || '',
+                            date: e.date || '',
+                            images: [] // Reset images; existing images are not part of this form's direct state
+                          }))
+                        : [{ id: Date.now().toString(), title: '', description: '', date: '', images: [] }]
+                    }
+                });
+                fileInputRefs.current.forEach(ref => { if (ref) ref.value = null; });
+    // Do not clear the fileInputRefs.current array itself, as refs are tied to rendered inputs.
+                setSubmitStatus(null);
+                setAlertMessage('');
+            }}
+            disabled={loading || !formik.dirty}
+        >
+            Reset
+        </Button>
+      </Box>
+    </Box>
+  );
+};
+
+AwardsTab.propTypes = {
+  initialEntries: PropTypes.arrayOf(awardEntryPropType),
+};
+
+AwardsTab.defaultProps = {
+  initialEntries: [],
+};
+
+export default AwardsTab;
