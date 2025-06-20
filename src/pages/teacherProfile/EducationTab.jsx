@@ -84,10 +84,12 @@ const EducationTab = ({ initialEntries }) => {
         name="educationEntries"
         render={({ form, push, remove: removeHelper }) => { // Destructure form, push, remove
           const { values, touched, errors, handleChange, handleBlur } = form; // Use Formik context from render prop
+          const educationEntriesArray = values?.educationEntries || []; // Safe access to the array
+
           return (
             <div>
-              {values.educationEntries && values.educationEntries.length > 0 ? (
-                values.educationEntries.map((entry, index) => (
+              {educationEntriesArray.length > 0 ? (
+                educationEntriesArray.map((entry, index) => (
                   <Paper key={entry.id || index} sx={{ p: 2, mb: 2, border: '1px solid #ddd' }}>
                     <Grid container spacing={2} alignItems="flex-start">
                       <Grid item xs={12} sm={2.5}>

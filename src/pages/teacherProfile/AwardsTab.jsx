@@ -166,13 +166,16 @@ const AwardsTab = ({ initialEntries }) => {
         name="awardEntries"
         render={({ form, push, remove: removeHelper }) => { // Destructure form, push, remove
           const { values, touched, errors, handleChange, handleBlur } = form; // Use Formik context from render prop
+          const awardEntriesArray = values?.awardEntries || []; // Safe access to the array
           return (
             <div>
-              {values.awardEntries && values.awardEntries.length > 0 ? (
-                values.awardEntries.map((entry, index) => (
-                  <Paper key={entry.id || index} sx={{ p: 2, mb: 2, border: '1px solid #ddd' }}>
-                    <Grid container spacing={2} alignItems="flex-start">
-                      <Grid item xs={12}>
+              {awardEntriesArray.length > 0 ? (
+                awardEntriesArray.map((entry, index) => { // entry here is from awardEntriesArray, should be safe
+                  const imagesLength = entry?.images?.length || 0; // Safe access for images length
+                  return (
+                    <Paper key={entry.id || index} sx={{ p: 2, mb: 2, border: '1px solid #ddd' }}>
+                      <Grid container spacing={2} alignItems="flex-start">
+                        <Grid item xs={12}>
                         <TextField
                           fullWidth
                           name={`awardEntries[${index}].title`}
@@ -217,11 +220,11 @@ const AwardsTab = ({ initialEntries }) => {
                           variant="outlined"
                           component="label"
                           startIcon={<AttachFileIcon />}
-                          disabled={(values.awardEntries[index].images?.length || 0) >= MAX_FILES_PER_AWARD}
+                          disabled={imagesLength >= MAX_FILES_PER_AWARD}
                         >
-                          { (values.awardEntries[index].images?.length || 0) >= MAX_FILES_PER_AWARD
+                          {imagesLength >= MAX_FILES_PER_AWARD
                             ? `Max Files Reached (${MAX_FILES_PER_AWARD})`
-                            : `Upload Images (${values.awardEntries[index].images?.length || 0}/${MAX_FILES_PER_AWARD})`
+                            : `Upload Images (${imagesLength}/${MAX_FILES_PER_AWARD})`
                           }
                           <input
                             type="file"
@@ -242,13 +245,13 @@ const AwardsTab = ({ initialEntries }) => {
                         )}
                       </Grid>
 
-                      {entry.images && entry.images.length > 0 && (
+                    {(entry?.images || []).length > 0 && ( // Safe access for images array map
                         <Grid item xs={12}>
                           <Typography variant="subtitle2" sx={{mt: 1}}>Selected Files:</Typography>
                           <List dense>
-                            {entry.images.map((file, fileIndex) => (
+                          {(entry.images || []).map((file, fileIndex) => ( // Map over safely accessed images
                               <ListItem
-                                key={file.name + fileIndex}
+                              key={file.name + fileIndex} // Assuming file objects are present if array has length
                                 secondaryAction={
                                   <IconButton edge="end" aria-label="delete" onClick={() => removeImageInArray(index, fileIndex, form)}> {/* Pass form instance */}
                                     <DeleteOutlineIcon />
@@ -275,8 +278,9 @@ const AwardsTab = ({ initialEntries }) => {
                       </Grid>
                     </Grid>
                   </Paper>
-                ))
-              ) : (
+                );
+              }))
+            : (
                   <Typography sx={{my: 2, textAlign: 'center', color: 'text.secondary'}}>No awards or recognitions added yet.</Typography>
               )}
               <Button
